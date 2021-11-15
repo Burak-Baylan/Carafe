@@ -1,4 +1,4 @@
-package com.example.social
+package com.bluecannibal.carafe
 
 import io.flutter.embedding.android.FlutterActivity
 

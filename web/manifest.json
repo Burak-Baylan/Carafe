@@ -1,6 +1,6 @@
 {
-    "name": "social",
-    "short_name": "social",
+    "name": "Carafe",
+    "short_name": "Carafe",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
