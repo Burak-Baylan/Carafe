@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:Carafe/app/app_settings/app_settings_view_model.dart';
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Firebase.initializeApp();
     return Observer(builder: (_) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
