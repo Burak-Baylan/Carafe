@@ -8,4 +8,5 @@ class SVGConstants {
 
   String get login => "login".toSvg;
   String get signup => "signup".toSvg;
+  String get forgotPassword => "forgotPassword".toSvg;
 }
