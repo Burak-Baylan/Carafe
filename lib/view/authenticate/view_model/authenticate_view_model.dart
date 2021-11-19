@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:Carafe/core/constants/svg/svg_constants.dart';
-import 'package:Carafe/view/authenticate/authenticate_view.dart';
+
+import '../../../core/constants/svg/svg_constants.dart';
+import '../authenticate_view.dart';
+
 part 'authenticate_view_model.g.dart';
 
 class AuthenticateViewModel = _AuthenticateViewModelBase

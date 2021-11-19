@@ -57,3 +57,7 @@ extension TextStyleExtensions on BuildContext {
   TextStyle get underlinedText =>
       const TextStyle(decoration: TextDecoration.underline);
 }
+
+extension AlerDialogExtensions on BuildContext{
+  get closeAlerDialog => Navigator.of(this).pop();
+}

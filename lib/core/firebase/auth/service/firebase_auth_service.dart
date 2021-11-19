@@ -24,10 +24,16 @@ class FirebaseAuthService {
     }
   }
 
-  Future<UserCredential> signup(LoginModel loginModel) async {
-    return await firebaseAuth.createUserWithEmailAndPassword(
-      email: loginModel.email!,
-      password: loginModel.password!,
-    );
+  Future<AuthnenticationResponse> signup(LoginModel loginModel) async {
+    try {
+      UserCredential? userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: loginModel.email!,
+        password: loginModel.password!,
+      );  
+      return AuthnenticationResponse(null, userCredential.user);
+    } on FirebaseException catch (e) {
+      return AuthnenticationResponse(CustomError(e.message), null);
+    }
   }
 }

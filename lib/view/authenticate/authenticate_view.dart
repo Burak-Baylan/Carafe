@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:Carafe/app/constants/constants_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,7 +37,7 @@ class _AuthenticateViewState extends State<AuthenticateView>
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) => Scaffold(
-        backgroundColor: Color(0xfff1f3f8),
+        backgroundColor: context.colorScheme.background,
         body: SafeArea(
           child: Column(
             children: [
@@ -80,7 +81,7 @@ class _AuthenticateViewState extends State<AuthenticateView>
 
   TabBar get _tabBar => TabBar(
         controller: tabController,
-        labelColor: Colors.black,
+        labelColor: AppColors.secondary,
         indicatorColor: context.colorScheme.primary,
         indicatorWeight: 3,
         indicatorSize: TabBarIndicatorSize.label,
