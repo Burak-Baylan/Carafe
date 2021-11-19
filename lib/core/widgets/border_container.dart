@@ -9,6 +9,7 @@ class BorderContainer extends StatelessWidget {
   Widget? child;
   Color? color;
   double? radius;
+  EdgeInsetsGeometry? margin;
 
   BorderContainer({
     Key? key,
@@ -19,6 +20,7 @@ class BorderContainer extends StatelessWidget {
     this.bottomRight = 0,
     this.bottomLeft = 0,
     this.color,
+    this.margin,
   }) : super(key: key);
 
   BorderContainer.all({
@@ -27,11 +29,13 @@ class BorderContainer extends StatelessWidget {
     required this.radius,
     this.padding,
     this.color,
+    this.margin,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: margin,
       padding: padding,
       child: child,
       decoration: BoxDecoration(

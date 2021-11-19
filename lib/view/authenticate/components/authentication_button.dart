@@ -14,15 +14,7 @@ class AuthenticationButton extends StatelessWidget {
 
   Text _buttonText(BuildContext context) => Text(
         text,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: context.normalValue
-        ),
-      );
-
-  ButtonStyle _buttonStyle(BuildContext context) => ElevatedButton.styleFrom(
-        padding: context.normalPadding,
-        shape: const StadiumBorder(),
+        style: TextStyle(color: Colors.white, fontSize: context.normalValue),
       );
 
   @override
@@ -33,4 +25,9 @@ class AuthenticationButton extends StatelessWidget {
       style: _buttonStyle(context),
     );
   }
+
+  ButtonStyle _buttonStyle(BuildContext context) => ElevatedButton.styleFrom(
+        padding: context.normalPadding,
+        shape: const StadiumBorder(),
+      );
 }
