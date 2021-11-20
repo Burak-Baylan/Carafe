@@ -1,8 +1,8 @@
 // ignore_for_file: overridden_fields
 
 import 'package:Carafe/core/extensions/string_extensions.dart';
-import 'package:Carafe/core/firebase/auth/response/authentication_response.dart';
-import 'package:Carafe/core/firebase/auth/service/firebase_auth_service.dart';
+import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
+import 'package:Carafe/core/firebase/auth/authentication/service/firebase_auth_service.dart';
 import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
 import 'package:Carafe/view/authenticate/view/login/model/login_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,15 +67,14 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     password = passworController.text;
   }
 
-  //! error alert ver success alert aynı yolda onları değiştir
-
   _responseControl(AuthnenticationResponse value) {
     if (value.error != null) {
-      _showAlert("Error", value.error!.message.toString());
+      _showAlert("Error", value.error!.message.toString(), false);
       return;
     }
     _clearAllTextInputs();
-    _showAlert("Success", "Signup successful. Please login.");
+    _showAlert("Success", "Signup successful. Please verify your email.", true);
+    value.user!.sendEmailVerification();
   }
 
   _clearAllTextInputs() {
@@ -84,12 +83,14 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     passworController.clear();
   }
 
-  _showAlert(String title, String message) => CustomAlertDialog(
+  _showAlert(String title, String message, bool changePage) =>
+      CustomAlertDialog(
         context: context!,
         title: title,
         message: message,
         positiveButtonText: "Confirm",
-        onPressedPositiveButton: () => changeTabIndex(0),
+        onPressedPositiveButton: () =>
+            changePage == true ? changeTabIndex(0) : null,
         disableNegativeButton: true,
       ).show();
 

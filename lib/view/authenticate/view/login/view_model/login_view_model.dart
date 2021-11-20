@@ -1,12 +1,13 @@
 // ignore_for_file: override_on_non_overriding_member
 
 import 'package:Carafe/core/constants/navigation/navigation_constants.dart';
-import 'package:Carafe/core/firebase/auth/response/authentication_response.dart';
-import 'package:Carafe/core/firebase/auth/service/firebase_auth_service.dart';
+import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
+import 'package:Carafe/core/firebase/auth/authentication/service/firebase_auth_service.dart';
 import 'package:Carafe/core/init/navigation/service/navigation_service.dart';
 import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
 import 'package:Carafe/view/authenticate/view/login/model/login_model.dart';
 import 'package:Carafe/view/authenticate/view_model/base_authentication_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'login_view_model.g.dart';
@@ -14,7 +15,7 @@ part 'login_view_model.g.dart';
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
 
 abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
-  @override
+
   BuildContext? context;
 
   TextEditingController emailController = TextEditingController();
@@ -35,7 +36,6 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
 
   @action
   loginControl() async {
-    changeInputState();
     if (!formKey.currentState!.validate()) {
       changeInputState();
       return;
@@ -59,24 +59,37 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
     password = passworController.text.trim();
   }
 
-  _responseControl(AuthnenticationResponse value) {
-    if (value.error != null) {
-      _showError(value.error!.message.toString());
+  _responseControl(AuthnenticationResponse response) async {
+    if (response.error != null) {
+      _showAlert(
+        "Error",
+        response.error!.message.toString(),
+        disablePositiveButton: true,
+      );
       return;
     }
-    NavigationService.instance.navigateToPage(
-      path: NavigationConstans.MAIN_VIEW,
-      data: null,
-    );
+    _emailValidateControl();
   }
 
-  _showError(String message) => CustomAlertDialog(
-        context: context!,
-        title: "Error",
-        message: message,
-        positiveButtonText: "Cancel",
-        disableNegativeButton: true,
-      ).show();
+  _emailValidateControl() async {
+    if (isEmailVerified) {
+      NavigationService.instance.navigateToPage(
+        path: NavigationConstans.MAIN_VIEW,
+        data: null,
+      );
+    } else {
+      _showAlert(
+        "Error",
+        "Email not verified. Please verified your email.",
+        positiveButtonText: "Send mail",
+        negativeButtonText: "Cancel",
+        onPressedPositiveButton: () async {
+          await sendVerificationMail();
+          await auth.signOut();
+        },
+      );
+    }
+  }
 
   @override
   @action
@@ -93,4 +106,24 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
   }
+
+  _showAlert(
+    String title,
+    String message, {
+    bool disableNegativeButton = false,
+    bool disablePositiveButton = false,
+    String? positiveButtonText,
+    String? negativeButtonText,
+    Function? onPressedPositiveButton,
+  }) =>
+      CustomAlertDialog(
+        context: context!,
+        title: title,
+        message: message,
+        disableNegativeButton: disableNegativeButton,
+        disablePositiveButton: disablePositiveButton,
+        positiveButtonText: positiveButtonText,
+        onPressedPositiveButton: onPressedPositiveButton,
+        negativeButtonText: negativeButtonText ?? "Confirm",
+      ).show();
 }
