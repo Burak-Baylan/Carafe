@@ -16,6 +16,8 @@ class AuthTextFormField extends StatelessWidget {
     this.readOnly = false,
     this.hintText,
     this.focusNode,
+    this.iconContainerColor,
+    this.iconColor,
   }) : super(key: key);
 
   final TextInputType? keyboardType;
@@ -26,6 +28,8 @@ class AuthTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? hintText;
   final FocusNode? focusNode;
+  final Color? iconContainerColor;
+  final Color? iconColor;
   bool obscureText;
 
   late BuildContext context;
@@ -75,10 +79,10 @@ class AuthTextFormField extends StatelessWidget {
     return BorderContainer.all(
       padding: context.ultraLowPadding,
       radius: 5,
-      color: context.colorScheme.primary,
+      color: iconContainerColor,
       child: Icon(
         icon,
-        color: Colors.white,
+        color: iconColor ?? context.colorScheme.primary,
       ),
     );
   }

@@ -36,6 +36,7 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
 
   @action
   loginControl() async {
+    changeInputState();
     if (!formKey.currentState!.validate()) {
       changeInputState();
       return;

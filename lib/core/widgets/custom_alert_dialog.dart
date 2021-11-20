@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,12 +16,14 @@ class CustomAlertDialog extends StatelessWidget {
     this.negativeButtonText,
     this.positiveButtonText,
     this.message,
-    this.disableNegativeButton,
+    this.disableNegativeButton = false,
+    this.disablePositiveButton = false,
   }) : super(key: key);
 
   BuildContext context;
   double? borderRadius;
-  bool? disableNegativeButton;
+  bool disableNegativeButton;
+  bool disablePositiveButton;
   String title;
   String? message;
   String? positiveButtonText;
@@ -30,6 +31,7 @@ class CustomAlertDialog extends StatelessWidget {
   Function? onPressedNegativeButton;
   Function? onPressedPositiveButton;
   List<Widget>? children;
+  bool dismissable = true;
 
   final double _titleTextSize = 25;
 
@@ -38,25 +40,26 @@ class CustomAlertDialog extends StatelessWidget {
     return _buildDialog;
   }
 
-  show() => showDialog(context: context, builder: (context) => _buildDialog);
+  show() => showDialog(
+        barrierDismissible: dismissable,
+        context: context,
+        builder: (context) => this,
+      );
 
-  get _buildDialog => Dialog(
+  get _buildDialog => AlertDialog(
         shape: _shape,
-        child: Container(
-          padding: context.normalPadding,
-          child: Wrap(
-            children: [
-              Align(child: _buildTitleText, alignment: Alignment.center),
-              const SizedBox(height: 45),
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: (children ?? [_buildText]),
-                ),
+        content: Wrap(
+          children: [
+            Align(child: _buildTitleText, alignment: Alignment.center),
+            const SizedBox(height: 45),
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: (children ?? [_buildText]),
               ),
-              _buildButtons,
-            ],
-          ),
+            ),
+            _buildButtons,
+          ],
         ),
       );
 
@@ -97,7 +100,7 @@ class CustomAlertDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           disableNegativeButton != true ? _buildNegativeButton : Container(),
-          _buildPositiveButton,
+          disablePositiveButton != true ? _buildPositiveButton : Container(),
         ],
       );
 
@@ -117,6 +120,6 @@ class CustomAlertDialog extends StatelessWidget {
             onPressedPositiveButton!();
           }
         },
-        child: Text(positiveButtonText ?? "Okay"),
+        child: Text(positiveButtonText ?? "Confirm"),
       );
 }
