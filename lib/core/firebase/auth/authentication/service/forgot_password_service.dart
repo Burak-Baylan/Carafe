@@ -1,8 +1,8 @@
 import 'package:Carafe/core/error/custom_error.dart';
-import 'package:Carafe/core/firebase/auth/authentication/service/base/base_authentication.dart';
+import 'package:Carafe/core/firebase/base/firebase_base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class ForgotPasswordService extends BaseAuthentication {
+class ForgotPasswordService extends FirebaseBase {
   static ForgotPasswordService? _instance;
   static ForgotPasswordService get instance => _instance =
       _instance == null ? ForgotPasswordService._init() : _instance!;
