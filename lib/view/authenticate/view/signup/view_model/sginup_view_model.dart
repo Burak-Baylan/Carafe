@@ -1,14 +1,13 @@
 // ignore_for_file: overridden_fields
-
+import 'package:Carafe/core/error/custom_error.dart';
 import 'package:Carafe/core/extensions/string_extensions.dart';
 import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
-import 'package:Carafe/core/firebase/auth/authentication/service/firebase_auth_service.dart';
-import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
+import 'package:Carafe/core/firebase/auth/model/user_model.dart';
 import 'package:Carafe/view/authenticate/view/login/model/login_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:Carafe/view/authenticate/view_model/base_authentication_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:Carafe/view/authenticate/view_model/base_authentication_view_model.dart';
+
 part 'sginup_view_model.g.dart';
 
 class SignupViewModel = _SignupViewModelBase with _$SignupViewModel;
@@ -47,18 +46,62 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
       _changeInputState();
       return;
     }
-    _removeTextInputFocus();
+    _initializeCredenticial();
     await _signup();
     _changeInputState();
+    _removeTextInputFocus();
   }
 
   _signup() async {
-    _initializeCredenticial();
-    await FirebaseAuthService.instance
-        .signup(LoginModel(email: email, password: password))
-        .then((value) {
-      _responseControl(value);
-    });
+    AuthnenticationResponse authenticationResponse = await authService.signup(
+        LoginModel(email: email, password: password, displayName: username));
+
+    bool isResponseOkey = _authSignupResponseControl(authenticationResponse);
+
+    if (isResponseOkey) {
+      CustomError userCreateResponse = await userService.createUser(UserModel(
+        user: authenticationResponse.user,
+        email: email,
+        username: username,
+      ));
+      bool isUserCrated = await _firebaseSignupResponseControl(
+          userCreateResponse, authenticationResponse);
+
+      if (isUserCrated) {
+        await authService.sendVerificationEmail(authenticationResponse.user!);
+        _showSignupSuccessAlert();
+        _clearAllTextInputs();
+      }
+    }
+  }
+
+  _showSignupSuccessAlert() => showAlert(
+        "Success",
+        "Signup successful. Please verify your email.",
+        context: context!,
+        onPressedPositiveButton: () => changeTabIndex(0),
+        disableNegativeButton: true,
+      );
+
+  Future<bool> _firebaseSignupResponseControl(
+      CustomError response, AuthnenticationResponse authResponse) async {
+    if (response.message == null) {
+      return true;
+    } else {
+      await authService.deleteUser(authResponse.user!);
+      showAlert("Error", response.message!,
+          context: context!, disableNegativeButton: true);
+      return false;
+    }
+  }
+
+  bool _authSignupResponseControl(AuthnenticationResponse response) {
+    if (response.error != null) {
+      showAlert("Error", response.error!.message.toString(),
+          context: context!, disableNegativeButton: true);
+      return false;
+    }
+    return true;
   }
 
   _initializeCredenticial() {
@@ -67,32 +110,11 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     password = passworController.text;
   }
 
-  _responseControl(AuthnenticationResponse value) {
-    if (value.error != null) {
-      _showAlert("Error", value.error!.message.toString(), false);
-      return;
-    }
-    _clearAllTextInputs();
-    _showAlert("Success", "Signup successful. Please verify your email.", true);
-    value.user!.sendEmailVerification();
-  }
-
   _clearAllTextInputs() {
     usernameController.clear();
     emailController.clear();
     passworController.clear();
   }
-
-  _showAlert(String title, String message, bool changePage) =>
-      CustomAlertDialog(
-        context: context!,
-        title: title,
-        message: message,
-        positiveButtonText: "Confirm",
-        onPressedPositiveButton: () =>
-            changePage == true ? changeTabIndex(0) : null,
-        disableNegativeButton: true,
-      ).show();
 
   @override
   @action

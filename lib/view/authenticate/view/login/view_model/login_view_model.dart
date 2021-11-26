@@ -15,7 +15,6 @@ part 'login_view_model.g.dart';
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
 
 abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
-
   BuildContext? context;
 
   TextEditingController emailController = TextEditingController();
@@ -62,9 +61,10 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
 
   _responseControl(AuthnenticationResponse response) async {
     if (response.error != null) {
-      _showAlert(
+      showAlert(
         "Error",
         response.error!.message.toString(),
+        context: context!,
         disablePositiveButton: true,
       );
       return;
@@ -74,14 +74,12 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
 
   _emailValidateControl() async {
     if (isEmailVerified) {
-      NavigationService.instance.navigateToPage(
-        path: NavigationConstans.MAIN_VIEW,
-        data: null,
-      );
+      navigateToPage(path: NavigationConstans.MAIN_VIEW, data: null);
     } else {
-      _showAlert(
+      showAlert(
         "Error",
         "Email not verified. Please verified your email.",
+        context: context!,
         positiveButtonText: "Send mail",
         negativeButtonText: "Cancel",
         onPressedPositiveButton: () async {
@@ -107,24 +105,4 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
   }
-
-  _showAlert(
-    String title,
-    String message, {
-    bool disableNegativeButton = false,
-    bool disablePositiveButton = false,
-    String? positiveButtonText,
-    String? negativeButtonText,
-    Function? onPressedPositiveButton,
-  }) =>
-      CustomAlertDialog(
-        context: context!,
-        title: title,
-        message: message,
-        disableNegativeButton: disableNegativeButton,
-        disablePositiveButton: disablePositiveButton,
-        positiveButtonText: positiveButtonText,
-        onPressedPositiveButton: onPressedPositiveButton,
-        negativeButtonText: negativeButtonText ?? "Confirm",
-      ).show();
 }
