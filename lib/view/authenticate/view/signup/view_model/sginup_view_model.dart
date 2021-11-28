@@ -84,12 +84,14 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
       );
 
   Future<bool> _firebaseSignupResponseControl(
-      CustomError response, AuthnenticationResponse authResponse) async {
-    if (response.message == null) {
+    CustomError response,
+    AuthnenticationResponse authResponse,
+  ) async {
+    if (response.errorMessage == null) {
       return true;
     } else {
       await authService.deleteUser(authResponse.user!);
-      showAlert("Error", response.message!,
+      showAlert("Error", response.errorMessage!,
           context: context!, disableNegativeButton: true);
       return false;
     }
@@ -97,7 +99,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
 
   bool _authSignupResponseControl(AuthnenticationResponse response) {
     if (response.error != null) {
-      showAlert("Error", response.error!.message.toString(),
+      showAlert("Error", response.error!.errorMessage.toString(),
           context: context!, disableNegativeButton: true);
       return false;
     }

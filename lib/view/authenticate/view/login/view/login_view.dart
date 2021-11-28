@@ -6,7 +6,7 @@ import '../../../../../core/extensions/string_extensions.dart';
 import '../../../../../core/init/navigation/navigator/navigator.dart';
 import '../../../../../core/widgets/animated_button.dart';
 import '../../../components/authentication_button.dart';
-import '../../../components/authentication_text_form.dart';
+import '../../../../../core/widgets/custom_text_form.dart';
 import '../view_model/login_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  AuthTextFormField get _emailFormField => AuthTextFormField(
+  CustomTextFormField get _emailFormField => CustomTextFormField(
         keyboardType: TextInputType.emailAddress,
         focusNode: _loginVm.emailFocusNode,
         validator: (text) => text?.emailValidator,
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         icon: Icons.email_outlined,
       );
 
-  AuthTextFormField get _passwordFormField => AuthTextFormField(
+  CustomTextFormField get _passwordFormField => CustomTextFormField(
         focusNode: _loginVm.passwordFocusNode,
         validator: (text) => text?.passwordValidator,
         readOnly: _loginVm.passwordTextInputLock,

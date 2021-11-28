@@ -3,8 +3,7 @@
 import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:Carafe/core/extensions/string_extensions.dart';
 import 'package:Carafe/core/widgets/animated_button.dart';
-import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
-import 'package:Carafe/view/authenticate/components/authentication_text_form.dart';
+import 'package:Carafe/core/widgets/custom_text_form.dart';
 import 'package:Carafe/view/authenticate/view/signup/view_model/sginup_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +48,7 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 
-  AuthTextFormField get _usernameFormField => AuthTextFormField(
+  CustomTextFormField get _usernameFormField => CustomTextFormField(
         validator: (text) => _signupVm.usernameValidator(text),
         focusNode: _signupVm.usernameFocusNode,
         controller: _signupVm.usernameController,
@@ -58,7 +57,7 @@ class _SignupViewState extends State<SignupView> {
         readOnly: _signupVm.usernameLock,
       );
 
-  AuthTextFormField get _emailFormField => AuthTextFormField(
+  CustomTextFormField get _emailFormField => CustomTextFormField(
         keyboardType: TextInputType.emailAddress,
         focusNode: _signupVm.emailFocusNode,
         validator: (text) => text?.emailValidator,
@@ -68,7 +67,7 @@ class _SignupViewState extends State<SignupView> {
         readOnly: _signupVm.emailLock,
       );
 
-  AuthTextFormField get _passwordFormFiled => AuthTextFormField(
+  CustomTextFormField get _passwordFormFiled => CustomTextFormField(
         focusNode: _signupVm.passwordFocusNode,
         validator: (text) => text?.passwordValidator,
         controller: _signupVm.passworController,
@@ -84,8 +83,7 @@ class _SignupViewState extends State<SignupView> {
       );
 
   GestureDetector get _buildHaveAccountText => GestureDetector(
-        onTap: () =>
-            {_signupVm.changeTabIndex(_signupVm.authVm.loginPageIndex)},
+        onTap: () => _signupVm.changeTabIndex(_signupVm.authVm.loginPageIndex),
         child: RichText(
           text: TextSpan(
             style: context.theme.textTheme.headline6,

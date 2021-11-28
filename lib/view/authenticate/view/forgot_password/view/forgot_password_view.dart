@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/constants/svg/svg_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
-import '../../../components/authentication_text_form.dart';
+import '../../../../../core/widgets/custom_text_form.dart';
 import '../view_model/forgot_password_view_model.dart';
 
 class ForgotPasswordView extends StatelessWidget {
@@ -64,7 +64,7 @@ class ForgotPasswordView extends StatelessWidget {
         textAlign: TextAlign.center,
       );
 
-  AuthTextFormField get _emailTextInput => AuthTextFormField(
+  CustomTextFormField get _emailTextInput => CustomTextFormField(
       focusNode: forgotPassworVm.emailFocusNode,
       validator: (text) => text?.emailValidator,
       controller: forgotPassworVm.emailController,

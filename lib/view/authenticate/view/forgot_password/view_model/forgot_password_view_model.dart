@@ -26,10 +26,10 @@ abstract class _ForgotPasswordViewModelBase with Store {
   }
 
   _responseControl(CustomError response) {
-    if (response.message == null) {
+    if (response.errorMessage == null) {
       _successResponse();
     } else {
-      _unseccessfulResponse(response.message!.toString());
+      _unseccessfulResponse(response.errorMessage!.toString());
     }
   }
 

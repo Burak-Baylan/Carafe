@@ -63,7 +63,7 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
     if (response.error != null) {
       showAlert(
         "Error",
-        response.error!.message.toString(),
+        response.error!.errorMessage.toString(),
         context: context!,
         disablePositiveButton: true,
       );
