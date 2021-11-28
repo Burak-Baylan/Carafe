@@ -4,6 +4,8 @@ extension ContextExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
   ThemeData get theme => Theme.of(this);
   ColorScheme get colorScheme => theme.colorScheme;
+  get openDrawer => Scaffold.of(this).openDrawer();
+  get pop => Navigator.pop(this);
 }
 
 extension ValueExtension on BuildContext {

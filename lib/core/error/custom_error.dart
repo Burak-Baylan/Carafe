@@ -1,5 +1,5 @@
 class CustomError {
-  String? message;
+  String? errorMessage;
 
-  CustomError(this.message);
+  CustomError(this.errorMessage);
 }
