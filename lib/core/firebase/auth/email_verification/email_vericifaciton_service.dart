@@ -1,7 +1,5 @@
-import 'package:Carafe/core/firebase/auth/authentication/service/base/base_authentication.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-class EmailVerificationService{
-  FirebaseAuth auth = FirebaseAuth.instance;
+import 'package:Carafe/core/firebase/base/firebase_base.dart';
+class EmailVerificationService extends FirebaseBase{
   bool get isEmailValid => auth.currentUser!.emailVerified;
   Future<void> get sendVerificationMail async => await auth.currentUser!.sendEmailVerification();
 }
