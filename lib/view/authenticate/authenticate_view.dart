@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:Carafe/app/constants/constants_colors.dart';
+import 'package:Carafe/core/base/view/base_view.dart';
+import 'package:Carafe/core/base/view_model/base_view_model.dart';
+import 'package:Carafe/core/constants/navigation/navigation_constants.dart';
+import 'package:Carafe/core/init/navigation/service/navigation_service.dart';
+import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +24,7 @@ class AuthenticateView extends StatefulWidget {
 
 TabController? tabController;
 
-class _AuthenticateViewState extends State<AuthenticateView>
+class _AuthenticateViewState extends BaseView<AuthenticateView>
     with SingleTickerProviderStateMixin {
   final double paddingValue = 35;
   final AuthenticateViewModel authVm = AuthenticateViewModel();
@@ -35,7 +40,7 @@ class _AuthenticateViewState extends State<AuthenticateView>
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
+    return  Observer(
       builder: (_) => Scaffold(
         backgroundColor: context.colorScheme.background,
         body: SafeArea(
@@ -44,14 +49,7 @@ class _AuthenticateViewState extends State<AuthenticateView>
               _buildImage,
               _buildTabBar,
               Expanded(
-                child: TabBarView(
-                  controller: tabController,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
-                    LoginScreen(),
-                    SignupView(),
-                  ],
-                ),
+                child: _tabBarView,
               ),
             ],
           ),
@@ -59,6 +57,15 @@ class _AuthenticateViewState extends State<AuthenticateView>
       ),
     );
   }
+
+  TabBarView get _tabBarView => TabBarView(
+        controller: tabController,
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          LoginScreen(),
+          SignupView(),
+        ],
+      );
 
   AnimatedContainer get _buildImage => AnimatedContainer(
         duration: context.duration100ms,

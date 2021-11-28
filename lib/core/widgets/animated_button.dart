@@ -42,29 +42,11 @@ class _AnimatedButtonState extends State<AnimatedButton> {
     );
   }
 
-  _initValues() {
-    _isInit = _isAnimating || _state == ButtonState.init;
-  }
-
   ElevatedButton get _button => ElevatedButton(
         style: widget.style ?? _buttonStyle(context),
         child: FittedBox(child: widget.child ?? Text(widget.text ?? "Press")),
         onPressed: () => _onPressed(),
       );
-
-  _onPressed() async {
-    setState(() => _state = ButtonState.loading);
-    try {
-      await widget.onPressed();
-    } catch (e) {
-      setState(() => _state = ButtonState.init);
-      print("ERROR FROM ANIMATED BUTTON _ONPRESSED_ $e");
-    }
-    setState(() => _state = ButtonState.init);
-    if (widget.onEnd != null) {
-      widget.onEnd!();
-    }
-  }
 
   ButtonStyle _buttonStyle(BuildContext context) => ElevatedButton.styleFrom(
       shape: const StadiumBorder(), fixedSize: Size(context.width, 42));
@@ -81,6 +63,24 @@ class _AnimatedButtonState extends State<AnimatedButton> {
         child: CircularProgressIndicator(color: Colors.white),
       ),
     );
+  }
+
+  _initValues() {
+    _isInit = _isAnimating || _state == ButtonState.init;
+  }
+
+  _onPressed() async {
+    setState(() => _state = ButtonState.loading);
+    try {
+      await widget.onPressed();
+    } catch (e) {
+      setState(() => _state = ButtonState.init);
+      print("ERROR FROM ANIMATED BUTTON _ONPRESSED_ $e");
+    }
+    setState(() => _state = ButtonState.init);
+    if (widget.onEnd != null) {
+      widget.onEnd!();
+    }
   }
 }
 

@@ -77,7 +77,7 @@ class CustomAlertDialog extends StatelessWidget {
             message ?? "",
             style: GoogleFonts.ubuntu().copyWith(
               fontSize: 16,
-              color: AppColors.waitingBlue,
+              color: context.colorScheme.secondary,
             ),
             overflow: TextOverflow.fade,
           ),
@@ -113,6 +113,7 @@ class CustomAlertDialog extends StatelessWidget {
         },
         child: Text(negativeButtonText ?? "Cancel"),
       );
+      
   TextButton get _buildPositiveButton => TextButton(
         onPressed: () {
           context.closeAlerDialog;
