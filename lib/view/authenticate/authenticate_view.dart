@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:Carafe/app/constants/constants_colors.dart';
+import 'package:Carafe/app/constants/app_constants.dart';
 import 'package:Carafe/core/base/view/base_view.dart';
 import 'package:Carafe/core/base/view_model/base_view_model.dart';
 import 'package:Carafe/core/constants/navigation/navigation_constants.dart';

@@ -2,8 +2,8 @@
 import 'package:Carafe/core/error/custom_error.dart';
 import 'package:Carafe/core/extensions/string_extensions.dart';
 import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
-import 'package:Carafe/core/firebase/auth/model/user_model.dart';
 import 'package:Carafe/view/authenticate/view/login/model/login_model.dart';
+import 'package:Carafe/view/authenticate/view/signup/view_model/helpers/register_user.dart';
 import 'package:Carafe/view/authenticate/view_model/base_authentication_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -40,79 +40,31 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
   setContext(BuildContext context) => this.context = context;
 
   @action
-  Future<dynamic> signupControl() async {
-    _changeInputState();
+  Future<dynamic> signupControl(SignupViewModel viewModel) async {
+    changeInputState();
     if (!formKey.currentState!.validate()) {
-      _changeInputState();
+      changeInputState();
       return;
     }
-    _initializeCredenticial();
-    await _signup();
-    _changeInputState();
-    _removeTextInputFocus();
+    initializeCredenticial();
+    await _signup(viewModel);
+    changeInputState();
+    removeTextInputFocus();
   }
 
-  _signup() async {
+  _signup(SignupViewModel viewModel) async {
     AuthnenticationResponse authenticationResponse = await authService.signup(
         LoginModel(email: email, password: password, displayName: username));
-
-    bool isResponseOkey = _authSignupResponseControl(authenticationResponse);
-
-    if (isResponseOkey) {
-      CustomError userCreateResponse = await userService.createUser(UserModel(
-        user: authenticationResponse.user,
-        email: email,
-        username: username,
-      ));
-      bool isUserCrated = await _firebaseSignupResponseControl(
-          userCreateResponse, authenticationResponse);
-
-      if (isUserCrated) {
-        await authService.sendVerificationEmail(authenticationResponse.user!);
-        _showSignupSuccessAlert();
-        _clearAllTextInputs();
-      }
-    }
+    RegisterUser.instance.register(authenticationResponse, viewModel);
   }
 
-  _showSignupSuccessAlert() => showAlert(
-        "Success",
-        "Signup successful. Please verify your email.",
-        context: context!,
-        onPressedPositiveButton: () => changeTabIndex(0),
-        disableNegativeButton: true,
-      );
-
-  Future<bool> _firebaseSignupResponseControl(
-    CustomError response,
-    AuthnenticationResponse authResponse,
-  ) async {
-    if (response.errorMessage == null) {
-      return true;
-    } else {
-      await authService.deleteUser(authResponse.user!);
-      showAlert("Error", response.errorMessage!,
-          context: context!, disableNegativeButton: true);
-      return false;
-    }
-  }
-
-  bool _authSignupResponseControl(AuthnenticationResponse response) {
-    if (response.error != null) {
-      showAlert("Error", response.error!.errorMessage.toString(),
-          context: context!, disableNegativeButton: true);
-      return false;
-    }
-    return true;
-  }
-
-  _initializeCredenticial() {
+  initializeCredenticial() {
     username = usernameController.text;
     email = emailController.text;
     password = passworController.text;
   }
 
-  _clearAllTextInputs() {
+  clearAllTextInputs() {
     usernameController.clear();
     emailController.clear();
     passworController.clear();
@@ -123,14 +75,14 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
   changeTabIndex(int index) => authVm.changeTabIndex(index);
 
   @action
-  _removeTextInputFocus() {
+  removeTextInputFocus() {
     usernameFocusNode.unfocus();
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
   }
 
   @action
-  _changeInputState() {
+  changeInputState() {
     usernameLock = !usernameLock;
     emailLock = !emailLock;
     passwordLock = !passwordLock;
@@ -151,4 +103,12 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     }
     return null;
   }
+
+  showSignupSuccessAlert() => showAlert(
+        "Success",
+        "Signup successful. Please verify your email.",
+        context: context!,
+        onPressedPositiveButton: () => changeTabIndex(0),
+        disableNegativeButton: true,
+      );
 }

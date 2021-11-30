@@ -73,8 +73,8 @@ mixin _$SignupViewModel on _SignupViewModelBase, Store {
       AsyncAction('_SignupViewModelBase.signupControl');
 
   @override
-  Future<dynamic> signupControl() {
-    return _$signupControlAsyncAction.run(() => super.signupControl());
+  Future<dynamic> signupControl(SignupViewModel viewModel) {
+    return _$signupControlAsyncAction.run(() => super.signupControl(viewModel));
   }
 
   final _$_SignupViewModelBaseActionController =
@@ -92,22 +92,22 @@ mixin _$SignupViewModel on _SignupViewModelBase, Store {
   }
 
   @override
-  dynamic _removeTextInputFocus() {
+  dynamic removeTextInputFocus() {
     final _$actionInfo = _$_SignupViewModelBaseActionController.startAction(
-        name: '_SignupViewModelBase._removeTextInputFocus');
+        name: '_SignupViewModelBase.removeTextInputFocus');
     try {
-      return super._removeTextInputFocus();
+      return super.removeTextInputFocus();
     } finally {
       _$_SignupViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic _changeInputState() {
+  dynamic changeInputState() {
     final _$actionInfo = _$_SignupViewModelBaseActionController.startAction(
-        name: '_SignupViewModelBase._changeInputState');
+        name: '_SignupViewModelBase.changeInputState');
     try {
-      return super._changeInputState();
+      return super.changeInputState();
     } finally {
       _$_SignupViewModelBaseActionController.endAction(_$actionInfo);
     }

@@ -78,7 +78,7 @@ class _SignupViewState extends State<SignupView> {
       );
 
   AnimatedButton get _buildSignupButton => AnimatedButton(
-        onPressed: () => _signupVm.signupControl(),
+        onPressed: () => _signupVm.signupControl(_signupVm),
         text: "Signup",
       );
 
