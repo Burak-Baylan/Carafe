@@ -38,7 +38,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
       width: _state == ButtonState.init ? context.width : 42,
       onEnd: () => setState(() => _isAnimating = !_isAnimating),
       duration: context.duration200ms,
-      child: _isInit ? _button : _buildSmallButton(),
+      child: _isInit ? _button : _buildLoadingButton(),
     );
   }
 
@@ -51,7 +51,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
   ButtonStyle _buttonStyle(BuildContext context) => ElevatedButton.styleFrom(
       shape: const StadiumBorder(), fixedSize: Size(context.width, 42));
 
-  Widget _buildSmallButton() {
+  Widget _buildLoadingButton() {
     final Color color = context.colorScheme.secondaryVariant;
 
     return Container(

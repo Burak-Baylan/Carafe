@@ -16,7 +16,7 @@ class PickImage {
   Future<File?> _pick(ImageSource source) async {
     final image = await _imagePicker.pickImage(source: source);
     if (image == null) return null;
-    final imageTemporary = File(image.path);
-    return imageTemporary;
+    final imageFile = File(image.path);
+    return imageFile;
   }
 }
