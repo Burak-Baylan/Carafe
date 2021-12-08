@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import '../constants/global_constants/constants.dart';
 
 extension StringExtension on String {
@@ -18,5 +21,9 @@ extension StringExtension on String {
     return null;
   }
 
-  bool get isUsernameValid => RegExp(GlobalConstants.USERNAME_REGEX).hasMatch(this);
+  bool get isUsernameValid =>
+      RegExp(GlobalConstants.USERNAME_REGEX).hasMatch(this);
+
+  Color get convertStringToColor =>
+      Color(int.parse((("#" + this).substring(1, 7)), radix: 16) + 0xFF000000);
 }

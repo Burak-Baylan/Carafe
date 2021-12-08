@@ -6,6 +6,8 @@ extension ContextExtension on BuildContext {
   ColorScheme get colorScheme => theme.colorScheme;
   get openDrawer => Scaffold.of(this).openDrawer();
   get pop => Navigator.pop(this);
+  get popSheet => Navigator.of(this, rootNavigator: true).pop();
+  get unFocus => FocusScope.of(this).unfocus();
 }
 
 extension ValueExtension on BuildContext {
@@ -46,13 +48,6 @@ extension PaddingAll on BuildContext {
       EdgeInsets.symmetric(horizontal: mediumValue);
   EdgeInsets get paddingHighHorizontal =>
       EdgeInsets.symmetric(horizontal: highValue);
-}
-
-extension DurationExtension on BuildContext {
-  Duration get duration100ms => const Duration(milliseconds: 100);
-  Duration get duration200ms => const Duration(milliseconds: 200);
-  Duration get duration300ms => const Duration(milliseconds: 300);
-  Duration get duration2000ms => const Duration(milliseconds: 2000);
 }
 
 extension TextStyleExtensions on BuildContext {
