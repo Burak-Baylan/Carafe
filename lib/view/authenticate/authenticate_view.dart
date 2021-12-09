@@ -2,18 +2,15 @@
 
 import 'package:Carafe/app/constants/app_constants.dart';
 import 'package:Carafe/core/base/view/base_view.dart';
-import 'package:Carafe/core/base/view_model/base_view_model.dart';
-import 'package:Carafe/core/constants/navigation/navigation_constants.dart';
-import 'package:Carafe/core/init/navigation/service/navigation_service.dart';
-import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:Carafe/core/extensions/context_extensions.dart';
+import 'package:Carafe/core/extensions/int_extensions.dart';
 import 'package:Carafe/core/widgets/border_container.dart';
 import 'package:Carafe/view/authenticate/view/login/view/login_view.dart';
 import 'package:Carafe/view/authenticate/view/signup/view/signup_view.dart';
 import 'package:Carafe/view/authenticate/view_model/authenticate_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AuthenticateView extends StatefulWidget {
   AuthenticateView({Key? key}) : super(key: key);
@@ -68,7 +65,7 @@ class _AuthenticateViewState extends BaseView<AuthenticateView>
       );
 
   AnimatedContainer get _buildImage => AnimatedContainer(
-        duration: context.duration100ms,
+        duration: 100.durationMilliseconds,
         height:
             context.mediaQuery.viewInsets.bottom > 0 ? 0 : context.height * 0.3,
         child: Center(

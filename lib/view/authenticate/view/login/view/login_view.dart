@@ -24,8 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _loginVm.setContext(context);
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      body: Observer(builder: (_) {
-        return Padding(
+      body: Observer(
+        builder: (_) => Padding(
           padding: context.paddingNormalHorizontal,
           child: Form(
             key: _loginVm.formKey,
@@ -44,50 +44,58 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
-  GestureDetector get _buildDontAccountText => GestureDetector(
-        onTap: () => _loginVm.changeTabIndex(_loginVm.authVm.signupPageIndex),
-        child: RichText(
-          text: TextSpan(
-            style: context.theme.textTheme.headline6,
-            children: [
-              const TextSpan(text: "Don't have an account? "),
-              TextSpan(
-                text: "Signup",
-                style: context.underlinedText,
-              ),
-            ],
+  Widget get _buildDontAccountText => Observer(
+        builder: (_) => GestureDetector(
+          onTap: () => _loginVm.changeTabIndex(_loginVm.authVm.signupPageIndex),
+          child: RichText(
+            text: TextSpan(
+              style: context.theme.textTheme.headline6,
+              children: [
+                const TextSpan(text: "Don't have an account? "),
+                TextSpan(
+                  text: "Signup",
+                  style: context.underlinedText,
+                ),
+              ],
+            ),
           ),
         ),
       );
 
-  CustomTextFormField get _emailFormField => CustomTextFormField(
-        keyboardType: TextInputType.emailAddress,
-        focusNode: _loginVm.emailFocusNode,
-        validator: (text) => text?.emailValidator,
-        readOnly: _loginVm.emailTextInputLock,
-        controller: _loginVm.emailController,
-        labelText: "E-Mail",
-        icon: Icons.email_outlined,
+  Widget get _emailFormField => Observer(
+        builder: (_) => CustomTextFormField(
+          keyboardType: TextInputType.emailAddress,
+          focusNode: _loginVm.emailFocusNode,
+          validator: (text) => text?.emailValidator,
+          readOnly: _loginVm.emailTextInputLock,
+          controller: _loginVm.emailController,
+          labelText: "E-Mail",
+          icon: Icons.email_outlined,
+        ),
       );
 
-  CustomTextFormField get _passwordFormField => CustomTextFormField(
-        focusNode: _loginVm.passwordFocusNode,
-        validator: (text) => text?.passwordValidator,
-        readOnly: _loginVm.passwordTextInputLock,
-        controller: _loginVm.passworController,
-        labelText: "Password",
-        obscureText: true,
-        icon: Icons.lock_outline_rounded,
+  Widget get _passwordFormField => Observer(
+        builder: (_) => CustomTextFormField(
+          focusNode: _loginVm.passwordFocusNode,
+          validator: (text) => text?.passwordValidator,
+          readOnly: _loginVm.passwordTextInputLock,
+          controller: _loginVm.passworController,
+          labelText: "Password",
+          obscureText: true,
+          icon: Icons.lock_outline_rounded,
+        ),
       );
 
-  AnimatedButton get _buildLoginButton => AnimatedButton(
-        onPressed: () => _loginVm.loginControl(),
-        text: "Login to app",
+  Widget get _buildLoginButton => Observer(
+        builder: (_) => AnimatedButton(
+          onPressed: () => _loginVm.loginControl(),
+          text: "Login to app",
+        ),
       );
 
   GestureDetector get _buildForgotPasswordText => GestureDetector(

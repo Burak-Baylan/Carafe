@@ -1,11 +1,12 @@
-import 'package:Carafe/core/extensions/string_extensions.dart';
-import 'package:Carafe/core/widgets/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/constants/svg/svg_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
+import '../../../../../core/extensions/int_extensions.dart';
+import '../../../../../core/extensions/string_extensions.dart';
+import '../../../../../core/widgets/animated_button.dart';
 import '../../../../../core/widgets/custom_text_form.dart';
 import '../view_model/forgot_password_view_model.dart';
 
@@ -76,7 +77,7 @@ class ForgotPasswordView extends StatelessWidget {
   Align get _image => Align(
         alignment: Alignment.topCenter,
         child: AnimatedContainer(
-          duration: context.duration100ms,
+          duration: 100.durationMilliseconds,
           height: context.mediaQuery.viewInsets.bottom > 0
               ? 0
               : context.height * 0.25,
@@ -88,6 +89,6 @@ class ForgotPasswordView extends StatelessWidget {
 
   AppBar get _appBar => AppBar(
         centerTitle: true,
-        title: Text("Forgot Password"),
+        title: const Text("Forgot Password"),
       );
 }

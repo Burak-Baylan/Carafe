@@ -1,5 +1,4 @@
 // ignore_for_file: overridden_fields
-import 'package:Carafe/core/error/custom_error.dart';
 import 'package:Carafe/core/extensions/string_extensions.dart';
 import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
 import 'package:Carafe/view/authenticate/view/login/model/login_model.dart';
