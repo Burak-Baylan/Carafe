@@ -173,13 +173,13 @@ class ImageWidgets extends StatelessWidget {
         child: Hero(
           tag: images[imageIndex],
           child: CachedNetworkImage(
-            fadeInDuration: const Duration(milliseconds: 0),
+            fadeInDuration: 0.durationMilliseconds,
             filterQuality: FilterQuality.medium,
             placeholder: (context, url) => BorderContainer.all(
               radius: 10,
               color: AppColors.placeHolderGray,
             ),
-            placeholderFadeInDuration: const Duration(milliseconds: 100),
+            placeholderFadeInDuration: 100.durationMilliseconds,
             imageBuilder: (context, provider) {
               imageProviders[imageIndex] = provider;
               return Container(

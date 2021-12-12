@@ -22,7 +22,7 @@ class PostProfilePhoto extends StatelessWidget {
       height: context.height * 0.075,
       margin: const EdgeInsets.only(right: 3),
       child: CachedNetworkImage(
-        fadeInDuration: const Duration(milliseconds: 0),
+        fadeInDuration: 0.durationMilliseconds,
         filterQuality: FilterQuality.medium,
         placeholder: (context, url) => BorderContainer.all(
           radius: 100,
