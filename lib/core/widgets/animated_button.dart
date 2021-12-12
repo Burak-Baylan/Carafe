@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../extensions/context_extensions.dart';
@@ -37,7 +38,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
     return AnimatedContainer(
       width: _state == ButtonState.init ? context.width : 42,
       onEnd: () => setState(() => _isAnimating = !_isAnimating),
-      duration: context.duration200ms,
+      duration: 200.durationMilliseconds,
       child: _isInit ? _button : _buildLoadingButton(),
     );
   }
@@ -60,7 +61,9 @@ class _AnimatedButtonState extends State<AnimatedButton> {
       padding: context.lowPadding,
       decoration: BoxDecoration(shape: BoxShape.circle, color: color),
       child: const Center(
-        child: CircularProgressIndicator(color: Colors.white),
+        child: FittedBox(
+          child: CircularProgressIndicator(color: Colors.white),
+        ),
       ),
     );
   }

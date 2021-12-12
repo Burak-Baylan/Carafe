@@ -113,7 +113,7 @@ class CustomAlertDialog extends StatelessWidget {
         },
         child: Text(negativeButtonText ?? "Cancel"),
       );
-      
+
   TextButton get _buildPositiveButton => TextButton(
         onPressed: () {
           context.closeAlerDialog;
