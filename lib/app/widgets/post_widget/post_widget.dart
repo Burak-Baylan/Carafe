@@ -11,6 +11,7 @@ import '../../models/post_model.dart';
 import 'sub_widgets/bottom_layout.dart';
 import 'sub_widgets/image_widgets.dart';
 import 'sub_widgets/name_and_menu.dart';
+import 'sub_widgets/post_top_information.dart';
 import 'sub_widgets/profile_photo.dart';
 
 class PostWidget extends StatefulWidget {
@@ -31,7 +32,7 @@ class _PostWidgetState extends State<PostWidget> {
     _initializeValues();
     return Column(
       children: [
-        const SizedBox(height: 15),
+        15.sizedBoxOnlyHeight,
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: BorderContainer.all(
@@ -55,24 +56,40 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget get _postBody => Container(
         margin: 10.0.edgeIntesetsAll,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: [
-            _buildPp,
-            5.sizedBoxOnlyWidth,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  _nameAndMoreMenu,
-                  _buildPostText,
-                  _image,
-                  5.sizedBoxOnlyHeight,
-                  _buildBottomLayout
-                ],
-              ),
+            _topInformation,
+            5.sizedBoxOnlyHeight,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildPp,
+                5.sizedBoxOnlyWidth,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      _nameAndMoreMenu,
+                      _buildPostText,
+                      _image,
+                      5.sizedBoxOnlyHeight,
+                      _buildBottomLayout
+                    ],
+                  ),
+                ),
+              ],
             ),
+          ],
+        ),
+      );
+
+  Widget get _topInformation => Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            (context.height * 0.053).sizedBoxOnlyWidth,
+            PostTopInformation(model: model),
           ],
         ),
       );
