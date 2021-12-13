@@ -5,9 +5,9 @@ import '../../../core/extensions/double_extensions.dart';
 import '../../../core/extensions/int_extensions.dart';
 import '../../../core/init/navigation/navigator/navigator.dart';
 import '../../../core/widgets/border_container.dart';
+import '../../../view/main/model/post_model.dart';
 import '../../../view/main/view/home/view/sub_views/home_page_full_screen/home_page_full_screen_image.dart';
 import '../../../view/main/view/home/view_model/home_view_model.dart';
-import '../../../view/main/model/post_model.dart';
 import 'sub_widgets/bottom_layout.dart';
 import 'sub_widgets/image_widgets.dart';
 import 'sub_widgets/name_and_menu.dart';
@@ -110,6 +110,7 @@ class _PostWidgetState extends State<PostWidget> {
     List<dynamic> imageUrls,
     int imageIndex,
   ) {
+    if (imageProviders[imageUrls.length - 1] == null) return;
     PushToPage.instance.navigateToCustomPage(
       HomePageFullScreenImage(
         onPageChanged: (index, reason) =>
