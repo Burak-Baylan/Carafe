@@ -30,8 +30,8 @@ class PostTopInformation extends StatelessWidget {
         categoryName = PostContstants.TECHNOLOGY;
         categoryIcon = Icons.phone_android_outlined;
         break;
-      case PostContstants.SOCIAL:
-        categoryName = PostContstants.SOCIAL;
+      case PostContstants.SOFTWARE:
+        categoryName = PostContstants.SOFTWARE;
         categoryIcon = Icons.language_outlined;
         break;
       case PostContstants.GAMES:
