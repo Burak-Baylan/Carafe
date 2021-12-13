@@ -1,11 +1,12 @@
-import 'package:Carafe/app/constants/app_constants.dart';
-import 'package:Carafe/core/base/view_model/base_view_model.dart';
-import 'package:Carafe/core/error/custom_error.dart';
-import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
-import 'package:Carafe/app/models/user_model.dart';
-import 'package:Carafe/view/authenticate/view/signup/view_model/sginup_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
+import '../../../../../../app/constants/app_constants.dart';
+import '../../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../../core/error/custom_error.dart';
+import '../../../../../../core/firebase/auth/authentication/response/authentication_response.dart';
+import '../../../../model/user_model.dart';
+import '../sginup_view_model.dart';
 
 class RegisterUser extends BaseViewModel {
   static RegisterUser? _instance;
