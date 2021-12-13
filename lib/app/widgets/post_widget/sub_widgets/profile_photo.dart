@@ -5,7 +5,7 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/int_extensions.dart';
 import '../../../../core/widgets/border_container.dart';
 import '../../../constants/app_constants.dart';
-import '../../../models/post_model.dart';
+import '../../../../view/main/model/post_model.dart';
 
 class PostProfilePhoto extends StatelessWidget {
   PostProfilePhoto({

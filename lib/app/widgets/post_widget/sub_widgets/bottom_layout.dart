@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/extensions/double_extensions.dart';
 import '../../../../core/extensions/int_extensions.dart';
 import '../../../../core/extensions/timestamp_extensions.dart';
-import '../../../models/post_model.dart';
+import '../../../../view/main/model/post_model.dart';
 
 class PostBottomLayout extends StatelessWidget {
   PostBottomLayout({

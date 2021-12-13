@@ -1,6 +1,7 @@
-import 'package:Carafe/app/constants/app_constants.dart';
-import 'package:Carafe/app/models/post_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../../constants/app_constants.dart';
+import '../../../../view/main/model/post_model.dart';
 
 class PostTopInformation extends StatelessWidget {
   PostTopInformation({

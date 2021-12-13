@@ -1,4 +1,4 @@
-import 'package:Carafe/app/models/post_model.dart';
+import 'package:Carafe/view/main/model/post_model.dart';
 import 'package:flutter/material.dart';
 
 class PostNameAndMenu extends StatelessWidget {
