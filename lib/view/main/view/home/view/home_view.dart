@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../../app/constants/app_constants.dart';
-import '../../../../../app/models/post_model.dart';
+import '../../../model/post_model.dart';
 import '../../../../../app/widgets/post_widget/post_widget.dart';
 import '../../../../../core/extensions/int_extensions.dart';
 import '../view_model/home_view_model.dart';
@@ -19,12 +19,20 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   HomeViewModel viewModel = HomeViewModel();
 
+  late Future getPostsV;
+
+  @override
+  void initState() {
+    getPostsV = getPosts();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backGroundGrey,
       body: FutureBuilder(
-        future: getPosts(),
+        future: getPostsV,
         builder: (context, snapshot) {
           if (snapshot.hasData) return _postBody;
           if (snapshot.hasError) return _errorLayout;
