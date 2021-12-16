@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ZoomableImage extends StatefulWidget {
