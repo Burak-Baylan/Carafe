@@ -1,32 +1,38 @@
+import 'view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/extensions/context_extensions.dart';
-import '../../../core/extensions/double_extensions.dart';
-import '../../../core/extensions/int_extensions.dart';
-import '../../../core/init/navigation/navigator/navigator.dart';
-import '../../../core/widgets/border_container.dart';
-import '../../../view/main/model/post_model.dart';
-import '../../../view/main/view/home/view/sub_views/home_page_full_screen/home_page_full_screen_image.dart';
-import '../../../view/main/view/home/view_model/home_view_model.dart';
+import '../../../../../core/extensions/context_extensions.dart';
+import '../../../../../core/extensions/double_extensions.dart';
+import '../../../../../core/extensions/int_extensions.dart';
+import '../../../../../core/init/navigation/navigator/navigator.dart';
+import '../../../../../core/widgets/border_container.dart';
+import '../../../model/post_model.dart';
+import '../../home/view/sub_views/home_page_full_screen_image/home_page_full_screen_image.dart';
+import '../../home/view_model/home_view_model.dart';
 import 'sub_widgets/bottom_layout.dart';
-import 'sub_widgets/image_widgets.dart';
-import 'sub_widgets/name_and_menu.dart';
+import 'sub_widgets/name_and_menu/name_and_menu.dart';
+import 'sub_widgets/post_image_widget.dart';
 import 'sub_widgets/post_top_information.dart';
 import 'sub_widgets/profile_photo.dart';
 
 class PostWidget extends StatefulWidget {
-  PostWidget({Key? key, required this.model, required this.viewModel})
-      : super(key: key);
+  PostWidget({
+    Key? key,
+    required this.model,
+    required this.homeViewModel,
+  }) : super(key: key);
 
   PostModel model;
-  HomeViewModel viewModel;
+  HomeViewModel homeViewModel;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  PostViewModel postViewModel = PostViewModel();
   late PostModel model;
+
   @override
   Widget build(BuildContext context) {
     _initializeValues();
@@ -51,6 +57,7 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   _initializeValues() {
+    postViewModel.setPostModel(widget.model);
     model = widget.model;
   }
 
@@ -114,7 +121,7 @@ class _PostWidgetState extends State<PostWidget> {
     PushToPage.instance.navigateToCustomPage(
       HomePageFullScreenImage(
         onPageChanged: (index, reason) =>
-            widget.viewModel.changeFullScreenImageIndex(index),
+            widget.homeViewModel.changeFullScreenImageIndex(index),
         imageIndex: imageIndex,
         imageProviders: imageProviders,
         imageUrls: imageUrls,
@@ -126,9 +133,13 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget get _buildPp => PostProfilePhoto(postModel: model);
 
-  Widget get _nameAndMoreMenu => PostNameAndMenu(postModel: model);
+  Widget get _nameAndMoreMenu => PostNameAndMenu(
+        postModel: model,
+        viewModel: widget.homeViewModel,
+      );
 
-  Widget get _buildBottomLayout => PostBottomLayout(postModel: model);
+  Widget get _buildBottomLayout =>
+      PostBottomLayout(postModel: model, postViewModel: postViewModel, homeViewModel: widget.homeViewModel);
 
   Widget get _buildPostText => model.text != null
       ? Column(

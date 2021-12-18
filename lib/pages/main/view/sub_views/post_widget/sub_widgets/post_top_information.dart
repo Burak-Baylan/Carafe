@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/app_constants.dart';
-import '../../../../view/main/model/post_model.dart';
+import '../../../../../../app/constants/app_constants.dart';
+import '../../../../model/post_model.dart';
+
 
 class PostTopInformation extends StatelessWidget {
   PostTopInformation({
@@ -28,19 +29,23 @@ class PostTopInformation extends StatelessWidget {
         break;
       case PostContstants.TECHNOLOGY:
         categoryName = PostContstants.TECHNOLOGY;
-        categoryIcon = Icons.phone_android_outlined;
+        categoryIcon = PostContstants.TECHNOLOGY_ICON;
         break;
       case PostContstants.SOFTWARE:
         categoryName = PostContstants.SOFTWARE;
-        categoryIcon = Icons.language_outlined;
+        categoryIcon = PostContstants.SOFTWARE_ICON;
         break;
       case PostContstants.GAMES:
         categoryName = PostContstants.GAMES;
-        categoryIcon = Icons.games_outlined;
+        categoryIcon = PostContstants.GAMES_ICON;
         break;
       case PostContstants.ADVICES:
         categoryName = PostContstants.ADVICES;
-        categoryIcon = Icons.book_outlined;
+        categoryIcon = PostContstants.ADVICES_ICON;
+        break;
+      case PostContstants.ENTERPRISE:
+        categoryName = PostContstants.ENTERPRISE;
+        categoryIcon = PostContstants.ENTERPRISE_ICON;
         break;
       default:
     }

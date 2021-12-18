@@ -1,8 +1,8 @@
+import 'package:Carafe/core/extensions/context_extensions.dart';
+import 'package:Carafe/core/widgets/full_screen_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-import '../../../../core/extensions/context_extensions.dart';
-import '../../../../core/widgets/full_screen_image.dart';
 
 class PostFullScreenImage extends StatelessWidget {
   PostFullScreenImage({
