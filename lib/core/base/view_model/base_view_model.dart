@@ -1,25 +1,19 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
-import '../../firebase/auth/authentication/service/firebase_auth_service.dart';
-import '../../firebase/firestore/manager/firebase_user_manager.dart';
-import '../../firebase/firestore/service/firebase.dart';
-import '../../firebase/storage/service/firebase_storage_service.dart';
+
+import '../../extensions/double_extensions.dart';
+import '../../firebase/base/firebase_base.dart';
 import '../../helpers/colorful_print.dart';
 import '../../helpers/dominant_color_getter.dart';
 import '../../init/navigation/service/navigation_service.dart';
 import '../../widgets/custom_alert_dialog.dart';
 
-abstract class BaseViewModel {
+abstract class BaseViewModel with FirebaseBase {
   BuildContext? context;
   setContext(BuildContext context);
-  FirebaseAuthService authService = FirebaseAuthService.instance;
-  FirebaseUserManager userService = FirebaseUserManager.instance;
-
-  FirestoreService firestoreService = FirestoreService.instance;
-  FirebaseStorageService storageService = FirebaseStorageService.instance;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Timestamp currentTime = Timestamp.now();
 
@@ -28,9 +22,20 @@ abstract class BaseViewModel {
 
   navigateToPage({required String path, required Object? data}) =>
       NavigationService.instance.navigateToPage(path: path, data: data);
-
   replacePage({required String path, required Object? data}) =>
       NavigationService.instance.replacePageNamed(path: path, data: data);
+
+  customNavigateToPage({required Widget page, bool animate = false}) =>
+      NavigationService.instance.customNavigateToPage(page, animate: animate);
+  customReplacePage({required Widget page, bool animate = false}) =>
+      NavigationService.instance.replacePage(page, animate: animate);
+
+  bottomToTopAnimation(Widget child, Animation<double> animation) =>
+      SlideTransition(
+        child: child,
+        position: Tween<Offset>(begin: 1.0.offsetY, end: 0.0.offsetXY)
+            .animate(animation),
+      );
 
   showAlert(
     String title,
@@ -39,7 +44,7 @@ abstract class BaseViewModel {
     bool disableNegativeButton = false,
     bool disablePositiveButton = false,
     String? positiveButtonText,
-    String? negativeButtonText,
+    String? negativeButtonText = 'Confirm',
     Function? onPressedPositiveButton,
     Function? onPressedNegativeButton,
   }) =>
@@ -52,7 +57,7 @@ abstract class BaseViewModel {
         positiveButtonText: positiveButtonText,
         onPressedPositiveButton: onPressedPositiveButton,
         onPressedNegativeButton: onPressedNegativeButton,
-        negativeButtonText: negativeButtonText ?? "Confirm",
+        negativeButtonText: negativeButtonText,
       ).show();
 
   printYellow(String text) => ColorfulPrint.yellow(text);
