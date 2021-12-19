@@ -1,8 +1,9 @@
-import 'package:Carafe/core/error/custom_error.dart';
-import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
-import 'package:Carafe/core/firebase/base/firebase_base.dart';
-import 'package:Carafe/view/authenticate/view/login/model/login_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../../../../pages/authenticate/view/login/model/login_model.dart';
+import '../../../../data/custom_data.dart';
+import '../../../../error/custom_error.dart';
+import '../../../base/firebase_base.dart';
 
 class FirebaseAuthService extends FirebaseBase {
   static FirebaseAuthService? _instance;
@@ -10,28 +11,35 @@ class FirebaseAuthService extends FirebaseBase {
       _instance = _instance == null ? FirebaseAuthService._init() : _instance!;
   FirebaseAuthService._init();
 
-  Future<AuthnenticationResponse> login(LoginModel loginModel) async {
+  User? get currentUser => auth.currentUser;
+  String? get username => currentUser?.displayName;
+  String? get ppUrl => currentUser?.photoURL;
+  String? get userId => currentUser?.uid;
+  String? get email => currentUser?.email;
+  bool? get isEmailValid => currentUser?.emailVerified;
+
+  Future<CustomData<UserCredential>> login(LoginModel loginModel) async {
     try {
       UserCredential? userCredential = await auth.signInWithEmailAndPassword(
         email: loginModel.email!,
         password: loginModel.password!,
       );
-      return AuthnenticationResponse(null, userCredential.user);
+      return CustomData<UserCredential>(userCredential, null);
     } on FirebaseException catch (e) {
-      return AuthnenticationResponse(CustomError(e.message), null);
+      return CustomData<UserCredential>(null, CustomError(e.message));
     }
   }
 
-  Future<AuthnenticationResponse> signup(LoginModel loginModel) async {
+  Future<CustomData<UserCredential>> signup(LoginModel loginModel) async {
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: loginModel.email!,
         password: loginModel.password!,
       );
       await userCredential.user!.updateDisplayName(loginModel.displayName);
-      return AuthnenticationResponse(null, userCredential.user);
+      return CustomData<UserCredential>(userCredential, null);
     } on FirebaseException catch (e) {
-      return AuthnenticationResponse(CustomError(e.message), null);
+      return CustomData<UserCredential>(null, CustomError(e.message));
     }
   }
 
@@ -44,6 +52,15 @@ class FirebaseAuthService extends FirebaseBase {
     }
   }
 
-  Future<void> sendVerificationEmail(User user) async =>
-      await user.sendEmailVerification();
+  Future<CustomError> sendPasswordResetEmail(String email) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+      return CustomError(null);
+    } on FirebaseException catch (e) {
+      return CustomError(e.message);
+    }
+  }
+
+  Future<void> sendVerificationEmail() async =>
+      await currentUser?.sendEmailVerification();
 }
