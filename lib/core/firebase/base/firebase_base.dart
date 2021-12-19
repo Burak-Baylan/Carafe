@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../constants/firebase/firebase_constants.dart';
 import '../auth/authentication/service/firebase_auth_service.dart';
-import '../firestore/helper/firestore_helper.dart';
 import '../firestore/manager/firebase_manager.dart';
 import '../firestore/manager/firebase_user_manager.dart';
 import '../firestore/manager/post_manager.dart';
@@ -24,7 +23,6 @@ abstract class FirebaseBase {
   FirebasePostManager get firebasePostManger => FirebasePostManager.instance;
   FirebaseStorageService get storageService => FirebaseStorageService.instance;
   FirebaseConstants get firebaseConstants => FirebaseConstants.instance;
-  FirestoreHelper get firestoreHelper => FirestoreHelper.instance;
   FirebasePostManager get postManager => FirebasePostManager.instance;
 
   CollectionReference get allUsersCollectionRef => firebaseConstants.allUsersCollectionRef;
