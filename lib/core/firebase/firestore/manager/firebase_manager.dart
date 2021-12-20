@@ -1,8 +1,8 @@
-import 'package:Carafe/core/data/custom_data.dart';
-import 'package:Carafe/core/firebase/base/firebase_base.dart';
-import 'package:Carafe/pages/authenticate/model/user_model.dart';
-import 'package:Carafe/pages/main/model/post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../../pages/authenticate/model/user_model.dart';
+import '../../../../pages/main/model/post_model.dart';
+import '../../base/firebase_base.dart';
 
 class FirebaseManager extends FirebaseBase {
   static FirebaseManager? _instance;
@@ -33,7 +33,7 @@ class FirebaseManager extends FirebaseBase {
   Future<PostModel?> getPostInformations(String postId) async {
     var rawData = await firebaseService.getDocument(postDocRef(postId));
     if (rawData.error != null) return null;
-    var data = rawData.data! as Map<String, dynamic>;
+    var data = rawData.data!.data() as Map<String, dynamic>;
     return PostModel.fromJson(data);
   }
 
@@ -52,7 +52,7 @@ class FirebaseManager extends FirebaseBase {
   ) async {
     var rawData = await firebaseService.getDocument(reference);
     if (rawData.error != null) return null;
-    var data = rawData.data! as Map<String, dynamic>;
+    var data = rawData.data!.data() as Map<String, dynamic>;
     return data;
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 extension RadiusExtension on int {
   Radius get radiusCircular => Radius.circular(toDouble());
 
+  BorderRadius get borderRadiusCircular => BorderRadius.circular(toDouble());
   BorderRadius get radiusAll => BorderRadius.all(radiusCircular);
   BorderRadius get radiusTopLeft => BorderRadius.only(topLeft: radiusCircular);
   BorderRadius get radiusTopRight =>
@@ -38,4 +39,20 @@ extension DurationExtension on int {
   Duration get durationSeconds => Duration(seconds: this);
   Duration get durationMilliseconds => Duration(milliseconds: this);
   Duration get durationnMicroseconds => Duration(microseconds: this);
+}
+
+extension NumberShortenerExtension on int {
+  String get shorten {
+    if (this > 999 && this < 99999) {
+      return "${(this / 1000).toStringAsFixed(1)} K";
+    } else if (this > 99999 && this < 999999) {
+      return "${(this / 1000).toStringAsFixed(0)} K";
+    } else if (this > 999999 && this < 999999999) {
+      return "${(this / 1000000).toStringAsFixed(1)} M";
+    } else if (this > 999999999) {
+      return "${(this / 1000000000).toStringAsFixed(1)} B";
+    } else {
+      return toString();
+    }
+  }
 }
