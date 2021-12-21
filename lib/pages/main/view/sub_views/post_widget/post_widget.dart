@@ -72,23 +72,23 @@ class _PostWidgetState extends State<PostWidget> {
               children: [
                 _buildPp,
                 5.sizedBoxOnlyWidth,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      _nameAndMoreMenu,
-                      _buildPostText,
-                      _image,
-                      5.sizedBoxOnlyHeight,
-                      _buildBottomLayout
-                    ],
-                  ),
-               ),
-              ], 
+                Expanded(child: _postInfromationLayotu),
+              ],
             ),
           ],
         ),
+      );
+
+  Widget get _postInfromationLayotu => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          _nameAndMoreMenu,
+          _buildPostText,
+          _image,
+          5.sizedBoxOnlyHeight,
+          _buildPostBottomLayout
+        ],
       );
 
   Widget get _topInformation => Align(
@@ -138,8 +138,11 @@ class _PostWidgetState extends State<PostWidget> {
         viewModel: widget.homeViewModel,
       );
 
-  Widget get _buildBottomLayout =>
-      PostBottomLayout(postModel: model, postViewModel: postViewModel, homeViewModel: widget.homeViewModel);
+  Widget get _buildPostBottomLayout => PostBottomLayout(
+        postModel: model,
+        postViewModel: postViewModel,
+        homeViewModel: widget.homeViewModel,
+      );
 
   Widget get _buildPostText => model.text != null
       ? Column(

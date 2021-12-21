@@ -28,8 +28,8 @@ class FirestoreService extends FirebaseBase {
     String fieldName,
   ){
     try {
-      var a = path.get(fieldName);
-      return CustomData<E>(a, null);
+      var data = path.get(fieldName);
+      return CustomData<E>(data, null);
     } catch (e) {
       return CustomData<E>(null, CustomError(e.toString()));
     }
