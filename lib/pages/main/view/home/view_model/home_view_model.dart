@@ -1,10 +1,9 @@
-import 'package:Carafe/core/firebase/firestore/manager/post_manager.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../core/extensions/widget_extension.dart';
 import '../../../model/post_model.dart';
 import '../../main_screen.dart';
 
@@ -18,37 +17,27 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
 
   @override
   setContext(BuildContext context) => this.context = context;
-
   @observable
   int fullScreenImageIndex = 0;
-
   @observable
   List<PostModel> posts = [];
-
   @observable
   Widget homeBody = Container();
-
   @observable
   ScrollPhysics? postsScrollable;
-
   @observable
   bool moreImageLoadingProgressState = false;
-
   @action
   changeHomeBody(Widget body) => homeBody = body;
-
   @action
   changeFullScreenImageIndex(int index) => fullScreenImageIndex = index;
-
   @action
   changePostsScrollable(ScrollPhysics? physics) => postsScrollable = physics;
-
   @action
-  lockScrollable() => changePostsScrollable(const NeverScrollableScrollPhysics());
-
+  lockScrollable() =>
+      changePostsScrollable(const NeverScrollableScrollPhysics());
   @action
   openScrollable() => changePostsScrollable(null);
-
   @action
   changeMoreImageLoadingProgressState() =>
       moreImageLoadingProgressState = !moreImageLoadingProgressState;
@@ -75,20 +64,21 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
   }
 
   @action
-  Future<List<PostModel>> getPosts() async {
+  Future<List<PostModel>> getPosts(Widget postBody) async {
+    changeHomeBody(const CircularProgressIndicator().center);
     lockScrollable();
     posts.clear();
     posts = await firebasePostManger.getPosts();
     openScrollable();
+    changeHomeBody(postBody);
     return posts;
   }
-  
-FirebaseAuth get auth => FirebaseAuth.instance;
+
   Future<List<PostModel>> loadMorePosts() async {
     changeMoreImageLoadingProgressState();
-    var postsHere = await firebasePostManger.loadMorePost();
-    for (var element in postsHere) {
-      posts.add(element);
+    var postList = await firebasePostManger.loadMorePost();
+    for (var post in postList) {
+      posts.add(post);
     }
     changeMoreImageLoadingProgressState();
     return posts;

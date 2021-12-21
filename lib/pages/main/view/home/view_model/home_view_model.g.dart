@@ -92,8 +92,8 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   final _$getPostsAsyncAction = AsyncAction('_HomeViewModelBase.getPosts');
 
   @override
-  Future<List<PostModel>> getPosts() {
-    return _$getPostsAsyncAction.run(() => super.getPosts());
+  Future<List<PostModel>> getPosts(Widget postBody) {
+    return _$getPostsAsyncAction.run(() => super.getPosts(postBody));
   }
 
   final _$_HomeViewModelBaseActionController =
