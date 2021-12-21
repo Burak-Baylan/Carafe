@@ -1,3 +1,4 @@
+import 'package:Carafe/pages/authenticate/view/signup/view_model/helpers/register_user.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/base/view_model/base_view_model.dart';
@@ -9,10 +10,6 @@ abstract class IAuthenticationViewModel extends BaseViewModel {
   void changeTabIndex(int index);
   @override
   setContext(BuildContext context);
-
   AuthenticateViewModel authVm = AuthenticateViewModel();
-
-  bool get isEmailVerified => authService.isEmailValid!;
-  Future<void> sendVerificationMail() async =>
-      await authService.sendVerificationEmail(authService.currentUser!);
+  RegisterUser registerUser = RegisterUser.instance;
 }

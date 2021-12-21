@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../extensions/double_extensions.dart';
 import '../../firebase/base/firebase_base.dart';
 import '../../helpers/colorful_print.dart';
-import '../../helpers/dominant_color_getter.dart';
+import '../../helpers/image_colors_getter.dart';
 import '../../init/navigation/service/navigation_service.dart';
 import '../../widgets/custom_alert_dialog.dart';
 
@@ -17,8 +17,7 @@ abstract class BaseViewModel with FirebaseBase {
 
   Timestamp currentTime = Timestamp.now();
 
-  Future<Color?> getDominantColor(File image) async =>
-      await DominantColorGetter.getColor(image);
+  ImageColorsGetter imageColorsGetter = ImageColorsGetter();
 
   navigateToPage({required String path, required Object? data}) =>
       NavigationService.instance.navigateToPage(path: path, data: data);
