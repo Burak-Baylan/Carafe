@@ -1,12 +1,10 @@
-import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../../app/constants/app_constants.dart';
-import '../../../model/post_model.dart';
-import '../../../../../app/widgets/post_widget/post_widget.dart';
+import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/int_extensions.dart';
+import '../../sub_views/post_widget/post_widget.dart';
 import '../view_model/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
@@ -19,20 +17,20 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   HomeViewModel viewModel = HomeViewModel();
 
-  late Future getPostsV;
+  late Future postsFuture;
 
   @override
   void initState() {
-    getPostsV = getPosts();
+    postsFuture = viewModel.getPosts(_postBody);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backGroundGrey,
-      body: FutureBuilder(
-        future: getPostsV,
+    return Container(
+      color: AppColors.backGroundGrey,
+      child: FutureBuilder(
+        future: postsFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) return _postBody;
           if (snapshot.hasError) return _errorLayout;
@@ -56,7 +54,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             TextButton(
-              onPressed: () => getPosts(),
+              onPressed: () => viewModel.getPosts(_postBody),
               child: Text(
                 "Refresh",
                 style: TextStyle(
@@ -71,16 +69,13 @@ class _HomeViewState extends State<HomeView> {
   Widget get _postBody => Observer(
         builder: (context) => RefreshIndicator(
           strokeWidth: 2.5,
-          onRefresh: () => getPosts(),
+          onRefresh: () => viewModel.getPosts(_postBody),
           child: NotificationListener<UserScrollNotification>(
             onNotification: (notification) =>
                 viewModel.scrollDirectionController(notification),
             child: Column(
               children: [
-                Flexible(
-                  flex: 12,
-                  child: _builder,
-                ),
+                Flexible(flex: 12, child: _buildPostsList),
                 viewModel.moreImageLoadingProgressState
                     ? morePostLoadingWidget
                     : Container(),
@@ -101,30 +96,21 @@ class _HomeViewState extends State<HomeView> {
         ),
       );
 
-  Widget get _builder => Observer(builder: (_) {
-        return ListView.builder(
+  Widget get _buildPostsList => Observer(
+        builder: (_) => ListView.builder(
           controller: viewModel.scrollController,
           shrinkWrap: true,
           physics: viewModel.postsScrollable,
           itemCount: viewModel.posts.length,
           itemBuilder: (context, index) => _buildPostItem(index),
-        );
-      });
-
-  Future<List<PostModel>> getPosts() async {
-    viewModel.changeHomeBody(const Center(
-      child: CircularProgressIndicator(),
-    ));
-    var posts = await viewModel.getPosts();
-    viewModel.changeHomeBody(_postBody);
-    return posts;
-  }
+        ),
+      );
 
   _buildPostItem(int index) {
     List<Widget> postItem = [];
     postItem.add(PostWidget(
       model: viewModel.posts[index],
-      viewModel: viewModel,
+      homeViewModel: viewModel,
     ));
     if (viewModel.posts.length - 1 == index) {
       postItem.add(15.sizedBoxOnlyHeight);
