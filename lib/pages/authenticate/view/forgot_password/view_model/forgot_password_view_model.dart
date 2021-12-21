@@ -1,26 +1,29 @@
-import 'package:Carafe/core/error/custom_error.dart';
-import 'package:Carafe/core/firebase/auth/authentication/service/forgot_password_service.dart';
-import 'package:Carafe/core/widgets/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../core/error/custom_error.dart';
+import '../../../../../core/widgets/custom_alert_dialog.dart';
+
 part 'forgot_password_view_model.g.dart';
 
 class ForgotPasswordViewModel = _ForgotPasswordViewModelBase
     with _$ForgotPasswordViewModel;
 
-abstract class _ForgotPasswordViewModelBase with Store {
+abstract class _ForgotPasswordViewModelBase extends BaseViewModel with Store {
   TextEditingController emailController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   FocusNode emailFocusNode = FocusNode();
 
-  late BuildContext _context;
-
-  setContext(BuildContext context) => _context = context;
+  @override
+  late BuildContext? context;
+  @override
+  setContext(BuildContext context) => this.context = context;
 
   Future<void> sendPasswordResetMail() async {
     if (formKey.currentState!.validate()) {
-      await ForgotPasswordService.instance
-          .send(emailController.text)
+      await authService
+          .sendPasswordResetEmail(emailController.text)
           .then((value) => _responseControl(value));
     }
   }
@@ -39,12 +42,10 @@ abstract class _ForgotPasswordViewModelBase with Store {
     _showAlert("Sent", "Email sent, please check your mailbox.");
   }
 
-  _unseccessfulResponse(String message) {
-    _showAlert("Error", message);
-  }
+  _unseccessfulResponse(String message) => _showAlert("Error", message);
 
   _showAlert(String title, String message) => CustomAlertDialog(
-        context: _context,
+        context: context!,
         title: title,
         message: message,
         disableNegativeButton: true,
