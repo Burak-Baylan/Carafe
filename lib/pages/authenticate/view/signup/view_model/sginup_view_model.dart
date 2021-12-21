@@ -1,9 +1,10 @@
 // ignore_for_file: overridden_fields
+
+import 'package:Carafe/core/data/custom_data.dart';
 import 'package:Carafe/core/extensions/string_extensions.dart';
-import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
 import 'package:Carafe/pages/authenticate/view/login/model/login_model.dart';
-import 'package:Carafe/pages/authenticate/view/signup/view_model/helpers/register_user.dart';
 import 'package:Carafe/pages/authenticate/view_model/base_authentication_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -51,10 +52,10 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     removeTextInputFocus();
   }
 
-  _signup(SignupViewModel viewModel) async {
-    AuthnenticationResponse authenticationResponse = await authService.signup(
+  Future _signup(SignupViewModel viewModel) async {
+    CustomData<UserCredential> authenticationResponse = await authService.signup(
         LoginModel(email: email, password: password, displayName: username));
-    RegisterUser.instance.register(authenticationResponse, viewModel);
+    await registerUser.register(authenticationResponse, viewModel);
   }
 
   initializeCredenticial() {
