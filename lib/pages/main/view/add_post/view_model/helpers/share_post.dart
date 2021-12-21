@@ -1,11 +1,13 @@
+import 'package:Carafe/core/firebase/base/firebase_base.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/extensions/color_extensions.dart';
 import '../../../../model/post_model.dart';
 import '../add_post_view_model.dart';
 
-class SharePost {
+class SharePost with FirebaseBase {
   static SharePost? _instance;
   static SharePost get instance =>
       _instance = _instance == null ? SharePost._init() : _instance!;
@@ -30,19 +32,10 @@ class SharePost {
   }
 
   Future<CustomError> _uploadPost(String postId, PostModel model) async =>
-      await vm.firestoreService
-          .addDocument(vm.firestore.collection("posts").doc(postId), {
-        'postId': model.postId,
-        'text': model.text,
-        'author_id': model.authorId,
-        'created_at': model.createdAt,
-        'like_count': model.likeCount,
-        'comment_count': model.commentCount,
-        'category': model.category,
-        'image_links': model.imageLinks,
-        'images_dominant_color': imagesDominantColors,
-        'post_notifications': model.postNotifications,
-      });
+      await vm.firestoreService.addDocument(
+        vm.firestore.collection(firebaseConstants.postsText).doc(postId),
+        model.toJson(),
+      );
 
   PostModel _prepareModel(String postId) => PostModel(
         postId: postId,
@@ -89,12 +82,9 @@ class SharePost {
         imagesDominantColors.add(Colors.black.getString);
         continue;
       }
-      Color? color = await vm.getDominantColor(element);
-      if (color == null) {
-        imagesDominantColors.add(Colors.black.getString);
-        continue;
-      }
-      imagesDominantColors.add(color.getString);
+      Color dominantColor =
+          await vm.imageColorsGetter.findSuitableColor(element);
+      imagesDominantColors.add(dominantColor.getString);
     }
   }
 
