@@ -1,4 +1,3 @@
-import 'view_model/post_view_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/extensions/context_extensions.dart';
@@ -14,6 +13,7 @@ import 'sub_widgets/name_and_menu/name_and_menu.dart';
 import 'sub_widgets/post_image_widget.dart';
 import 'sub_widgets/post_top_information.dart';
 import 'sub_widgets/profile_photo.dart';
+import 'view_model/post_view_model.dart';
 
 class PostWidget extends StatefulWidget {
   PostWidget({
@@ -84,8 +84,8 @@ class _PostWidgetState extends State<PostWidget> {
                       _buildBottomLayout
                     ],
                   ),
-                ),
-              ],
+               ),
+              ], 
             ),
           ],
         ),

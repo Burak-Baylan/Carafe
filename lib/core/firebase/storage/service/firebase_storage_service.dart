@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:Carafe/core/error/custom_error.dart';
 import 'package:Carafe/core/firebase/base/firebase_base.dart';
-import 'package:Carafe/view/main/view/add_post/view_model/add_post_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseStorageService extends FirebaseBase {

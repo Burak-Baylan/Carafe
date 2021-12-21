@@ -27,6 +27,7 @@ class AddPostCategorySelector {
           _buildItem(PostContstants.SOFTWARE, 3),
           _buildItem(PostContstants.GAMES, 4),
           _buildItem(PostContstants.ADVICES, 5),
+          _buildItem(PostContstants.ENTERPRISE, 6),
         ],
       ),
     );
@@ -53,6 +54,9 @@ class AddPostCategorySelector {
         break;
       case 5:
         vm.selectCategory(PostContstants.ADVICES);
+        break;
+      case 6:
+        vm.selectCategory(PostContstants.ENTERPRISE);
         break;
       default:
     }
