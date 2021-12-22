@@ -8,19 +8,22 @@ class ImageColorsGetter {
   Future<Color> findSuitableColor(File image) async {
     Color? color;
     color = await darkMutedColor(image);
-    if (color != null && color != AppColors.black) return color;
+    if (_colorControl(color)) return color!;
     color = await darkVibrantColor(image);
-    if (color != null && color != AppColors.black) return color;
+    if (_colorControl(color)) return color!;
     color = await dominantColor(image);
-    if (color != null && color != AppColors.black) return color;
+    if (_colorControl(color)) return color!;
     color = await lightMutedColor(image);
-    if (color != null && color != AppColors.black) return color;
+    if (_colorControl(color)) return color!;
     color = await lightVibrantColor(image);
-    if (color != null && color != AppColors.black) return color;
+    if (_colorControl(color)) return color!;
     color = await dominantColor(image);
-    if (color != null && color != AppColors.black) return color;
+    if (_colorControl(color)) return color!;
     return AppColors.black;
   }
+
+  bool _colorControl(Color? color) =>
+      color != null && (color != AppColors.black || color != AppColors.white);
 
   Future<Color?> darkMutedColor(File image) async {
     var palette = await getPalette(image);
