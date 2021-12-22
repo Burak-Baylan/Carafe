@@ -18,11 +18,14 @@ class FirebaseConstants extends FirebaseBase {
   String postNotificationsText = "post_notifications";
   String textText = "text";
   String authorIdText = "author_id";
+  String followersCount = "followers_count";
   //*
 
   String collectionLikesText = "likers";
   String postLikersText = "likes";
   String usersText = "Users";
+
+  int numberOfPostsToBeUploadedAtOnce = 15;
 
   @override
   DocumentReference<Map<String, dynamic>> userDocRef(String userId) =>
@@ -32,8 +35,7 @@ class FirebaseConstants extends FirebaseBase {
       allPostsCollectionRef.doc(postId);
 
   CollectionReference<Map<String, dynamic>> postLikesCollectionRef(
-    String postId
-  ) =>
+          String postId) =>
       allPostsCollectionRef.doc(postId).collection(postLikersText);
 
   @override
@@ -53,6 +55,5 @@ class FirebaseConstants extends FirebaseBase {
     String postId,
     String userId,
   ) =>
-      postLikesCollectionRef(postId)
-          .where(authorIdText, isEqualTo: userId);
+      postLikesCollectionRef(postId).where(authorIdText, isEqualTo: userId);
 }
