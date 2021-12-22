@@ -42,6 +42,19 @@ class PostModel {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'author_id': authorId,
+        'category': category,
+        'comment_count': commentCount,
+        'created_at': createdAt,
+        'image_links': imageLinks,
+        'images_dominant_color': imagesDominantColors,
+        'like_count': likeCount,
+        'postId': postId,
+        'text': text,
+        'post_notifications': postNotifications,
+      };
+
   @override
   String toString() =>
       "[[[(((PostId: $postId | Text: $text | AuthorId: $authorId | CreatedAt: $createdAt | LikeCount: $likeCount | CommentCount: $commentCount" +

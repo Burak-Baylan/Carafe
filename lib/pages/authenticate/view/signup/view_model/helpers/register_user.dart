@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
 import '../../../../../../app/constants/app_constants.dart';
 import '../../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../../core/data/custom_data.dart';
 import '../../../../../../core/error/custom_error.dart';
-import '../../../../../../core/firebase/auth/authentication/response/authentication_response.dart';
 import '../../../../model/user_model.dart';
 import '../sginup_view_model.dart';
 
@@ -15,33 +15,35 @@ class RegisterUser extends BaseViewModel {
   RegisterUser._init();
 
   late SignupViewModel vm;
-  late AuthnenticationResponse authenticationResponse;
+  late CustomData<UserCredential> authenticationResponse;
 
-  register(
-    AuthnenticationResponse authenticationResponse,
+  Future register(
+    CustomData<UserCredential> response,
     SignupViewModel viewModel,
   ) async {
     vm = viewModel;
-    this.authenticationResponse = authenticationResponse;
+    authenticationResponse = response;
 
-    bool isResponseOkey = authSignupResponseControl(authenticationResponse);
+    bool isResponseOkey = authSignupResponseControl(response);
 
     if (isResponseOkey) {
       CustomError userCreateResponse =
           await userService.createUser(_getUserModel);
 
-      bool isUserCrated = await firebaseSignupResponseControl(
-          userCreateResponse, authenticationResponse);
+      response.error = userCreateResponse;
+
+      bool isUserCrated = await firebaseSignupResponseControl(response);
 
       if (isUserCrated) {
-        await authService.sendVerificationEmail(authenticationResponse.user!);
+        await authService.sendVerificationEmail();
         vm.showSignupSuccessAlert();
         vm.clearAllTextInputs();
       }
     }
+    return;
   }
 
-  bool authSignupResponseControl(AuthnenticationResponse response) {
+  bool authSignupResponseControl(CustomData response) {
     if (response.error != null) {
       showAlert("Error", response.error!.errorMessage.toString(),
           context: vm.context!, disableNegativeButton: true);
@@ -51,22 +53,24 @@ class RegisterUser extends BaseViewModel {
   }
 
   Future<bool> firebaseSignupResponseControl(
-    CustomError response,
-    AuthnenticationResponse authResponse,
+    CustomData<UserCredential> response,
   ) async {
     vm.currentTime;
-    if (response.errorMessage == null) {
+    if (response.error!.errorMessage == null) {
       return true;
     } else {
-      await authService.deleteUser(authResponse.user!);
-      showAlert("Error", response.errorMessage!,
+      await authService.deleteUser(response.data!.user!);
+      showAlert("Error", response.error!.errorMessage!,
           context: vm.context!, disableNegativeButton: true);
       return false;
     }
   }
 
   UserModel get _getUserModel => UserModel(
-        user: authenticationResponse.user!,
+        userId: authenticationResponse.data!.user!.uid,
+        email: vm.email!,
+        username: vm.username!,
+        photoUrl: null,
         profileDescription: null,
         createdAt: Timestamp.now(),
         profilePrivacy: false,
