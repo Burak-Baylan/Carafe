@@ -2,13 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+
 import 'app/app_settings/app_settings_view_model.dart';
 import 'core/extensions/color_extensions.dart';
 import 'core/extensions/context_extensions.dart';
 import 'core/init/navigation/route/navigation_route.dart';
 import 'core/init/navigation/service/navigation_service.dart';
-import 'view/authenticate/authenticate_view.dart';
-import 'view/main/view/main_screen.dart';
+import 'pages/authenticate/authenticate_view.dart';
+import 'pages/main/view/main_screen.dart';
 
 void main() {
   runApp(MyApp());

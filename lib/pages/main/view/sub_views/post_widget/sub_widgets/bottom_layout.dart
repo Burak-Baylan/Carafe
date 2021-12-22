@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../../../../../core/data/custom_data.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
@@ -28,9 +29,10 @@ class PostBottomLayout extends StatelessWidget {
 
   _initState(BuildContext context) {
     this.context = context;
-    postViewModel.findLikeIcon;
-    postLikeCountStream = postViewModel.firebaseConstants
-        .postLikesCollectionRef(postModel.postId)
+    postViewModel.findLikeIcon();
+    postLikeCountStream = postViewModel.firebaseConstants.allPostsCollectionRef
+        .where(postViewModel.firebaseConstants.postIdText,
+            isEqualTo: postModel.postId)
         .snapshots();
   }
 
@@ -98,14 +100,19 @@ class PostBottomLayout extends StatelessWidget {
   Widget get _buildLikeText =>
       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: postLikeCountStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _buildMyText(snapshot.data!.docs.length.toString(),
-                animate: true);
-          }
-          return _buildMyText(postModel.likeCount.toString(), animate: true);
-        },
+        builder: (context, snapshot) => _findLikeText(snapshot),
       );
+
+  Widget _findLikeText(var snapshot) {
+    if (snapshot.hasData) {
+      CustomData<int> data = postViewModel.firebaseService.getAField<int>(
+          snapshot.data!.docs[0], postViewModel.firebaseConstants.likeCountText);
+      if (data.data != null) {
+        return _buildMyText(data.data.toString(), animate: true);
+      }
+    }
+    return _buildMyText(postModel.likeCount.toString(), animate: true);
+  }
 
   Widget get _buildLikeButton => Observer(
         builder: (context) => _buildSmallButtons(
