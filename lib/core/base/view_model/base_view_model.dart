@@ -15,7 +15,7 @@ abstract class BaseViewModel with FirebaseBase {
   BuildContext? context;
   setContext(BuildContext context);
 
-  Timestamp currentTime = Timestamp.now();
+  Timestamp get currentTime => Timestamp.now();
 
   ImageColorsGetter imageColorsGetter = ImageColorsGetter();
 

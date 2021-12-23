@@ -24,6 +24,7 @@ class FirebaseConstants extends FirebaseBase {
   String collectionLikesText = "likers";
   String postLikersText = "likes";
   String usersText = "Users";
+  String userSavedPostsText = "saved_posts";
 
   int numberOfPostsToBeUploadedAtOnce = 15;
 
@@ -37,6 +38,10 @@ class FirebaseConstants extends FirebaseBase {
   CollectionReference<Map<String, dynamic>> postLikesCollectionRef(
           String postId) =>
       allPostsCollectionRef.doc(postId).collection(postLikersText);
+
+  CollectionReference<Map<String, dynamic>> userPostSaveCollectionRef(
+          String userId) =>
+      allUsersCollectionRef.doc(userId).collection(userSavedPostsText);
 
   @override
   CollectionReference<Map<String, dynamic>> get allUsersCollectionRef =>
@@ -56,4 +61,12 @@ class FirebaseConstants extends FirebaseBase {
     String userId,
   ) =>
       postLikesCollectionRef(postId).where(authorIdText, isEqualTo: userId);
+
+  Query<Map<String, dynamic>> userSaveStatusPath(
+    String postId,
+    String userId,
+  ) =>
+      userPostSaveCollectionRef(userId).where('post_id', isEqualTo: postId);
+
+      
 }
