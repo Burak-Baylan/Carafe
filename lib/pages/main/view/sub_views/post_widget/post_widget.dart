@@ -1,3 +1,4 @@
+import 'package:Carafe/pages/authenticate/model/user_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/extensions/context_extensions.dart';
@@ -134,9 +135,9 @@ class _PostWidgetState extends State<PostWidget> {
   Widget get _buildPp => PostProfilePhoto(postModel: model);
 
   Widget get _nameAndMoreMenu => PostNameAndMenu(
-        postModel: model,
-        viewModel: widget.homeViewModel,
-      );
+          postModel: model,
+          homeViewModel: widget.homeViewModel,
+        );
 
   Widget get _buildPostBottomLayout => PostBottomLayout(
         postModel: model,

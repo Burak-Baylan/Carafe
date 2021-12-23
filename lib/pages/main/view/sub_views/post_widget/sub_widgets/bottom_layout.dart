@@ -30,6 +30,7 @@ class PostBottomLayout extends StatelessWidget {
   _initState(BuildContext context) {
     this.context = context;
     postViewModel.findLikeIcon();
+    postViewModel.findPostSaveIcon();
     postLikeCountStream = postViewModel.firebaseConstants.allPostsCollectionRef
         .where(postViewModel.firebaseConstants.postIdText,
             isEqualTo: postModel.postId)
@@ -106,7 +107,8 @@ class PostBottomLayout extends StatelessWidget {
   Widget _findLikeText(var snapshot) {
     if (snapshot.hasData) {
       CustomData<int> data = postViewModel.firebaseService.getAField<int>(
-          snapshot.data!.docs[0], postViewModel.firebaseConstants.likeCountText);
+          snapshot.data!.docs[0],
+          postViewModel.firebaseConstants.likeCountText);
       if (data.data != null) {
         return _buildMyText(data.data.toString(), animate: true);
       }
@@ -126,8 +128,10 @@ class PostBottomLayout extends StatelessWidget {
         Icons.mode_comment_outlined,
       );
 
-  Widget get _buildSaveButton => _buildSmallButtons(
-        () {},
-        Icons.bookmark_outline,
-      );
+  Widget get _buildSaveButton => Observer(
+    builder: (context) => _buildSmallButtons(
+          () => postViewModel.save(),
+          postViewModel.postSaveIcon,
+        ),
+  );
 }

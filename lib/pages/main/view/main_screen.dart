@@ -30,11 +30,12 @@ class _MainScreenState extends BaseView<MainScreen> {
     this.context = context;
     _setViewModel(context);
     return Scaffold(
+      appBar: _appBar,
       backgroundColor: AppColors.backGroundGrey,
       drawer: MainScreenDrawer(viewModel: mainVm),
       floatingActionButton: _fab,
       bottomNavigationBar: MainBottomNavigation(viewModel: mainVm),
-      body: SafeArea(child: _body),
+      body: SafeArea(child: HomeView()),
     );
   }
 
@@ -58,26 +59,16 @@ class _MainScreenState extends BaseView<MainScreen> {
             NavigationService.instance.customNavigateToPage(AddPostPage()),
       );
 
-  Widget get _body {
-    return NestedScrollView(
-      floatHeaderSlivers: true,
-      body: HomeView(),
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => [
-        _appBar,
-      ],
-    );
-  }
-
-  Widget get _appBar => SliverAppBar(
+  AppBar get _appBar => AppBar(
         backgroundColor: AppColors.white,
-        centerTitle: true,
-        forceElevated: true,
-        floating: false,
-        pinned: true,
-        elevation: 4,
         leading: _leading,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: 15.radiusCircular),
+        centerTitle: true,
+        title: Text(
+          "Home",
+          style: TextStyle(
+            fontSize: 16,
+            color: context.theme.colorScheme.primary,
+          ),
         ),
         actions: [
           IconButton(
@@ -88,13 +79,6 @@ class _MainScreenState extends BaseView<MainScreen> {
             onPressed: () {},
           ),
         ],
-        title: Text(
-          "Home",
-          style: TextStyle(
-            fontSize: 16,
-            color: context.theme.colorScheme.primary,
-          ),
-        ),
       );
 
   Widget get _leading => Padding(
@@ -114,6 +98,5 @@ class _MainScreenState extends BaseView<MainScreen> {
 
   _setViewModel(BuildContext context) {
     mainVm.setContext(context);
-    mainVm.userControl(user);
   }
 }
