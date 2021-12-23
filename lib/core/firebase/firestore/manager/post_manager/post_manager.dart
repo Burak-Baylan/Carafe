@@ -1,8 +1,10 @@
+import 'package:Carafe/core/firebase/firestore/manager/post_manager/save_manager.dart';
+import 'package:Carafe/pages/main/model/like_model.dart';
+import 'package:Carafe/pages/main/model/post_save_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../pages/main/model/like_model.dart';
-import '../../../../pages/main/model/post_model.dart';
-import '../../base/firebase_base.dart';
+import '../../../../../pages/main/model/post_model.dart';
+import '../../../base/firebase_base.dart';
 
 class FirebasePostManager extends FirebaseBase {
   static FirebasePostManager? _instance;
@@ -52,43 +54,45 @@ class FirebasePostManager extends FirebaseBase {
     return models;
   }
 
-  Future likePost(
+  Future<bool> likePost(String postId, Timestamp currentTime) async =>
+      await postLikeManager.likePost(postId, currentTime);
+
+  Future<bool> unlikePost(String postId, String userId) async =>
+      await postLikeManager.unlikePost(postId, userId);
+
+  Future<bool> savePost(
     String postId,
+    String userId,
     Timestamp currentTime,
-    String likeId,
   ) async {
-    await firebaseManager.increaseField(
-      documentReference: firebaseConstants.postDocRef(postId),
-      fieldName: firebaseConstants.likeCountText,
+    var saveModel = PostSaveModel(
+      savedAt: currentTime,
+      userId: userId,
+      postId: postId,
     );
-    String userId = authService.userId.toString();
-    Map<String, dynamic> json =
-        LikeModel(authorId: userId, createdAt: currentTime).toJson();
-    var ref = firebaseConstants.allPostsCollectionRef
-        .doc(postId)
-        .collection(firebaseConstants.postLikersText)
-        .doc(userId);
-    firebaseService.addDocument(ref, json);
+    return await postSaveManager.savePost(saveModel);
   }
 
-  Future unlikePost(String postId, String userId) async {
-    var postsDocRef = firebaseConstants.postDocRef(postId);
-    await firebaseManager.decraseField(
-      documentReference: postsDocRef,
-      fieldName: firebaseConstants.likeCountText,
+  Future<bool> unsavePost(
+    String postId,
+    String userId,
+    Timestamp currentTime,
+  ) async {
+    var saveModel = PostSaveModel(
+      savedAt: currentTime,
+      userId: userId,
+      postId: postId,
     );
-    var response = await firebaseService.deleteDocument(
-        firebaseConstants.postLikesCollectionRef(postId).doc(userId));
-    if (response.errorMessage != null) {
-      await firebaseManager.increaseField(
-        documentReference: postsDocRef,
-        fieldName: firebaseConstants.likeCountText,
-      );
-    }
+    return await postSaveManager.unsavePost(saveModel);
   }
 
   Future<bool> userLikeState(String postId, String userId) async {
     var doc = await firebaseConstants.userLikeStatusPath(postId, userId).get();
+    return doc.docs.isEmpty;
+  }
+
+  Future<bool> userPostSaveState(String postId, String userId) async {
+    var doc = await firebaseConstants.userSaveStatusPath(postId, userId).get();
     return doc.docs.isEmpty;
   }
 }
