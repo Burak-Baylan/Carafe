@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LikeModel {
   String authorId;
-  Timestamp? createdAt;
+  Timestamp createdAt;
 
   LikeModel({
     required this.authorId,
