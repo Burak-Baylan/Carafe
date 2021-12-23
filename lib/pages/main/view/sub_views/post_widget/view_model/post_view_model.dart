@@ -21,12 +21,19 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
 
   @observable
   IconData likeIcon = Icons.favorite_outline;
+  @observable
+  IconData postSaveIcon = Icons.bookmark_outline;
 
   bool likeLock = false;
+  bool saveLock = false;
   IconData unlikedIcon = Icons.favorite_outline;
   IconData likedIcon = Icons.favorite_outlined;
+  IconData unsavedIcon = Icons.bookmark_outline;
+  IconData savedIcon = Icons.bookmark_outlined;
 
   changeLikeLockState() => likeLock = !likeLock;
+
+  changePostSaveLockState() => saveLock = !saveLock;
 
   @action
   findLikeIcon() async {
@@ -37,7 +44,22 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
     }
   }
 
+  @action
+  findPostSaveIcon() async {
+    if (!(await getUserPostSaveState)) {
+      postSaveIcon = savedIcon;
+    } else {
+      postSaveIcon = unsavedIcon;
+    }
+  }
+
   Future<bool> get getUserLikeState async => await postManager.userLikeState(
+        postModel.postId,
+        authService.userId!,
+      );
+
+  Future<bool> get getUserPostSaveState async =>
+      await postManager.userPostSaveState(
         postModel.postId,
         authService.userId!,
       );
@@ -47,14 +69,30 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
     if (likeLock) return;
     changeLikeLockState();
     if (await getUserLikeState) {
-      await postManager.likePost(postModel.postId, currentTime, getRandomId);
-      likeIcon = likedIcon;
+      bool isPostLiked = await postManager.likePost(
+          postModel.postId, currentTime);
+      if (isPostLiked) likeIcon = likedIcon;
     } else {
-      await postManager.unlikePost(postModel.postId, authService.userId!);
-      likeIcon = unlikedIcon;
+      bool isPostUnliked =
+          await postManager.unlikePost(postModel.postId, authService.userId!);
+      if (isPostUnliked) likeIcon = unlikedIcon;
     }
     changeLikeLockState();
   }
 
   comment() async {}
+
+  @action
+  Future save() async {
+    if (saveLock) return;
+    changePostSaveLockState();
+    if (await getUserPostSaveState) {
+      await postManager.savePost(postModel.postId, authService.userId!, currentTime);
+      postSaveIcon = savedIcon;
+    } else {
+      await postManager.unsavePost(postModel.postId, authService.userId!, currentTime);
+      postSaveIcon = unsavedIcon;
+    }
+    changePostSaveLockState();
+  }
 }

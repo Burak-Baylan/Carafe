@@ -24,12 +24,35 @@ mixin _$PostViewModel on _PostViewModelBase, Store {
     });
   }
 
+  final _$postSaveIconAtom = Atom(name: '_PostViewModelBase.postSaveIcon');
+
+  @override
+  IconData get postSaveIcon {
+    _$postSaveIconAtom.reportRead();
+    return super.postSaveIcon;
+  }
+
+  @override
+  set postSaveIcon(IconData value) {
+    _$postSaveIconAtom.reportWrite(value, super.postSaveIcon, () {
+      super.postSaveIcon = value;
+    });
+  }
+
   final _$findLikeIconAsyncAction =
       AsyncAction('_PostViewModelBase.findLikeIcon');
 
   @override
   Future findLikeIcon() {
     return _$findLikeIconAsyncAction.run(() => super.findLikeIcon());
+  }
+
+  final _$findPostSaveIconAsyncAction =
+      AsyncAction('_PostViewModelBase.findPostSaveIcon');
+
+  @override
+  Future findPostSaveIcon() {
+    return _$findPostSaveIconAsyncAction.run(() => super.findPostSaveIcon());
   }
 
   final _$likeAsyncAction = AsyncAction('_PostViewModelBase.like');
@@ -42,7 +65,8 @@ mixin _$PostViewModel on _PostViewModelBase, Store {
   @override
   String toString() {
     return '''
-likeIcon: ${likeIcon}
+likeIcon: ${likeIcon},
+postSaveIcon: ${postSaveIcon}
     ''';
   }
 }
