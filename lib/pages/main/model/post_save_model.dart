@@ -15,14 +15,14 @@ class PostSaveModel {
     return PostSaveModel(
       savedAt: json['saved_at'],
       userId: json['user_id'],
-      postId: json['post_id'],
+      postId: json['postId'],
     );
   }
 
   Map<String, dynamic> toJson() => {
         'saved_at': savedAt,
         'user_id': userId,
-        'post_id': postId,
+        'postId': postId,
       };
 
   @override

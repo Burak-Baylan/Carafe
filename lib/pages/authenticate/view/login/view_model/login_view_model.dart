@@ -1,10 +1,11 @@
 // ignore_for_file: override_on_non_overriding_member
 
 import 'package:Carafe/core/constants/navigation/navigation_constants.dart';
-import 'package:Carafe/core/firebase/auth/authentication/response/authentication_response.dart';
+import 'package:Carafe/core/data/custom_data.dart';
 import 'package:Carafe/core/firebase/auth/authentication/service/firebase_auth_service.dart';
 import 'package:Carafe/pages/authenticate/view/login/model/login_model.dart';
 import 'package:Carafe/pages/authenticate/view_model/base_authentication_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'login_view_model.g.dart';
@@ -44,7 +45,7 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
 
   _login() async {
     _initializeCredenticial();
-    await FirebaseAuthService.instance
+    await authService
         .login(LoginModel(email: email, password: password))
         .then((value) {
       _responseControl(value);
@@ -56,7 +57,7 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
     password = passworController.text.trim();
   }
 
-  _responseControl(AuthnenticationResponse response) async {
+  _responseControl(CustomData<UserCredential> response) async {
     if (response.error != null) {
       showAlert(
         "Error",
@@ -70,7 +71,7 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
   }
 
   _emailValidateControl() async {
-    if (isEmailVerified) {
+    if (authService.isEmailValid!) {
       replacePage(path: NavigationConstans.MAIN_VIEW, data: null);
     } else {
       showAlert(
@@ -80,7 +81,7 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
         positiveButtonText: "Send mail",
         negativeButtonText: "Cancel",
         onPressedPositiveButton: () async {
-          await sendVerificationMail();
+          await authService.sendVerificationEmail();
           await auth.signOut();
         },
       );
