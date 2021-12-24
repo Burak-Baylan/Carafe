@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/int_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 
@@ -20,13 +21,15 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   @action
   changeFabVisibility(bool visibility) => isFabVisible = visibility;
 
+  late ScrollController homeViewPostsScrollController;
+
   setContext(context) => this.context = context;
 
   @action
   changeIndex(int index) {
     switch (index) {
       case 0:
-        currentIndex = index;
+        _homeTabClicked(index);
         break;
       case 1:
         currentIndex = index;
@@ -37,6 +40,17 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
       case 3:
         currentIndex = index;
         break;
+    }
+  }
+
+  _homeTabClicked(int index) {
+    currentIndex = index;
+    if (homeViewPostsScrollController.hasClients) {
+      homeViewPostsScrollController.animateTo(
+        homeViewPostsScrollController.position.minScrollExtent,
+        duration: 300.durationMilliseconds,
+        curve: Curves.fastOutSlowIn,
+      );
     }
   }
 }

@@ -27,6 +27,7 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
   ScrollPhysics? postsScrollable;
   @observable
   bool moreImageLoadingProgressState = false;
+  
   @action
   changeHomeBody(Widget body) => homeBody = body;
   @action
@@ -44,6 +45,7 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
 
   ScrollController get scrollController {
     var controller = ScrollController();
+    mainVm.homeViewPostsScrollController = controller;
     controller.addListener(() async {
       if (controller.offset >= controller.position.maxScrollExtent) {
         lockScrollable();
