@@ -66,7 +66,7 @@ class FirebaseConstants extends FirebaseBase {
     String postId,
     String userId,
   ) =>
-      userPostSaveCollectionRef(userId).where('post_id', isEqualTo: postId);
+      userPostSaveCollectionRef(userId).where(postIdText, isEqualTo: postId);
 
       
 }
