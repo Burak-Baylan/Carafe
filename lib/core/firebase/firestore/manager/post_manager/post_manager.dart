@@ -1,9 +1,6 @@
-import 'package:Carafe/core/firebase/firestore/manager/post_manager/save_manager.dart';
-import 'package:Carafe/pages/main/model/like_model.dart';
-import 'package:Carafe/pages/main/model/post_save_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../../../../pages/main/model/post_model.dart';
+import '../../../../../pages/main/model/post_save_model.dart';
 import '../../../base/firebase_base.dart';
 
 class FirebasePostManager extends FirebaseBase {
@@ -12,29 +9,22 @@ class FirebasePostManager extends FirebaseBase {
       _instance = _instance == null ? FirebasePostManager._init() : _instance!;
   FirebasePostManager._init();
 
-  late String lastPostId;
+  late QueryDocumentSnapshot<Map<String, dynamic>> lastVisiblePost;
+
+  Query<Map<String, dynamic>> get allPostsRef => firebaseConstants.postsCreatedDescending;
 
   var numberOfPostsToBeUploadedAtOnce = 0;
 
   Future<List<PostModel>> getPosts() async {
-    var ref = firebaseConstants.postsCreatedDescending;
-    var dataList = await ref
+    var dataList = await allPostsRef
         .limit(firebaseConstants.numberOfPostsToBeUploadedAtOnce)
         .get();
     return getModels(dataList);
   }
 
   Future<List<PostModel>> loadMorePost() async {
-    var lastVisibleRef = await firestore
-        .collection(firebaseConstants.postsText)
-        .where(firebaseConstants.postIdText, isEqualTo: lastPostId)
-        .limit(firebaseConstants.numberOfPostsToBeUploadedAtOnce)
-        .get();
-    var lastVisible = lastVisibleRef.docs[lastVisibleRef.size - 1];
-    var dataList = await firestore
-        .collection(firebaseConstants.postsText)
-        .orderBy(firebaseConstants.createdAtText, descending: true)
-        .startAfterDocument(lastVisible)
+    var dataList = await allPostsRef
+        .startAfterDocument(lastVisiblePost)
         .limit(firebaseConstants.numberOfPostsToBeUploadedAtOnce)
         .get();
     return getModels(dataList);
@@ -48,7 +38,7 @@ class FirebasePostManager extends FirebaseBase {
       var data = PostModel.fromJson(doc.data());
       models.add(data);
       if (dataList.docs.length == i) {
-        lastPostId = data.postId;
+        lastVisiblePost = dataList.docs[dataList.docs.length - 1];
       }
     }
     return models;
