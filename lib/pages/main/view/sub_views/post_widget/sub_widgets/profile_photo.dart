@@ -24,17 +24,9 @@ class PostProfilePhoto extends StatelessWidget {
       child: CachedNetworkImage(
         fadeInDuration: 0.durationMilliseconds,
         filterQuality: FilterQuality.medium,
-        placeholder: (context, url) => BorderContainer.all(
-          radius: 100,
-          color: AppColors.placeHolderGray,
-        ),
+        placeholder: (context, url) => _placeHolder,
         placeholderFadeInDuration: 100.durationMilliseconds,
-        imageBuilder: (context, provider) => Container(
-          decoration: BoxDecoration(
-            borderRadius: 50.radiusAll,
-            image: DecorationImage(fit: BoxFit.cover, image: provider),
-          ),
-        ),
+        imageBuilder: (context, provider) => _imageBuilder(provider),
         //TODO Delete Placeholder
         imageUrl: postModel.imageLinks.isNotEmpty
             ? postModel.imageLinks[0]
@@ -43,4 +35,16 @@ class PostProfilePhoto extends StatelessWidget {
       ),
     );
   }
+
+  Widget _imageBuilder(ImageProvider provider) => Container(
+        decoration: BoxDecoration(
+          borderRadius: 50.radiusAll,
+          image: DecorationImage(fit: BoxFit.cover, image: provider),
+        ),
+      );
+
+  Widget get _placeHolder => BorderContainer.all(
+        radius: 100,
+        color: AppColors.placeHolderGray,
+      );
 }
