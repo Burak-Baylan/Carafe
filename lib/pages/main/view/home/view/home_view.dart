@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../../../app/constants/app_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
-import '../../../../../core/extensions/int_extensions.dart';
+import '../../../../../core/extensions/widget_extension.dart';
+import '../../../../../core/widgets/center_dot_text.dart';
 import '../../sub_views/post_widget/post_widget.dart';
 import '../view_model/home_view_model.dart';
 
@@ -102,18 +102,18 @@ class _HomeViewState extends State<HomeView> {
           shrinkWrap: true,
           physics: viewModel.postsScrollable,
           itemCount: viewModel.posts.length,
-          itemBuilder: (context, index) => _buildPostItem(index),
+          itemBuilder: (context, index) =>_buildPostItem(index),
         ),
       );
 
-  _buildPostItem(int index) {
+  Widget _buildPostItem(int index) {
     List<Widget> postItem = [];
     postItem.add(PostWidget(
       model: viewModel.posts[index],
       homeViewModel: viewModel,
     ));
     if (viewModel.posts.length - 1 == index) {
-      postItem.add(15.sizedBoxOnlyHeight);
+      postItem.add(CenterDotText().center);
     }
     return Column(children: postItem);
   }
