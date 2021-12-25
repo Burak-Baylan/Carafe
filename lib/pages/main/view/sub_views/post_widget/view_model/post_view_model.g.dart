@@ -62,6 +62,13 @@ mixin _$PostViewModel on _PostViewModelBase, Store {
     return _$likeAsyncAction.run(() => super.like());
   }
 
+  final _$saveAsyncAction = AsyncAction('_PostViewModelBase.save');
+
+  @override
+  Future<dynamic> save() {
+    return _$saveAsyncAction.run(() => super.save());
+  }
+
   @override
   String toString() {
     return '''

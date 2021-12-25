@@ -4,7 +4,7 @@ import '../../../../../../../core/widgets/place_holder_with_border.dart';
 import '../../../../../../authenticate/model/user_model.dart';
 import '../../../../../model/post_model.dart';
 import '../../../../home/view_model/home_view_model.dart';
-import 'post_menu.dart';
+import 'post_menu/view/post_menu.dart';
 
 class PostNameAndMenu extends StatelessWidget {
   PostNameAndMenu({

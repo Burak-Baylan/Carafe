@@ -1,4 +1,6 @@
+import 'package:Carafe/app/constants/app_constants.dart';
 import 'package:Carafe/pages/authenticate/model/user_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/extensions/context_extensions.dart';
@@ -11,7 +13,7 @@ import '../../home/view/sub_views/home_page_full_screen_image/home_page_full_scr
 import '../../home/view_model/home_view_model.dart';
 import 'sub_widgets/bottom_layout.dart';
 import 'sub_widgets/name_and_menu/name_and_menu.dart';
-import 'sub_widgets/post_image_widget.dart';
+import 'sub_widgets/post_image_widget/post_images.dart';
 import 'sub_widgets/post_top_information.dart';
 import 'sub_widgets/profile_photo.dart';
 import 'view_model/post_view_model.dart';
