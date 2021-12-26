@@ -25,9 +25,18 @@ class FirebaseConstants extends FirebaseBase {
   String postLikersText = "likes";
   String usersText = "Users";
   String userSavedPostsText = "saved_posts";
+  String userIdText = 'userId';
+  String followingText = 'following';
+  String followersText = 'followers';
+  String pinnedPostText = 'pinned_post';
 
   int numberOfPostsToBeUploadedAtOnce = 15;
-
+  @override
+  CollectionReference<Map<String, dynamic>> get allUsersCollectionRef =>
+      firestore.collection(usersText);
+  @override
+  CollectionReference<Map<String, dynamic>> get allPostsCollectionRef =>
+      firestore.collection(postsText);
   @override
   DocumentReference<Map<String, dynamic>> userDocRef(String userId) =>
       allUsersCollectionRef.doc(userId);
@@ -43,18 +52,33 @@ class FirebaseConstants extends FirebaseBase {
           String userId) =>
       allUsersCollectionRef.doc(userId).collection(userSavedPostsText);
 
-  @override
-  CollectionReference<Map<String, dynamic>> get allUsersCollectionRef =>
-      firestore.collection(usersText);
-  @override
-  CollectionReference<Map<String, dynamic>> get allPostsCollectionRef =>
-      firestore.collection(postsText);
-
   Query<Map<String, dynamic>> get postsCreatedDescending =>
       allPostsCollectionRef.orderBy(createdAtText, descending: true);
 
   Query<Map<String, dynamic>> get postsCreatedAscending =>
       allPostsCollectionRef.orderBy(createdAtText, descending: false);
+
+  Query<Map<String, dynamic>> userPinnedPostControlRef(
+          String currentUserId, String postId) =>
+      allUsersCollectionRef
+          .doc(currentUserId)
+          .collection(pinnedPostText)
+          .where(postIdText, isEqualTo: postId);
+
+  DocumentReference<Map<String, dynamic>> userPinnedPostDocRef(String userId) =>
+      allUsersCollectionRef.doc(userId).collection(pinnedPostText).doc(userId);
+
+  CollectionReference<Map<String, dynamic>> userPinnedPostCollectionRef(String userId) =>
+      allUsersCollectionRef.doc(userId).collection(pinnedPostText);
+
+  Query<Map<String, dynamic>> userFollowingControlRef(
+    String currentUser,
+    String postOwnerUserId,
+  ) =>
+      allUsersCollectionRef
+          .doc(currentUser)
+          .collection(followingText)
+          .where(userIdText, isEqualTo: postOwnerUserId);
 
   Query<Map<String, dynamic>> userLikeStatusPath(
     String postId,
@@ -67,6 +91,4 @@ class FirebaseConstants extends FirebaseBase {
     String userId,
   ) =>
       userPostSaveCollectionRef(userId).where(postIdText, isEqualTo: postId);
-
-      
 }

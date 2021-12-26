@@ -24,9 +24,9 @@ class FirestoreService extends FirebaseBase {
   FieldValue _increaser(int value) => FieldValue.increment(value);
 
   CustomData<E> getAField<E>(
-    QueryDocumentSnapshot<Map<String, dynamic>> path,
+    DocumentSnapshot<Object?> path,
     String fieldName,
-  ){
+  ) {
     try {
       var data = path.get(fieldName);
       return CustomData<E>(data, null);
@@ -66,10 +66,30 @@ class FirestoreService extends FirebaseBase {
     }
   }
 
+  Future<CustomData<QuerySnapshot<Map<String, dynamic>>>> getCollection(
+      CollectionReference<Map<String, dynamic>> collectionRef) async {
+    try {
+      var data = await collectionRef.get();
+      return CustomData(data, null);
+    } on FirebaseException catch (e) {
+      return CustomData(null, CustomError(e.message));
+    }
+  }
+
   Future<CustomData<DocumentSnapshot<Object?>>> getDocument(
       DocumentReference reference) async {
     try {
       var data = await reference.get();
+      return CustomData(data, null);
+    } on FirebaseException catch (e) {
+      return CustomData(null, CustomError(e.message));
+    }
+  }
+
+  Future<CustomData<QuerySnapshot<Map<String, dynamic>>>> getQuery(
+      Query<Map<String, dynamic>> query) async {
+    try {
+      var data = await query.get();
       return CustomData(data, null);
     } on FirebaseException catch (e) {
       return CustomData(null, CustomError(e.message));
