@@ -1,3 +1,4 @@
+import 'package:Carafe/pages/main/model/pinned_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../pages/main/model/post_model.dart';
 import '../../../../../pages/main/model/post_save_model.dart';
@@ -11,7 +12,8 @@ class FirebasePostManager extends FirebaseBase {
 
   late QueryDocumentSnapshot<Map<String, dynamic>> lastVisiblePost;
 
-  Query<Map<String, dynamic>> get allPostsRef => firebaseConstants.postsCreatedDescending;
+  Query<Map<String, dynamic>> get allPostsRef =>
+      firebaseConstants.postsCreatedDescending;
 
   var numberOfPostsToBeUploadedAtOnce = 0;
 
@@ -84,5 +86,24 @@ class FirebasePostManager extends FirebaseBase {
   Future<bool> userPostSaveState(String postId, String userId) async {
     var doc = await firebaseConstants.userSaveStatusPath(postId, userId).get();
     return doc.docs.isEmpty;
+  }
+
+  Future<bool> pinPostToProfile(Timestamp currentTime, String postId) async {
+    var userId = auth.currentUser!.uid;
+    var ref = firebaseConstants.userPinnedPostCollectionRef(userId).doc(userId);
+    var pinnedPostModel = PinnedPostModel(
+        authorId: userId, createdAt: currentTime, postId: postId);
+    var savePostResponse =
+        await firebaseService.addDocument(ref, pinnedPostModel.toJson());
+    if (savePostResponse.errorMessage != null) return false;
+    return true;
+  }
+
+  Future<bool> unpinPostFromProfile() async {
+    var userId = auth.currentUser!.uid;
+    var ref = firebaseConstants.userPinnedPostDocRef(userId);
+    var response = await firebaseService.deleteDocument(ref);
+    if (response.errorMessage != null) return false;
+    return true;
   }
 }
