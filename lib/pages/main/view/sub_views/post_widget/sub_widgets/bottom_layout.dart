@@ -104,7 +104,7 @@ class PostBottomLayout extends StatelessWidget {
         builder: (context, snapshot) => _findLikeText(snapshot),
       );
 
-  Widget _findLikeText(var snapshot) {
+  Widget _findLikeText(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
     if (snapshot.hasData) {
       CustomData<int> data = postViewModel.firebaseService.getAField<int>(
           snapshot.data!.docs[0],

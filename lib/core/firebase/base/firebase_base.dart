@@ -18,7 +18,7 @@ abstract class FirebaseBase {
   FirebaseStorage get storage => FirebaseStorage.instance;
 
   FirebaseAuthService get authService => FirebaseAuthService.instance;
-  FirebaseUserManager get userService => FirebaseUserManager.instance;
+  FirebaseUserManager get userManager => FirebaseUserManager.instance;
   FirestoreService get firestoreService => FirestoreService.instance;
   FirestoreService get firebaseService => FirestoreService.instance;
   FirebaseManager get firebaseManager => FirebaseManager.instance;

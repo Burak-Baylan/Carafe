@@ -110,7 +110,7 @@ class ImageWidgets extends StatelessWidget {
                 PostImageWidget(
                   imageLink: images[1],
                   borderRadius: 10.radiusTopRight,
-                  height: (halfSize / 2) - 1.5,
+                  height: quarterSize,
                   onPressedImage: () =>
                       onPressedImage(imageProviders, images, 1),
                   getProvider: (provider) => imageProviders[1] = provider,
@@ -119,7 +119,7 @@ class ImageWidgets extends StatelessWidget {
                 PostImageWidget(
                   imageLink: images[2],
                   borderRadius: 10.radiusBottomRight,
-                  height: (halfSize / 2) - 1.5,
+                  height: quarterSize,
                   onPressedImage: () =>
                       onPressedImage(imageProviders, images, 2),
                   getProvider: (provider) => imageProviders[2] = provider,

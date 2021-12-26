@@ -28,7 +28,7 @@ class RegisterUser extends BaseViewModel {
 
     if (isResponseOkey) {
       CustomError userCreateResponse =
-          await userService.createUser(_getUserModel);
+          await userManager.createUser(_getUserModel);
 
       response.error = userCreateResponse;
 

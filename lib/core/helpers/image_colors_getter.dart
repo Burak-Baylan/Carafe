@@ -7,9 +7,12 @@ import 'package:palette_generator/palette_generator.dart';
 class ImageColorsGetter {
   Future<Color> findSuitableColor(File image) async {
     Color? color;
+    
     color = await darkMutedColor(image);
     if (_colorControl(color)) return color!;
     color = await darkVibrantColor(image);
+    if (_colorControl(color)) return color!;
+    color = await mutedColor(image);
     if (_colorControl(color)) return color!;
     color = await dominantColor(image);
     if (_colorControl(color)) return color!;
