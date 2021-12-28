@@ -28,9 +28,12 @@ class FirebaseConstants extends FirebaseBase {
   String userIdText = 'userId';
   String followingText = 'following';
   String followersText = 'followers';
+  String followerUserText = 'follower_user';
+  String followingUserText = 'following_user';
   String pinnedPostText = 'pinned_post';
 
   int numberOfPostsToBeUploadedAtOnce = 15;
+
   @override
   CollectionReference<Map<String, dynamic>> get allUsersCollectionRef =>
       firestore.collection(usersText);
@@ -68,17 +71,16 @@ class FirebaseConstants extends FirebaseBase {
   DocumentReference<Map<String, dynamic>> userPinnedPostDocRef(String userId) =>
       allUsersCollectionRef.doc(userId).collection(pinnedPostText).doc(userId);
 
-  CollectionReference<Map<String, dynamic>> userPinnedPostCollectionRef(String userId) =>
+  CollectionReference<Map<String, dynamic>> userPinnedPostCollectionRef(
+          String userId) =>
       allUsersCollectionRef.doc(userId).collection(pinnedPostText);
 
   Query<Map<String, dynamic>> userFollowingControlRef(
-    String currentUser,
+    String currentUserId,
     String postOwnerUserId,
   ) =>
-      allUsersCollectionRef
-          .doc(currentUser)
-          .collection(followingText)
-          .where(userIdText, isEqualTo: postOwnerUserId);
+      userFollowingCollectionRef(currentUserId)
+          .where(followingUserText, isEqualTo: postOwnerUserId);
 
   Query<Map<String, dynamic>> userLikeStatusPath(
     String postId,
@@ -91,4 +93,16 @@ class FirebaseConstants extends FirebaseBase {
     String userId,
   ) =>
       userPostSaveCollectionRef(userId).where(postIdText, isEqualTo: postId);
+
+  CollectionReference<Map<String, dynamic>> userFollowersCollectionRef(
+          String userId) =>
+      allUsersCollectionRef.doc(userId).collection(followersText);
+
+  CollectionReference<Map<String, dynamic>> userFollowingCollectionRef(
+          String userId) =>
+      allUsersCollectionRef.doc(userId).collection(followingText);
+
+  dsad() {
+    allUsersCollectionRef.where("blockedUsers", isNotEqualTo: "");
+  }
 }
