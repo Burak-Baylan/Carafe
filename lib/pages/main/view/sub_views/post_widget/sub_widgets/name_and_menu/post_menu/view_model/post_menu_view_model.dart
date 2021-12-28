@@ -1,10 +1,8 @@
-import 'package:Carafe/core/base/view_model/base_view_model.dart';
-import 'package:Carafe/core/firebase/firestore/manager/firebase_user_manager.dart';
-import 'package:Carafe/pages/authenticate/model/user_model.dart';
-import 'package:Carafe/pages/main/model/pinned_post_model.dart';
-import 'package:Carafe/pages/main/model/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import '../../../../../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../../../../authenticate/model/user_model.dart';
+import '../../../../../../../model/post_model.dart';
 part 'post_menu_view_model.g.dart';
 
 class PostMenuViewModel = _PostMenuViewModelBase with _$PostMenuViewModel;
@@ -16,9 +14,9 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
   setContext(BuildContext context) => this.context = context;
 
   late PostModel postModel;
-  late UserModel userModel;
+  late UserModel postOwnerUserModel;
   setPostModel(PostModel postModel) => this.postModel = postModel;
-  setUserModel(UserModel userModel) => this.userModel = userModel;
+  setUserModel(UserModel userModel) => postOwnerUserModel = userModel;
 
   @observable
   String pinButtonText = 'Pin to profile';
@@ -27,6 +25,7 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
 
   bool isItCurrentUserPost = false;
   bool thisPostPinnedToProfile = false;
+  bool currentUserIsFollowingThePostOwner = false;
 
   void findPostOwner() {
     if (postModel.authorId == auth.currentUser!.uid) {
@@ -39,11 +38,9 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
   @observable
   @action
   Future<bool> findPinButtonActionAndText() async {
-    var path = firebaseConstants.userPinnedPostControlRef(
-        userModel.userId, postModel.postId);
-    var data = await firebaseService.getQuery(path);
+    var data = await postManager.userPinnedPostState(postOwnerUserModel.userId, postModel.postId);
     if (data.error != null) return false;
-    if (data.data!.docs.isEmpty) {
+    if (data.data!) {
       pinButtonText = "Pin to profile";
       thisPostPinnedToProfile = false;
     } else {
@@ -55,15 +52,14 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
 
   @action
   Future<bool> findFollowButtonActionAndText() async {
-    var path = firebaseConstants.userFollowingControlRef(
-        authService.userId!, postModel.authorId);
-    var data = await firebaseService.getQuery(path);
-    printRed(data.data!.docs.length.toString());
+    var data = await userManager.followingState(postModel.authorId);
     if (data.error != null) return false;
-    if (data.data!.docs.isEmpty) {
+    if (data.data!) {
       followButtonText = 'Follow';
+      currentUserIsFollowingThePostOwner = false;
     } else {
       followButtonText = "Unfollow";
+      currentUserIsFollowingThePostOwner = true;
     }
     return true;
   }
@@ -76,20 +72,13 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
     }
   }
 
-  void showPostPinnedSuccessfullyAlert() => showAlert('Success', 'Post pinned.',
-      context: context!, disableNegativeButton: true);
-
-  void showPostNotPinnedAlert() => showAlert(
-      'Error', 'An error occured while pinning the post. Please try again.',
-      context: context!, disableNegativeButton: true);
-
-  void showPostUnpinnedSuccessfullyAlert() =>
-      showAlert('Success', 'Post unpinned.',
-          context: context!, disableNegativeButton: true);
-
-  void showPostNotUnpinnedAlert() => showAlert(
-      'Error', 'An error occured while unpinning the post. Please try again.',
-      context: context!, disableNegativeButton: true);
+  Future followUserClicked() async {
+    if (currentUserIsFollowingThePostOwner) {
+      await unfollowUser();
+    } else {
+      await followUser();
+    }
+  }
 
   Future pinToProfile() async {
     var response =
@@ -103,4 +92,35 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
     if (!response) showPostNotUnpinnedAlert();
     showPostUnpinnedSuccessfullyAlert();
   }
+
+  Future followUser() async {
+    var response =
+        await userManager.followUser(postOwnerUserModel.userId, currentTime);
+    if (!response) showFollowingUnsuccessAlert();
+    showFollowingSuccessAlert();
+  }
+
+  Future unfollowUser() async {
+    var response = await userManager.unfollowUser(postOwnerUserModel.userId);
+    if (!response) showUnfollowingUnsuccessAlert();
+    showUnfollowingSuccessAlert();
+  }
+
+  void showPostPinnedSuccessfullyAlert() => showToast("Post pinned");
+
+  void showPostNotPinnedAlert() => showToast("Could not be pinned");
+
+  void showPostUnpinnedSuccessfullyAlert() => showToast("Post unpinned");
+
+  void showPostNotUnpinnedAlert() => showToast("Could not be unpinned");
+
+  void showFollowingSuccessAlert() =>
+      showToast("You followed '${postOwnerUserModel.username}'");
+
+  void showFollowingUnsuccessAlert() => showToast("Could not be followed");
+
+  void showUnfollowingSuccessAlert() =>
+      showToast("You unfollowed '${postOwnerUserModel.username}'");
+
+  void showUnfollowingUnsuccessAlert() => showToast("Could not be unfollowed");
 }

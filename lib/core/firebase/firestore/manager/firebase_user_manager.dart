@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../../../../pages/authenticate/model/follow_user_model.dart';
 import '../../../../pages/authenticate/model/user_model.dart';
 import '../../../../pages/main/model/post_model.dart';
 import '../../../data/custom_data.dart';
@@ -61,5 +61,43 @@ class FirebaseUserManager extends FirebaseBase {
     var postData = rawPostData.data!.data() as Map<String, dynamic>;
     PostModel postModel = PostModel.fromJson(postData);
     return CustomData(postModel, null);
+  }
+
+  Future<CustomData<bool>> followingState(String followingUserId) async {
+    String currentUserId = authService.userId!;
+    var path = firebaseConstants.userFollowingControlRef(
+        currentUserId, followingUserId);
+    var data = await firebaseService.getQuery(path);
+    if (data.error != null) return CustomData(null, CustomError(""));
+    if (data.data!.docs.isEmpty) {
+      return CustomData(true, null);
+    } else {
+      return CustomData(false, null);
+    }
+  }
+
+  Future<bool> followUser(String followingUserId, Timestamp currentTime) async {
+    var currentUserId = authService.userId;
+    var followUserRef = firebaseConstants
+        .userFollowingCollectionRef(currentUserId!)
+        .doc(followingUserId);
+    var data = FollowUserModel(
+            followerUserId: currentUserId,
+            followingUserId: followingUserId,
+            followedAt: currentTime)
+        .toJson();
+    var response = await firebaseService.addDocument(followUserRef, data);
+    if (response.errorMessage != null) false;
+    return true;
+  }
+
+  Future<bool> unfollowUser(String unfollowingUserId) async {
+    var currentUserId = authService.userId;
+    var unfollowUserRef = firebaseConstants
+        .userFollowingCollectionRef(currentUserId!)
+        .doc(unfollowingUserId);
+    var response = await firebaseService.deleteDocument(unfollowUserRef);
+    if (response.errorMessage != null) false;
+    return true;
   }
 }
