@@ -1,3 +1,5 @@
+import 'package:Carafe/core/data/custom_data.dart';
+import 'package:Carafe/core/error/custom_error.dart';
 import 'package:Carafe/pages/main/model/pinned_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../pages/main/model/post_model.dart';
@@ -86,6 +88,18 @@ class FirebasePostManager extends FirebaseBase {
   Future<bool> userPostSaveState(String postId, String userId) async {
     var doc = await firebaseConstants.userSaveStatusPath(postId, userId).get();
     return doc.docs.isEmpty;
+  }
+
+  Future<CustomData<bool>> userPinnedPostState(String postOwnerId, String postId) async {
+    var path = firebaseConstants.userPinnedPostControlRef(
+        postOwnerId, postId);
+    var data = await firebaseService.getQuery(path);
+    if (data.error != null) return CustomData(null, CustomError(""));
+    if (data.data!.docs.isEmpty) {
+      return CustomData(true, null);
+    } else {
+      return CustomData(false, null);
+    }
   }
 
   Future<bool> pinPostToProfile(Timestamp currentTime, String postId) async {
