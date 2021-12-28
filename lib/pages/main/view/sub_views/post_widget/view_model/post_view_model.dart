@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../model/post_model.dart';
-
 part 'post_view_model.g.dart';
 
 class PostViewModel = _PostViewModelBase with _$PostViewModel;
@@ -69,8 +67,8 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
     if (likeLock) return;
     changeLikeLockState();
     if (await getUserLikeState) {
-      bool isPostLiked = await postManager.likePost(
-          postModel.postId, currentTime);
+      bool isPostLiked =
+          await postManager.likePost(postModel.postId, currentTime);
       if (isPostLiked) likeIcon = likedIcon;
     } else {
       bool isPostUnliked =
@@ -87,10 +85,12 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
     if (saveLock) return;
     changePostSaveLockState();
     if (await getUserPostSaveState) {
-      await postManager.savePost(postModel.postId, authService.userId!, currentTime);
+      await postManager.savePost(
+          postModel.postId, authService.userId!, currentTime);
       postSaveIcon = savedIcon;
     } else {
-      await postManager.unsavePost(postModel.postId, authService.userId!, currentTime);
+      await postManager.unsavePost(
+          postModel.postId, authService.userId!, currentTime);
       postSaveIcon = unsavedIcon;
     }
     changePostSaveLockState();

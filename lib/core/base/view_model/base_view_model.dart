@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../extensions/double_extensions.dart';
 import '../../firebase/base/firebase_base.dart';
 import '../../helpers/colorful_print.dart';
@@ -35,6 +33,8 @@ abstract class BaseViewModel with FirebaseBase {
         position: Tween<Offset>(begin: 1.0.offsetY, end: 0.0.offsetXY)
             .animate(animation),
       );
+
+  showToast(String message) => Fluttertoast.showToast(msg: message);
 
   showAlert(
     String title,

@@ -25,7 +25,7 @@ class PostMenuItems {
         builder: (_) => _listItem(
           3,
           postMenuVm.pinButtonText,
-          () async => itemClicked(() async => postMenuVm.pinToProfile()),
+          () async => itemClicked(() async => await postMenuVm.pinProfileClicked()),
           Icons.push_pin_outlined,
         ),
       ),
@@ -51,7 +51,7 @@ class PostMenuItems {
         builder: (_) => _listItem(
           2,
           '${postMenuVm.followButtonText} \'$username\'',
-          () => context.pop,
+          () async => itemClicked(() async => await postMenuVm.followUserClicked()),
           Icons.person_add_alt_outlined,
         ),
       ),

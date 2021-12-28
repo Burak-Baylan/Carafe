@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
-import '../../../../../../core/data/custom_data.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
@@ -32,8 +30,8 @@ class PostBottomLayout extends StatelessWidget {
     postViewModel.findLikeIcon();
     postViewModel.findPostSaveIcon();
     postLikeCountStream = postViewModel.firebaseConstants.allPostsCollectionRef
-        .where(postViewModel.firebaseConstants.postIdText,
-            isEqualTo: postModel.postId)
+        .doc(postModel.postId)
+        .collection(homeViewModel.firebaseConstants.postLikersText)
         .snapshots();
   }
 
@@ -104,14 +102,11 @@ class PostBottomLayout extends StatelessWidget {
         builder: (context, snapshot) => _findLikeText(snapshot),
       );
 
-  Widget _findLikeText(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+  Widget _findLikeText(
+      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
     if (snapshot.hasData) {
-      CustomData<int> data = postViewModel.firebaseService.getAField<int>(
-          snapshot.data!.docs[0],
-          postViewModel.firebaseConstants.likeCountText);
-      if (data.data != null) {
-        return _buildMyText(data.data.toString(), animate: true);
-      }
+      int likeCount = snapshot.data!.docs.length;
+      return _buildMyText(likeCount.toString(), animate: true);
     }
     return _buildMyText(postModel.likeCount.toString(), animate: true);
   }
@@ -129,9 +124,9 @@ class PostBottomLayout extends StatelessWidget {
       );
 
   Widget get _buildSaveButton => Observer(
-    builder: (context) => _buildSmallButtons(
+        builder: (context) => _buildSmallButtons(
           () => postViewModel.save(),
           postViewModel.postSaveIcon,
         ),
-  );
+      );
 }

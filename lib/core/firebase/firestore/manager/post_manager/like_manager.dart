@@ -1,7 +1,7 @@
-import 'package:Carafe/core/error/custom_error.dart';
-import 'package:Carafe/core/firebase/base/firebase_base.dart';
-import 'package:Carafe/pages/main/model/like_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../../pages/main/model/like_model.dart';
+import '../../../../error/custom_error.dart';
+import '../../../base/firebase_base.dart';
 
 class PostLikeManager extends FirebaseBase {
   static PostLikeManager? _instance;
@@ -15,10 +15,7 @@ class PostLikeManager extends FirebaseBase {
   Map<String, dynamic> _getLikeJson(Timestamp currentTime) =>
       LikeModel(authorId: userId, createdAt: currentTime).toJson();
 
-  Future<bool> likePost(
-    String postId,
-    Timestamp currentTime
-  ) async {
+  Future<bool> likePost(String postId, Timestamp currentTime) async {
     userId = authService.userId.toString();
     this.postId = postId;
     var postsDocRef = firebaseConstants.postDocRef(postId);
@@ -39,6 +36,8 @@ class PostLikeManager extends FirebaseBase {
   }
 
   Future<bool> unlikePost(String postId, String userId) async {
+    userId = authService.userId.toString();
+    this.postId = postId;
     var postsDocRef = firebaseConstants.postDocRef(postId);
     await _decraseLike(postsDocRef);
     var deleteResponse = await _deleteLikeFromFirebase();
