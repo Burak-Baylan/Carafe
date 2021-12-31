@@ -108,30 +108,10 @@ class _PostWidgetState extends State<PostWidget> {
           ImageWidgets(
             images: model.imageLinks,
             onPressedImage: (imageProviders, imageUrls, imageIndex) =>
-                onPressedImage(imageProviders, imageUrls, imageIndex),
+                postViewModel.onPressedImage(imageProviders, imageUrls, imageIndex),
           ),
         ],
       );
-
-  void onPressedImage(
-    List<ImageProvider<Object>?> imageProviders,
-    List<dynamic> imageUrls,
-    int imageIndex,
-  ) {
-    (model.imagesDominantColors[imageIndex] as String)
-        .convertStringToColor
-        .changeBottomNavBarColor;
-    if (imageProviders[imageUrls.length - 1] == null) return;
-    PushToPage.instance.navigateToCustomPage(
-      HomePageFullScreenImage(
-        imageProviders: imageProviders,
-        imageUrls: imageUrls,
-        imageIndex: imageIndex,
-        imagesDominantColor: model.imagesDominantColors,
-      ),
-      animate: false,
-    );
-  }
 
   Widget get _buildPp => PostProfilePhoto(postModel: model);
 

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../../core/extensions/color_extensions.dart';
+import '../../../../../../core/extensions/string_extensions.dart';
+import '../../../../../../core/init/navigation/navigator/navigator.dart';
 import '../../../../model/post_model.dart';
+import '../../../home/view/sub_views/home_page_full_screen_image/home_page_full_screen_image.dart';
+
 part 'post_view_model.g.dart';
 
 class PostViewModel = _PostViewModelBase with _$PostViewModel;
@@ -94,5 +99,25 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
       postSaveIcon = unsavedIcon;
     }
     changePostSaveLockState();
+  }
+
+  void onPressedImage(
+    List<ImageProvider<Object>?> imageProviders,
+    List<dynamic> imageUrls,
+    int imageIndex,
+  ) {
+    (postModel.imagesDominantColors[imageIndex] as String)
+        .convertStringToColor
+        .changeBottomNavBarColor;
+    if (imageProviders[imageUrls.length - 1] == null) return;
+    PushToPage.instance.navigateToCustomPage(
+      HomePageFullScreenImage(
+        imageProviders: imageProviders,
+        imageUrls: imageUrls,
+        imageIndex: imageIndex,
+        imagesDominantColor: postModel.imagesDominantColors,
+      ),
+      animate: false,
+    );
   }
 }
