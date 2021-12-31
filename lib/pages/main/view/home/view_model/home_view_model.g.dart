@@ -9,23 +9,6 @@ part of 'home_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeViewModel on _HomeViewModelBase, Store {
-  final _$fullScreenImageIndexAtom =
-      Atom(name: '_HomeViewModelBase.fullScreenImageIndex');
-
-  @override
-  int get fullScreenImageIndex {
-    _$fullScreenImageIndexAtom.reportRead();
-    return super.fullScreenImageIndex;
-  }
-
-  @override
-  set fullScreenImageIndex(int value) {
-    _$fullScreenImageIndexAtom.reportWrite(value, super.fullScreenImageIndex,
-        () {
-      super.fullScreenImageIndex = value;
-    });
-  }
-
   final _$postsAtom = Atom(name: '_HomeViewModelBase.posts');
 
   @override
@@ -111,17 +94,6 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   }
 
   @override
-  dynamic changeFullScreenImageIndex(int index) {
-    final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
-        name: '_HomeViewModelBase.changeFullScreenImageIndex');
-    try {
-      return super.changeFullScreenImageIndex(index);
-    } finally {
-      _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic changePostsScrollable(ScrollPhysics? physics) {
     final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
         name: '_HomeViewModelBase.changePostsScrollable');
@@ -168,7 +140,6 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   @override
   String toString() {
     return '''
-fullScreenImageIndex: ${fullScreenImageIndex},
 posts: ${posts},
 homeBody: ${homeBody},
 postsScrollable: ${postsScrollable},
