@@ -1,11 +1,9 @@
-import 'package:Carafe/app/constants/app_constants.dart';
-import 'package:Carafe/pages/authenticate/model/user_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import '../../../../../core/extensions/color_extensions.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/double_extensions.dart';
 import '../../../../../core/extensions/int_extensions.dart';
+import '../../../../../core/extensions/string_extensions.dart';
 import '../../../../../core/init/navigation/navigator/navigator.dart';
 import '../../../../../core/widgets/border_container.dart';
 import '../../../model/post_model.dart';
@@ -120,14 +118,15 @@ class _PostWidgetState extends State<PostWidget> {
     List<dynamic> imageUrls,
     int imageIndex,
   ) {
+    (model.imagesDominantColors[imageIndex] as String)
+        .convertStringToColor
+        .changeBottomNavBarColor;
     if (imageProviders[imageUrls.length - 1] == null) return;
     PushToPage.instance.navigateToCustomPage(
       HomePageFullScreenImage(
-        onPageChanged: (index, reason) =>
-            widget.homeViewModel.changeFullScreenImageIndex(index),
-        imageIndex: imageIndex,
         imageProviders: imageProviders,
         imageUrls: imageUrls,
+        imageIndex: imageIndex,
         imagesDominantColor: model.imagesDominantColors,
       ),
       animate: false,
@@ -137,9 +136,9 @@ class _PostWidgetState extends State<PostWidget> {
   Widget get _buildPp => PostProfilePhoto(postModel: model);
 
   Widget get _nameAndMoreMenu => PostNameAndMenu(
-          postModel: model,
-          homeViewModel: widget.homeViewModel,
-        );
+        postModel: model,
+        homeViewModel: widget.homeViewModel,
+      );
 
   Widget get _buildPostBottomLayout => PostBottomLayout(
         postModel: model,

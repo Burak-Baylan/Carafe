@@ -23,16 +23,11 @@ class PostBottomLayout extends StatelessWidget {
 
   late BuildContext context;
 
-  late Stream<QuerySnapshot<Map<String, dynamic>>> postLikeCountStream;
 
   _initState(BuildContext context) {
     this.context = context;
     postViewModel.findLikeIcon();
     postViewModel.findPostSaveIcon();
-    postLikeCountStream = postViewModel.firebaseConstants.allPostsCollectionRef
-        .doc(postModel.postId)
-        .collection(homeViewModel.firebaseConstants.postLikersText)
-        .snapshots();
   }
 
   @override
@@ -98,7 +93,7 @@ class PostBottomLayout extends StatelessWidget {
 
   Widget get _buildLikeText =>
       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: postLikeCountStream,
+        stream: postViewModel.firebaseConstants.likeTextStremRef(postModel.postId),
         builder: (context, snapshot) => _findLikeText(snapshot),
       );
 
