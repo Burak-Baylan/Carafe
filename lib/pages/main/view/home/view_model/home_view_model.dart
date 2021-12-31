@@ -18,8 +18,6 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
   @override
   setContext(BuildContext context) => this.context = context;
   @observable
-  int fullScreenImageIndex = 0;
-  @observable
   List<PostModel> posts = [];
   @observable
   Widget homeBody = Container();
@@ -30,8 +28,6 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
   
   @action
   changeHomeBody(Widget body) => homeBody = body;
-  @action
-  changeFullScreenImageIndex(int index) => fullScreenImageIndex = index;
   @action
   changePostsScrollable(ScrollPhysics? physics) => postsScrollable = physics;
   @action

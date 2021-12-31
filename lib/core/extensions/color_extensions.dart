@@ -8,4 +8,7 @@ extension ColorsExtension on Color {
 extension StatusBarColorExtension on Color {
   void get changeStatusBarColor => SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: this));
+
+  void get changeBottomNavBarColor => SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: this));
 }
