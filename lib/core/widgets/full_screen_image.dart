@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:photo_view/photo_view.dart';
 import '../../app/constants/app_constants.dart';
 import '../extensions/color_extensions.dart';
 import '../extensions/context_extensions.dart';
@@ -17,6 +17,10 @@ class FullScreenImage extends StatefulWidget {
     this.imageWidget,
     this.onImageTap,
     this.backgroundColor,
+    this.height,
+    this.width,
+    this.disableBackButton = false,
+    this.scaleStateChangedCallback,
   }) : super(key: key);
 
   String? tag = "";
@@ -25,6 +29,10 @@ class FullScreenImage extends StatefulWidget {
   List<Widget>? children;
   Function()? onImageTap;
   Color? backgroundColor;
+  double? width;
+  double? height;
+  bool disableBackButton;
+  void Function(PhotoViewScaleState)? scaleStateChangedCallback;
 
   @override
   State<FullScreenImage> createState() => _FullScreenImageState();
@@ -35,19 +43,18 @@ class _FullScreenImageState extends State<FullScreenImage> {
 
   @override
   Widget build(BuildContext context) {
+    Colors.transparent.changeStatusBarColor;
     return Container(
       height: context.height,
       width: context.width,
       color: widget.backgroundColor ?? AppColors.black,
-      child: SafeArea(
-        child: Hero(
-          tag: widget.tag!,
-          child: Stack(
-            children: [
-              Align(alignment: Alignment.center, child: _buildImage),
-              _getWidgets,
-            ],
-          ),
+      child: Hero(
+        tag: widget.tag!,
+        child: Stack(
+          children: [
+            Align(alignment: Alignment.center, child: _buildImage),
+            _getWidgets,
+          ],
         ),
       ),
     );
@@ -55,30 +62,35 @@ class _FullScreenImageState extends State<FullScreenImage> {
 
   Widget get _getWidgets {
     List<Widget> widgets = [];
-    widgets += <Widget>[
-      Align(alignment: Alignment.topLeft, child: _buildBackButton),
-    ];
+    if (!widget.disableBackButton) {
+      widgets += <Widget>[
+        Align(alignment: Alignment.topLeft, child: _buildBackButton),
+      ];
+    }
     if (widget.children != null) {
       widgets += widget.children!;
     }
-    return AnimatedOpacity(
-      opacity: visible ? 1 : 0,
-      duration: 300.durationMilliseconds,
-      child: Stack(
-        children: widgets,
+    return SafeArea(
+      child: AnimatedOpacity(
+        opacity: visible ? 1 : 0,
+        duration: 300.durationMilliseconds,
+        child: Stack(
+          children: widgets,
+        ),
       ),
     );
   }
 
   Widget get _buildImage => GestureDetector(
-        onTap: () {
-          if (widget.onImageTap != null) {
-            widget.onImageTap!();
-          }
-          _changeVisibility();
-        },
+        onTap: () => onImageTap(),
         child: widget.imageWidget ??
             ZoomableImage(
+              width: widget.width,
+              height: widget.height,
+              scaleStateChangedCallback: (state) =>
+                  widget.scaleStateChangedCallback != null
+                      ? widget.scaleStateChangedCallback!(state)
+                      : null,
               image: widget.image!,
               backgroundColor: widget.backgroundColor,
             ),
@@ -94,6 +106,13 @@ class _FullScreenImageState extends State<FullScreenImage> {
     setState(() {});
   }
 
+  onImageTap() {
+    if (widget.onImageTap != null) {
+      widget.onImageTap!();
+    }
+    _changeVisibility();
+  }
+
   _closePage() => context.pop;
 
   Widget get _buildBackButton => FullSizeImageSmallButton(
@@ -102,17 +121,10 @@ class _FullScreenImageState extends State<FullScreenImage> {
       );
 
   @override
-  void initState() {
-    super.initState();
-    widget.backgroundColor != null
-        ? widget.backgroundColor!.changeStatusBarColor
-        : Colors.black.changeStatusBarColor;
-  }
-
-  @override
   void dispose() {
     StatusBarHelper.open();
     Colors.transparent.changeStatusBarColor;
+    Colors.black.changeBottomNavBarColor;
     super.dispose();
   }
 }
