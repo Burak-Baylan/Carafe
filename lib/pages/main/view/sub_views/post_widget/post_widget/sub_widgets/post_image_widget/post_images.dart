@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../../../core/extensions/context_extensions.dart';
-import '../../../../../../../core/extensions/int_extensions.dart';
+import '../../../../../../../../core/extensions/context_extensions.dart';
+import '../../../../../../../../core/extensions/int_extensions.dart';
 import 'sub_views/post_image_widget.dart';
 
 class ImageWidgets extends StatelessWidget {

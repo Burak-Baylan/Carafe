@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import '../../../../../../../../../core/base/view_model/base_view_model.dart';
-import '../../../../../../../../authenticate/model/user_model.dart';
-import '../../../../../../../model/post_model.dart';
+import '../../../../../../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../../../../../authenticate/model/user_model.dart';
+import '../../../../../../../../model/post_model.dart';
 part 'post_menu_view_model.g.dart';
 
 class PostMenuViewModel = _PostMenuViewModelBase with _$PostMenuViewModel;

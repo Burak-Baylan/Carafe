@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../../../../../core/extensions/context_extensions.dart';
-import '../../../../../../core/extensions/double_extensions.dart';
-import '../../../../../../core/extensions/int_extensions.dart';
-import '../../../../../../core/extensions/timestamp_extensions.dart';
-import '../../../../model/post_model.dart';
-import '../../../home/view_model/home_view_model.dart';
+import '../../../../../../../core/extensions/context_extensions.dart';
+import '../../../../../../../core/extensions/double_extensions.dart';
+import '../../../../../../../core/extensions/int_extensions.dart';
+import '../../../../../../../core/extensions/timestamp_extensions.dart';
+import '../../../../../model/post_model.dart';
+import '../../../../home/view_model/home_view_model.dart';
 import '../view_model/post_view_model.dart';
 
 class PostBottomLayout extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../../app/constants/app_constants.dart';
-import '../../../../model/post_model.dart';
+import '../../../../../../../app/constants/app_constants.dart';
+import '../../../../../model/post_model.dart';
 
 
 class PostTopInformation extends StatelessWidget {
