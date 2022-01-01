@@ -14,34 +14,35 @@ abstract class _HomePageFullScreenImageViewModelBase with Store {
   @observable
   ScrollPhysics sliderScrollPhysics = const PageScrollPhysics();
   @observable
-  DismissDirection photoDismissDirection = DismissDirection.vertical;
-  @observable
   Color color = Colors.black.withOpacity(0.5);
   @action
   sliderNoneScrollPhysics() =>
       sliderScrollPhysics = const NeverScrollableScrollPhysics();
   @action
-  sliderPageScrollPhysics() => sliderScrollPhysics = const PageScrollPhysics();
+  sliderPageScrollPhysics() =>
+      sliderScrollPhysics = const BouncingScrollPhysics();
   @action
   changeVisiblity() => visible = !visible;
   @action
   changeIndex(int index) => this.index = index;
   @action
   setColor(Color color) => this.color = color;
+  @observable
+  bool dismissCloseState = false;
   @action
-  noneDissmisDirection() => photoDismissDirection = DismissDirection.none;
+  closePhotoDismissible() => dismissCloseState = true;
   @action
-  verticalDismissDirection() =>
-      photoDismissDirection = DismissDirection.vertical;
+  openPhotoDismissible() => dismissCloseState = false;
+
   @action
   photoScaleStateChanged(PhotoViewScaleState state) {
-    if (state == PhotoViewScaleState.covering ||
-        state == PhotoViewScaleState.zoomedIn) {
-      sliderNoneScrollPhysics();
-      noneDissmisDirection();
-    } else {
+    print("STATE |||| $state");
+    if (state == PhotoViewScaleState.initial) {
       sliderPageScrollPhysics();
-      verticalDismissDirection();
+      openPhotoDismissible();
+    } else {
+      sliderNoneScrollPhysics();
+      closePhotoDismissible();
     }
   }
 }

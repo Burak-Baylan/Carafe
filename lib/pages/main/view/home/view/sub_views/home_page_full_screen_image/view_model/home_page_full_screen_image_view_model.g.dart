@@ -57,23 +57,6 @@ mixin _$HomePageFullScreenImageViewModel
     });
   }
 
-  final _$photoDismissDirectionAtom =
-      Atom(name: '_HomePageFullScreenImageViewModelBase.photoDismissDirection');
-
-  @override
-  DismissDirection get photoDismissDirection {
-    _$photoDismissDirectionAtom.reportRead();
-    return super.photoDismissDirection;
-  }
-
-  @override
-  set photoDismissDirection(DismissDirection value) {
-    _$photoDismissDirectionAtom.reportWrite(value, super.photoDismissDirection,
-        () {
-      super.photoDismissDirection = value;
-    });
-  }
-
   final _$colorAtom = Atom(name: '_HomePageFullScreenImageViewModelBase.color');
 
   @override
@@ -89,35 +72,24 @@ mixin _$HomePageFullScreenImageViewModel
     });
   }
 
+  final _$dismissCloseStateAtom =
+      Atom(name: '_HomePageFullScreenImageViewModelBase.dismissCloseState');
+
+  @override
+  bool get dismissCloseState {
+    _$dismissCloseStateAtom.reportRead();
+    return super.dismissCloseState;
+  }
+
+  @override
+  set dismissCloseState(bool value) {
+    _$dismissCloseStateAtom.reportWrite(value, super.dismissCloseState, () {
+      super.dismissCloseState = value;
+    });
+  }
+
   final _$_HomePageFullScreenImageViewModelBaseActionController =
       ActionController(name: '_HomePageFullScreenImageViewModelBase');
-
-  @override
-  dynamic noneDissmisDirection() {
-    final _$actionInfo =
-        _$_HomePageFullScreenImageViewModelBaseActionController.startAction(
-            name: '_HomePageFullScreenImageViewModelBase.noneDissmisDirection');
-    try {
-      return super.noneDissmisDirection();
-    } finally {
-      _$_HomePageFullScreenImageViewModelBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic verticalDismissDirection() {
-    final _$actionInfo =
-        _$_HomePageFullScreenImageViewModelBaseActionController.startAction(
-            name:
-                '_HomePageFullScreenImageViewModelBase.verticalDismissDirection');
-    try {
-      return super.verticalDismissDirection();
-    } finally {
-      _$_HomePageFullScreenImageViewModelBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
 
   @override
   dynamic sliderNoneScrollPhysics() {
@@ -185,6 +157,33 @@ mixin _$HomePageFullScreenImageViewModel
   }
 
   @override
+  dynamic closePhotoDismissible() {
+    final _$actionInfo =
+        _$_HomePageFullScreenImageViewModelBaseActionController.startAction(
+            name:
+                '_HomePageFullScreenImageViewModelBase.closePhotoDismissible');
+    try {
+      return super.closePhotoDismissible();
+    } finally {
+      _$_HomePageFullScreenImageViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic openPhotoDismissible() {
+    final _$actionInfo =
+        _$_HomePageFullScreenImageViewModelBaseActionController.startAction(
+            name: '_HomePageFullScreenImageViewModelBase.openPhotoDismissible');
+    try {
+      return super.openPhotoDismissible();
+    } finally {
+      _$_HomePageFullScreenImageViewModelBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic photoScaleStateChanged(PhotoViewScaleState state) {
     final _$actionInfo =
         _$_HomePageFullScreenImageViewModelBaseActionController.startAction(
@@ -204,8 +203,8 @@ mixin _$HomePageFullScreenImageViewModel
 index: ${index},
 visible: ${visible},
 sliderScrollPhysics: ${sliderScrollPhysics},
-photoDismissDirection: ${photoDismissDirection},
-color: ${color}
+color: ${color},
+dismissCloseState: ${dismissCloseState}
     ''';
   }
 }

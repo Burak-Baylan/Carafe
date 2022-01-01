@@ -75,7 +75,8 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
   Widget _fullScreenImage(int index) => Observer(
         builder: (_) => DismissiblePage(
           onDismiss: () => context.pop,
-          direction: fullScreenImageVm.photoDismissDirection,
+          disabled: fullScreenImageVm.dismissCloseState,
+          direction: DismissDirection.vertical,
           backgroundColor: fullScreenImageVm.color,
           child: FullScreenImage(
             onImageTap: () => changeVisibility,
