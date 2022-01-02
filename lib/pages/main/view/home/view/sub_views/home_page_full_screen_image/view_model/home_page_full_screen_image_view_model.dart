@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:photo_view/photo_view.dart';
+import '../../../../../../../../core/base/view_model/base_view_model.dart';
 part 'home_page_full_screen_image_view_model.g.dart';
 
 class HomePageFullScreenImageViewModel = _HomePageFullScreenImageViewModelBase
     with _$HomePageFullScreenImageViewModel;
 
-abstract class _HomePageFullScreenImageViewModelBase with Store {
+abstract class _HomePageFullScreenImageViewModelBase extends BaseViewModel with Store {
+
+  BuildContext? context;
+  setContext(BuildContext context) => this.context = context;
+
   @observable
   int index = 0;
   @observable
@@ -34,9 +39,10 @@ abstract class _HomePageFullScreenImageViewModelBase with Store {
   @action
   openPhotoDismissible() => dismissCloseState = false;
 
+  bool firstInit = true;
+
   @action
   photoScaleStateChanged(PhotoViewScaleState state) {
-    print("STATE |||| $state");
     if (state == PhotoViewScaleState.initial) {
       sliderPageScrollPhysics();
       openPhotoDismissible();

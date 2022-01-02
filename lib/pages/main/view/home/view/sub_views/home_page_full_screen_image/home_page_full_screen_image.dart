@@ -35,7 +35,7 @@ class HomePageFullScreenImage extends StatefulWidget {
 class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
   @override
   Widget build(BuildContext context) {
-    changeIndex(widget.imageIndex);
+    _firstInit();
     return Scaffold(
       backgroundColor: imageDominantColor,
       body: _buildImageWidget,
@@ -132,5 +132,12 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
     imageDominantColor.changeStatusBarColor;
     fullScreenImageVm.setColor(imageDominantColor);
     imageDominantColor.withOpacity(0.5).changeBottomNavBarColor;
+  }
+
+  _firstInit() {
+    if (fullScreenImageVm.firstInit) {
+      changeIndex(widget.imageIndex);
+      fullScreenImageVm.firstInit = false;
+    }
   }
 }
