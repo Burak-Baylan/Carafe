@@ -6,6 +6,8 @@ import '../../../../../../../core/extensions/string_extensions.dart';
 import '../../../../../../../core/init/navigation/navigator/navigator.dart';
 import '../../../../../model/post_model.dart';
 import '../../../../home/view/sub_views/home_page_full_screen_image/home_page_full_screen_image.dart';
+import '../../../../home/view_model/home_view_model.dart';
+import '../../full_screen_post_view/full_screen_post_view.dart';
 
 part 'post_view_model.g.dart';
 
@@ -23,13 +25,13 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
   late PostModel postModel;
 
   @observable
-  IconData likeIcon = Icons.favorite_outline;
+  IconData likeIcon = Icons.favorite_rounded;
   @observable
   IconData postSaveIcon = Icons.bookmark_outline;
 
   bool likeLock = false;
   bool saveLock = false;
-  IconData unlikedIcon = Icons.favorite_outline;
+  IconData unlikedIcon = Icons.favorite_border_rounded;
   IconData likedIcon = Icons.favorite_outlined;
   IconData unsavedIcon = Icons.bookmark_outline;
   IconData savedIcon = Icons.bookmark_outlined;
@@ -120,4 +122,17 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
       animate: false,
     );
   }
+
+  navigateToFullScreenPostView(
+    PostViewModel viewModel,
+    HomeViewModel homeViewModel,
+  ) =>
+      customNavigateToPage(
+        page: FullScreenPostView(
+          postViewModel: viewModel,
+          postModel: postModel,
+          homeViewModel: homeViewModel,
+        ),
+        animate: true,
+      );
 }
