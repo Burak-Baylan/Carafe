@@ -38,6 +38,7 @@ class PostProfilePhoto extends StatelessWidget {
   Widget _imageBuilder(ImageProvider provider) => Container(
         decoration: BoxDecoration(
           borderRadius: 50.radiusAll,
+          border: Border.all(color: Colors.grey.shade500, width: 0.3),
           image: DecorationImage(fit: BoxFit.cover, image: provider),
         ),
       );

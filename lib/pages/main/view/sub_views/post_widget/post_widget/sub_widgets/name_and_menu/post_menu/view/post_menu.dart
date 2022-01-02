@@ -33,8 +33,9 @@ class PostMenuButton extends StatelessWidget {
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: () => sheet(context),
-        child: const Icon(
+        child: Icon(
           Icons.more_vert_outlined,
+          color: Colors.grey[500],
           size: 20,
         ),
       ),

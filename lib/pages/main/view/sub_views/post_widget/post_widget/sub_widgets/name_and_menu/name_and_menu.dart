@@ -11,10 +11,18 @@ class PostNameAndMenu extends StatelessWidget {
     Key? key,
     required this.postModel,
     required this.homeViewModel,
+    this.nameFontSize = 13,
+    this.mailFontSize = 13,
+    this.closeCenterDot = false,
+    this.buildWithColumn = false,
   }) : super(key: key);
 
   PostModel postModel;
   HomeViewModel homeViewModel;
+  double nameFontSize;
+  double mailFontSize;
+  bool closeCenterDot;
+  bool buildWithColumn;
 
   @override
   Widget build(BuildContext context) {
@@ -54,22 +62,28 @@ class PostNameAndMenu extends StatelessWidget {
         ],
       );
 
-  Widget _buildLayout(UserModel? userInformation) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        _buildText(text: userInformation!.username, fontSize: 13),
-        CenterDotText(),
+  Widget _buildLayout(UserModel? userInformation) => buildWithColumn
+      ? IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: nameAndMenuChildren(userInformation),
+          ),
+        )
+      : Row(
+          mainAxisSize: MainAxisSize.max,
+          children: nameAndMenuChildren(userInformation),
+        );
+
+  List<Widget> nameAndMenuChildren(UserModel? userInformation) => [
+        _buildText(text: userInformation!.username, fontSize: nameFontSize),
+        closeCenterDot ? Container() : CenterDotText(),
         Expanded(
           child: _buildText(
-            text: userInformation.email,
-            fontSize: 13,
-            textColor: Colors.grey[500],
-          ),
+              text: userInformation.email,
+              fontSize: mailFontSize,
+              textColor: Colors.grey[500]),
         ),
-      ],
-    );
-  }
+      ];
 
   Widget _buildText({
     required String text,

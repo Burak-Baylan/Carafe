@@ -4,13 +4,20 @@ import '../../../../../../../../core/extensions/int_extensions.dart';
 import 'sub_views/post_image_widget.dart';
 
 class ImageWidgets extends StatelessWidget {
-  ImageWidgets({Key? key, required this.images, required this.onPressedImage})
-      : super(key: key);
+  ImageWidgets({
+    Key? key,
+    required this.images,
+    required this.onPressedImage,
+    this.fullSizeHeight,
+    this.halfSizeHeight,
+  }) : super(key: key);
 
   List<dynamic> images;
   late BuildContext context;
   late Widget body;
   List<ImageProvider<Object>?> imageProviders = [null, null, null, null];
+  double? fullSizeHeight;
+  double? halfSizeHeight;
 
   Function(
     List<ImageProvider<Object>?> imageProviders,
@@ -18,9 +25,10 @@ class ImageWidgets extends StatelessWidget {
     int index,
   ) onPressedImage;
 
-  double get quarterSize => (((context.height / 3.5) / 2) - 1.5);
-  double get halfSize => context.height / 3.5;
-  double get fullSize => context.height / 3;
+  double get quarterSize =>
+      (((halfSizeHeight ?? ((context.height) / 3.5)) / 2) - 1.5);
+  double get halfSize => halfSizeHeight ?? context.height / 3.5;
+  double get fullSize => fullSizeHeight ?? context.height / 3;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +59,7 @@ class ImageWidgets extends StatelessWidget {
   }
 
   Widget buildOneImage(List<dynamic> images) => SizedBox(
-      height: context.height / 3,
+      height: fullSize,
       child: PostImageWidget(
         imageLink: images[0],
         borderRadius: 10.radiusAll,

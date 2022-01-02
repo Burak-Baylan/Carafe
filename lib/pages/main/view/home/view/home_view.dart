@@ -4,7 +4,7 @@ import '../../../../../app/constants/app_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/widget_extension.dart';
 import '../../../../../core/widgets/center_dot_text.dart';
-import '../../sub_views/post_widget/post_widget.dart';
+import '../../sub_views/post_widget/post_widget/post_widget.dart';
 import '../view_model/home_view_model.dart';
 
 class HomeView extends StatefulWidget {

@@ -44,7 +44,8 @@ class _PostWidgetState extends State<PostWidget> {
             width: context.width,
             child: InkWell(
               borderRadius: 10.radiusAll,
-              onTap: () {},
+              onTap: () => postViewModel.navigateToFullScreenPostView(
+                  postViewModel, widget.homeViewModel),
               child: _postBody,
             ),
           ),
@@ -102,19 +103,17 @@ class _PostWidgetState extends State<PostWidget> {
         children: [
           5.sizedBoxOnlyHeight,
           ImageWidgets(
-            images: model.imageLinks,
-            onPressedImage: (imageProviders, imageUrls, imageIndex) =>
-                postViewModel.onPressedImage(imageProviders, imageUrls, imageIndex),
-          ),
+              images: model.imageLinks,
+              onPressedImage: (imageProviders, imageUrls, imageIndex) =>
+                  postViewModel.onPressedImage(
+                      imageProviders, imageUrls, imageIndex)),
         ],
       );
 
   Widget get _buildPp => PostProfilePhoto(postModel: model);
 
-  Widget get _nameAndMoreMenu => PostNameAndMenu(
-        postModel: model,
-        homeViewModel: widget.homeViewModel,
-      );
+  Widget get _nameAndMoreMenu =>
+      PostNameAndMenu(postModel: model, homeViewModel: widget.homeViewModel);
 
   Widget get _buildPostBottomLayout => PostBottomLayout(
         postModel: model,
@@ -127,10 +126,7 @@ class _PostWidgetState extends State<PostWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             1.sizedBoxOnlyHeight,
-            Text(
-              "${model.text}",
-              style: TextStyle(color: Colors.grey[700]),
-            ),
+            Text("${model.text}", style: TextStyle(color: Colors.grey[700])),
           ],
         )
       : Container();
