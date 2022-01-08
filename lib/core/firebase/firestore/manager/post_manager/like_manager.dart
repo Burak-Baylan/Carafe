@@ -15,47 +15,41 @@ class PostLikeManager extends FirebaseBase {
   Map<String, dynamic> _getLikeJson(Timestamp currentTime) =>
       LikeModel(authorId: userId, createdAt: currentTime).toJson();
 
-  Future<bool> likePost(String postId, Timestamp currentTime) async {
+  Future<bool> likePost(DocumentReference docRef, Timestamp currentTime) async {
     userId = authService.userId.toString();
-    this.postId = postId;
-    var postsDocRef = firebaseConstants.postDocRef(postId);
-    await _incraseLike(postsDocRef);
+    await _incraseLike(docRef);
     Map<String, dynamic> json = _getLikeJson(currentTime);
-    var addRespones = await firebaseService.addDocument(_likeRef, json);
-    return await _controlResponse(addRespones, _likeRef);
+    var addRespones = await firebaseService.addDocument(_likeRef(docRef), json);
+    return await _controlResponse(addRespones, _likeRef(docRef));
   }
 
   Future<bool> _controlResponse(
       CustomError response, DocumentReference ref) async {
     if (response.errorMessage != null) {
-      var deleteResponse = await _deleteLikeFromFirebase();
+      var deleteResponse = await _deleteLikeFromFirebase(ref);
       if (deleteResponse.errorMessage == null) await _decraseLike(ref);
       return false;
     }
     return true;
   }
 
-  Future<bool> unlikePost(String postId, String userId) async {
+  Future<bool> unlikePost(DocumentReference ref) async {
     userId = authService.userId.toString();
-    this.postId = postId;
-    var postsDocRef = firebaseConstants.postDocRef(postId);
-    await _decraseLike(postsDocRef);
-    var deleteResponse = await _deleteLikeFromFirebase();
+    await _decraseLike(ref);
+    var deleteResponse = await _deleteLikeFromFirebase(ref);
     if (deleteResponse.errorMessage != null) {
-      await _incraseLike(postsDocRef);
+      await _incraseLike(ref);
       return false;
     }
     return true;
   }
 
-  DocumentReference get _likeRef => firebaseConstants.allPostsCollectionRef
-      .doc(postId)
-      .collection(firebaseConstants.postLikersText)
-      .doc(userId);
+  DocumentReference _likeRef(DocumentReference docRef) =>
+      firebaseConstants.postLikesCollectionRef(docRef).doc(userId);
 
-  Future<CustomError> _deleteLikeFromFirebase() async =>
+  Future<CustomError> _deleteLikeFromFirebase(DocumentReference docRef) async =>
       await firebaseService.deleteDocument(
-          firebaseConstants.postLikesCollectionRef(postId).doc(userId));
+          firebaseConstants.postLikesCollectionRef(docRef).doc(userId));
 
   Future _decraseLike(DocumentReference ref) async =>
       await firebaseManager.decraseField(

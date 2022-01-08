@@ -12,6 +12,7 @@ extension EdgeInsetsExtensions on double{
   EdgeInsets get edgeIntesetsBottomLeft => EdgeInsets.only(bottom: this, left: this);
   EdgeInsets get edgeIntesetsBottomRight => EdgeInsets.only(bottom: this, right: this);
   EdgeInsets get edgeIntesetsRightLeft => EdgeInsets.only(right: this, left: this);
+  EdgeInsets get edgeIntesetsRightLeftTop => EdgeInsets.only(right: this, left: this, top: this);
 }
 
 extension SizedBoxExtension on double {
