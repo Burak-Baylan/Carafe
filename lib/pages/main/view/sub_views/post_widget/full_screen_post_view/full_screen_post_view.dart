@@ -1,63 +1,133 @@
-import 'package:Carafe/core/widgets/center_dot_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
+import '../../../../../../core/extensions/widget_extension.dart';
+import '../../../../../../core/widgets/center_dot_text.dart';
 import '../../../../model/post_model.dart';
 import '../../../home/view_model/home_view_model.dart';
+import '../post_widget/post_widget.dart';
 import '../post_widget/sub_widgets/name_and_menu/name_and_menu.dart';
 import '../post_widget/sub_widgets/post_image_widget/post_images.dart';
 import '../post_widget/sub_widgets/post_top_information.dart';
 import '../post_widget/sub_widgets/profile_photo.dart';
 import '../post_widget/view_model/post_view_model.dart';
-import 'sub_widgets/full_screen_post_bottom_layout.dart';
+import 'sub_widgets/full_screen_post_bottom_layout/full_screen_post_bottom_layout.dart';
+import 'sub_widgets/more_comments_loading_widget.dart';
 
-class FullScreenPostView extends StatelessWidget {
+class FullScreenPostView extends StatefulWidget {
   FullScreenPostView({
     Key? key,
     required this.postViewModel,
     required this.postModel,
     required this.homeViewModel,
+    this.postRef,
   }) : super(key: key);
 
   PostViewModel postViewModel;
   HomeViewModel homeViewModel;
   PostModel postModel;
+  DocumentReference? postRef;
+
+  @override
+  State<FullScreenPostView> createState() => _FullScreenPostViewState();
+}
+
+class _FullScreenPostViewState extends State<FullScreenPostView> {
   late BuildContext context;
+  late PostViewModel postViewModel;
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
+
+    postViewModel = widget.postViewModel;
+    postViewModel.findCommentsPath(widget.postRef);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => postViewModel.navigateToReplyScreen(),
+        child: const Icon(Icons.reply_rounded),
+      ),
       appBar: _appBar,
       body: _body,
     );
   }
 
-  Widget get _body => SingleChildScrollView(
-        child: Container(
-          margin: 10.0.edgeIntesetsAll,
-          child: IntrinsicHeight(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      5.sizedBoxOnlyHeight,
-                      _topInformation,
-                      5.sizedBoxOnlyHeight,
-                      _postUserInformation,
-                      10.sizedBoxOnlyHeight,
-                      Expanded(child: _postInfromationLayotu),
-                    ],
-                  ),
-                ),
-                10.sizedBoxOnlyHeight,
-                CenterDotText(textColor: Colors.grey.shade500),
-              ],
-            ),
-          ),
+  @override
+  void initState() {
+    super.initState();
+    postViewModel = widget.postViewModel;
+    postViewModel.findCommentsPath(widget.postRef);
+  }
+
+  Widget get _body => FutureBuilder(
+        future: postViewModel.commentsFuture,
+        builder: (context, snapshot) => snapshot.hasData
+            ? _postsListsBuilderSkeleton
+            : const Center(child: CircularProgressIndicator()),
+      );
+
+  Widget get _postsListsBuilderSkeleton => Observer(
+        builder: (_) => Column(
+          children: [
+            Flexible(flex: 12, child: _postsListBuilder),
+            postViewModel.moreCommentsLoadingProgressState
+                ? const MoreCommentsLoadingWidget()
+                : Container(),
+          ],
+        ),
+      );
+
+  Widget get _postsListBuilder => ListView.builder(
+        shrinkWrap: true,
+        controller: widget.postViewModel.scrollController,
+        physics: widget.postViewModel.commentsScrollable,
+        itemCount: postViewModel.commentsLength + 1,
+        itemBuilder: (context, index) =>
+            index == 0 ? postBodySkeleton : _buildCommentItem(index - 1),
+      );
+
+  Widget _buildCommentItem(int index) {
+    List<Widget> postItem = [];
+    postItem.add(PostWidget(
+      model: postViewModel.comments[index],
+      homeViewModel: widget.homeViewModel,
+      showReply: true,
+      postRef: postViewModel.findACommentPath(index),
+    ));
+    if (postViewModel.commentsLength - 1 == index) {
+      postItem.add(10.0.sizedBoxOnlyHeight);
+      postItem.add(CenterDotText(textColor: Colors.grey.shade500).center);
+      postItem.add((context.height / 10).sizedBoxOnlyHeight);
+    }
+    return Column(children: postItem);
+  }
+
+  Widget get postBodySkeleton => SizedBox(
+        height: postViewModel.commentsLength == 0 ? context.height : null,
+        child: Column(
+          children: [
+            Container(margin: 10.0.edgeIntesetsRightLeftTop, child: postBody),
+            const Divider(height: 0),
+            postViewModel.commentsLength == 0
+                ? CenterDotText(textColor: Colors.grey.shade500)
+                : Container(),
+          ],
+        ),
+      );
+
+  Widget get postBody => IntrinsicHeight(
+        child: Column(
+          children: [
+            5.sizedBoxOnlyHeight,
+            _topInformation,
+            5.sizedBoxOnlyHeight,
+            _postUserInformation,
+            10.sizedBoxOnlyHeight,
+            Expanded(child: _postInfromationLayout),
+          ],
         ),
       );
 
@@ -75,24 +145,24 @@ class FullScreenPostView extends StatelessWidget {
         ],
       );
 
-  Widget get _postInfromationLayotu => Column(
+  Widget get _postInfromationLayout => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
           _buildPostText,
           _image,
           5.sizedBoxOnlyHeight,
-          _buildPostBottomLayout
+          _buildPostBottomLayout,
         ],
       );
 
-  Widget get _buildPostText => postModel.text != null
+  Widget get _buildPostText => widget.postModel.text != null
       ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             1.sizedBoxOnlyHeight,
             Text(
-              "${postModel.text}",
+              "${widget.postModel.text}",
               style: TextStyle(fontSize: context.height / 40),
             ),
           ],
@@ -103,39 +173,40 @@ class FullScreenPostView extends StatelessWidget {
         children: [
           5.sizedBoxOnlyHeight,
           ImageWidgets(
-            images: postModel.imageLinks,
+            images: widget.postModel.imageLinks,
             fullSizeHeight: context.height / 2.8,
             halfSizeHeight: context.height / 2.8,
-            onPressedImage: (imageProviders, imageUrls, imageIndex) =>
-                postViewModel.onPressedImage(
-                    imageProviders, imageUrls, imageIndex),
+            onPressedImage: (imageProviders, imageUrls, imageIndex) => widget
+                .postViewModel
+                .onPressedImage(imageProviders, imageUrls, imageIndex),
           ),
         ],
       );
 
   Widget get _nameAndMoreMenu => PostNameAndMenu(
-        postModel: postModel,
-        homeViewModel: homeViewModel,
+        postViewModel: postViewModel,
+        postModel: widget.postModel,
+        homeViewModel: widget.homeViewModel,
         closeCenterDot: true,
         buildWithColumn: true,
       );
 
-  get _buildPp => PostProfilePhoto(postModel: postModel);
+  get _buildPp => PostProfilePhoto(postModel: widget.postModel);
 
   Widget get _topInformation => Align(
         alignment: Alignment.centerLeft,
         child: Row(
           children: [
             (context.height * 0.053).sizedBoxOnlyWidth,
-            PostTopInformation(model: postModel),
+            PostTopInformation(model: widget.postModel),
           ],
         ),
       );
 
   Widget get _buildPostBottomLayout => FullScreenPostBottomLayout(
-        postModel: postModel,
-        postViewModel: postViewModel,
-        homeViewModel: homeViewModel,
+        postModel: widget.postModel,
+        postViewModel: widget.postViewModel,
+        homeViewModel: widget.homeViewModel,
       );
 
   AppBar get _appBar => AppBar(
