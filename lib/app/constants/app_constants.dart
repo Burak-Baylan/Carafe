@@ -21,6 +21,9 @@ class PostContstants {
   static const MAX_POST_TEXT_LENGTH = 300;
   static const WARNING_POST_TEXT_LENGTH = 250;
 
+  static const WARNING_LENGTH_COLOR = Colors.orangeAccent;
+  static const MAX_LENGTH_COLOR = Colors.redAccent;
+
   static const String ALL = "All";
   static const String TECHNOLOGY = "Technology";
   static const String SOFTWARE = "Software";

@@ -1,8 +1,8 @@
-import 'package:Carafe/app/constants/app_constants.dart';
-import 'package:Carafe/core/extensions/context_extensions.dart';
-import 'package:Carafe/core/widgets/cupertino_action_sheet/custom_cupertino_action_sheet.dart';
-import 'package:Carafe/pages/main/view/add_post/view_model/add_post_view_model.dart';
 import 'package:flutter/cupertino.dart';
+import '../../../../../app/constants/app_constants.dart';
+import '../../../../../core/alerts/bottom_sheet/cupertino_action_sheet/custom_cupertino_action_sheet.dart';
+import '../../../../../core/extensions/context_extensions.dart';
+import '../view_model/add_post_view_model.dart';
 
 class AddPostCategorySelector {
   static void show(BuildContext context, AddPostViewModel viewModel) =>

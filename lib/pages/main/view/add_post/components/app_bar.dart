@@ -37,10 +37,10 @@ class AddPostAppBar extends StatelessWidget {
         height: 30,
         child: AnimatedButton(
           onPressed: () => viewModel.sharePost(viewModel),
-          child: const FittedBox(
+          child: FittedBox(
             child: Text(
-              "Share",
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              viewModel.isAComment ? 'Reply' : 'Share',
+              style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
           style: ElevatedButton.styleFrom(

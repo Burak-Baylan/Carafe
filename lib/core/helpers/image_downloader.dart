@@ -1,11 +1,10 @@
 import 'dart:typed_data';
-
-import 'package:Carafe/core/extensions/timestamp_extensions.dart';
-import 'package:Carafe/core/permissions/storage_permission.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import '../extensions/timestamp_extensions.dart';
+import '../permissions/storage_permission.dart';
 
 class ImageDownloader {
   static Future download(

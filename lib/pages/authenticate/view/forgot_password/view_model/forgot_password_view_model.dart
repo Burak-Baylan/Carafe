@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../../core/error/custom_error.dart';
-import '../../../../../core/widgets/custom_alert_dialog.dart';
-
+import '../../../../../core/alerts/alert_dialog/custom_alert_dialog.dart';
 part 'forgot_password_view_model.g.dart';
 
 class ForgotPasswordViewModel = _ForgotPasswordViewModelBase

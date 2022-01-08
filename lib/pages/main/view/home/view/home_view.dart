@@ -102,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
           shrinkWrap: true,
           physics: viewModel.postsScrollable,
           itemCount: viewModel.posts.length,
-          itemBuilder: (context, index) =>_buildPostItem(index),
+          itemBuilder: (context, index) => _buildPostItem(index),
         ),
       );
 

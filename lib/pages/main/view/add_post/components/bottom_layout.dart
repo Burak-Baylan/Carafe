@@ -41,12 +41,12 @@ class AddPostBottomLayout extends StatelessWidget {
   }
 
   Widget get _buildIcons => IgnorePointer(
-    ignoring: viewModel.lockState,
+    ignoring: viewModel.screenLockState,
     child: IconButton(
       icon: const Icon(Icons.image_outlined),
       color: _context.colorScheme.secondary,
       iconSize: 25,
-      onPressed: () async => await viewModel.pickImage,
+      onPressed: () async => await viewModel.pickImageAlertSelector,
     ),
   );
 

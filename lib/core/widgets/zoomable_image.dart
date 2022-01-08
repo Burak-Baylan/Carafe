@@ -40,7 +40,7 @@ class _ZoomableImageState extends State<ZoomableImage> {
                   ? widget.scaleStateChangedCallback!(state)
                   : null,
           backgroundDecoration:
-              BoxDecoration(color: widget.backgroundColor ?? Colors.black),
+              BoxDecoration(color: widget.backgroundColor ?? Colors.transparent),
           maxScale: PhotoViewComputedScale.contained * (widget.minScale ?? 5),
           minScale: PhotoViewComputedScale.contained * (widget.maxScale ?? 1),
           initialScale:

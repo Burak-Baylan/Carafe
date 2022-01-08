@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
+import '../../alerts/alert_dialog/demonstrator/custom_alert_dialog_demonstrator.dart';
 import '../../extensions/double_extensions.dart';
 import '../../firebase/base/firebase_base.dart';
 import '../../helpers/colorful_print.dart';
 import '../../helpers/image_colors_getter.dart';
 import '../../init/navigation/service/navigation_service.dart';
-import '../../widgets/custom_alert_dialog.dart';
 
 abstract class BaseViewModel with FirebaseBase {
   BuildContext? context;
@@ -46,18 +46,20 @@ abstract class BaseViewModel with FirebaseBase {
     String? negativeButtonText = 'Confirm',
     Function? onPressedPositiveButton,
     Function? onPressedNegativeButton,
+    double? borderRadius,
   }) =>
-      CustomAlertDialog(
+      CustomAlerDialogDemonstrator.instance.show(
+        title,
+        message,
         context: context,
-        title: title,
-        message: message,
         disableNegativeButton: disableNegativeButton,
         disablePositiveButton: disablePositiveButton,
-        positiveButtonText: positiveButtonText,
-        onPressedPositiveButton: onPressedPositiveButton,
-        onPressedNegativeButton: onPressedNegativeButton,
         negativeButtonText: negativeButtonText,
-      ).show();
+        positiveButtonText: positiveButtonText,
+        onPressedNegativeButton: onPressedNegativeButton,
+        onPressedPositiveButton: onPressedPositiveButton,
+        borderRadius: borderRadius,
+      );
 
   printYellow(String text) => ColorfulPrint.yellow(text);
 
