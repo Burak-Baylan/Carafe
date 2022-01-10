@@ -4,7 +4,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../../core/extensions/int_extensions.dart';
-import '../../../../../../../core/extensions/timestamp_extensions.dart';
 import '../../../../../model/post_model.dart';
 import '../../../../home/view_model/home_view_model.dart';
 import '../view_model/post_view_model.dart';
@@ -23,7 +22,6 @@ class PostBottomLayout extends StatelessWidget {
 
   late BuildContext context;
 
-
   _initState(BuildContext context) {
     this.context = context;
     postViewModel.findLikeIcon();
@@ -33,28 +31,22 @@ class PostBottomLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _initState(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildMyText(postModel.createdAt!.getTimeAgo),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildLikeButton,
-                3.sizedBoxOnlyWidth,
-                _buildLikeText,
-                10.sizedBoxOnlyWidth,
-                _buildCommentButton,
-                3.sizedBoxOnlyWidth,
-                _buildMyText(postModel.commentCount.toString()),
-              ],
-            ),
-            _buildSaveButton,
+            _buildLikeButton,
+            3.sizedBoxOnlyWidth,
+            _buildLikeText,
+            10.sizedBoxOnlyWidth,
+            _buildCommentButton,
+            3.sizedBoxOnlyWidth,
+            _buildCommentText,
           ],
         ),
+        _buildSaveButton,
       ],
     );
   }
@@ -69,7 +61,7 @@ class PostBottomLayout extends StatelessWidget {
 
   Widget _buildText(String text) => Text(
         text,
-        key: ValueKey<String>(postViewModel.getRandomId),
+        key: ValueKey(postViewModel.getRandomId),
         style: TextStyle(color: Colors.grey[700], fontSize: 12),
       );
 
@@ -85,7 +77,7 @@ class PostBottomLayout extends StatelessWidget {
           padding: 3.0.edgeIntesetsAll,
           child: Icon(
             icon,
-            size: 21,
+            size: context.height / 34,
             color: iconColor ?? context.theme.colorScheme.secondary,
           ),
         ),
@@ -93,17 +85,35 @@ class PostBottomLayout extends StatelessWidget {
 
   Widget get _buildLikeText =>
       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: postViewModel.firebaseConstants.likeTextStremRef(postModel.postId),
+        stream: postViewModel.firebaseConstants
+            .likeCountStremRef(postViewModel.sharedPostRef),
         builder: (context, snapshot) => _findLikeText(snapshot),
       );
 
+  Widget get _buildCommentText =>
+      StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: postViewModel.firebaseConstants
+            .commentCountStremRef(postViewModel.sharedPostRef),
+        builder: (context, snapshot) => _findCommentText(snapshot),
+      );
+
   Widget _findLikeText(
-      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) =>
+      _findText(snapshot, postModel.likeCount);
+
+  Widget _findCommentText(
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) =>
+      _findText(snapshot, postModel.commentCount);
+
+  Widget _findText(
+    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
+    int countFromModel,
+  ) {
     if (snapshot.hasData) {
-      int likeCount = snapshot.data!.docs.length;
-      return _buildMyText(likeCount.toString(), animate: true);
+      int count = snapshot.data!.docs.length;
+      return _buildMyText(count.toString(), animate: false);
     }
-    return _buildMyText(postModel.likeCount.toString(), animate: true);
+    return _buildMyText(countFromModel.toString(), animate: false);
   }
 
   Widget get _buildLikeButton => Observer(
@@ -114,14 +124,20 @@ class PostBottomLayout extends StatelessWidget {
       );
 
   Widget get _buildCommentButton => _buildSmallButtons(
-        () {},
+        () => postViewModel.navigateToReplyScreen(
+          postModel: postModel,
+          postAddingRef: postViewModel.sharedPostRef,
+        ),
         Icons.mode_comment_outlined,
       );
 
-  Widget get _buildSaveButton => Observer(
-        builder: (context) => _buildSmallButtons(
-          () => postViewModel.save(),
-          postViewModel.postSaveIcon,
-        ),
-      );
+  Widget get _buildSaveButton =>
+      postModel.authorId == postViewModel.authService.userId
+          ? Container()
+          : Observer(
+              builder: (context) => _buildSmallButtons(
+                () => postViewModel.save(),
+                postViewModel.postSaveIcon,
+              ),
+            );
 }

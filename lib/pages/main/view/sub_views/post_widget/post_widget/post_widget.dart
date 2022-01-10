@@ -1,13 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
-import '../../../../../../core/widgets/border_container.dart';
 import '../../../../model/post_model.dart';
 import '../../../home/view_model/home_view_model.dart';
 import 'sub_widgets/bottom_layout.dart';
 import 'sub_widgets/name_and_menu/name_and_menu.dart';
 import 'sub_widgets/post_image_widget/post_images.dart';
+import 'sub_widgets/post_skeleton.dart';
 import 'sub_widgets/post_top_information.dart';
 import 'sub_widgets/profile_photo.dart';
 import 'view_model/post_view_model.dart';
@@ -17,10 +18,29 @@ class PostWidget extends StatefulWidget {
     Key? key,
     required this.model,
     required this.homeViewModel,
+    this.ppWidget,
+    this.topInformation,
+    this.topUserInformation,
+    this.postText,
+    this.image,
+    this.bottomLayout,
+    this.removerCardView = false,
+    this.showReply = false,
+    this.postRef,
   }) : super(key: key);
 
   PostModel model;
   HomeViewModel homeViewModel;
+
+  Widget? topInformation;
+  Widget? ppWidget;
+  Widget? topUserInformation;
+  Widget? postText;
+  Widget? image;
+  Widget? bottomLayout;
+  bool removerCardView;
+  bool showReply;
+  DocumentReference? postRef;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -35,57 +55,58 @@ class _PostWidgetState extends State<PostWidget> {
     _initializeValues();
     return Column(
       children: [
-        15.sizedBoxOnlyHeight,
-        Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: BorderContainer.all(
-            elevation: 5,
-            radius: 10,
-            width: context.width,
-            child: InkWell(
-              borderRadius: 10.radiusAll,
-              onTap: () => postViewModel.navigateToFullScreenPostView(
-                  postViewModel, widget.homeViewModel),
-              child: _postBody,
-            ),
-          ),
-        ),
+        widget.showReply ? 0.sizedBoxOnlyHeight : 15.sizedBoxOnlyHeight,
+        PostSkeleton(showReply: widget.showReply, child: _postContainer)
       ],
     );
   }
 
-  _initializeValues() {
-    postViewModel.setPostModel(widget.model);
-    model = widget.model;
-  }
+  Widget get _postContainer => InkWell(
+        borderRadius: (widget.removerCardView || widget.showReply)
+            ? 0.radiusAll
+            : 10.radiusAll,
+        onTap: () => postViewModel.navigateToFullScreenPostView(postViewModel),
+        child: _postLayout,
+      );
+
+  Widget get _postLayout => Column(
+        children: [
+          widget.showReply ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
+          _postBody,
+          widget.showReply ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
+          const Divider(height: 0),
+        ],
+      );
 
   Widget get _postBody => Container(
-        margin: 10.0.edgeIntesetsAll,
+        margin: widget.showReply
+            ? const EdgeInsets.symmetric(horizontal: 10)
+            : 10.0.edgeIntesetsAll,
         child: Column(
           children: [
-            _topInformation,
+            widget.topInformation ?? _topInformation,
             5.sizedBoxOnlyHeight,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildPp,
+                widget.ppWidget ?? _buildPp,
                 5.sizedBoxOnlyWidth,
-                Expanded(child: _postInfromationLayotu),
+                Expanded(child: _postComponents),
               ],
             ),
           ],
         ),
       );
 
-  Widget get _postInfromationLayotu => Column(
+  Widget get _postComponents => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          _nameAndMoreMenu,
-          _buildPostText,
-          _image,
+          widget.topUserInformation ?? _nameAndMoreMenu,
+          widget.postText ?? _buildPostText,
+          widget.image ?? _image,
           5.sizedBoxOnlyHeight,
-          _buildPostBottomLayout
+          widget.bottomLayout ?? _buildPostBottomLayout
         ],
       );
 
@@ -103,17 +124,21 @@ class _PostWidgetState extends State<PostWidget> {
         children: [
           5.sizedBoxOnlyHeight,
           ImageWidgets(
-              images: model.imageLinks,
-              onPressedImage: (imageProviders, imageUrls, imageIndex) =>
-                  postViewModel.onPressedImage(
-                      imageProviders, imageUrls, imageIndex)),
+            images: model.imageLinks,
+            onPressedImage: (imageProviders, imageUrls, imageIndex) =>
+                postViewModel.onPressedImage(
+                    imageProviders, imageUrls, imageIndex),
+          ),
         ],
       );
 
   Widget get _buildPp => PostProfilePhoto(postModel: model);
 
-  Widget get _nameAndMoreMenu =>
-      PostNameAndMenu(postModel: model, homeViewModel: widget.homeViewModel);
+  Widget get _nameAndMoreMenu => PostNameAndMenu(
+        postModel: model,
+        homeViewModel: widget.homeViewModel,
+        postViewModel: postViewModel,
+      );
 
   Widget get _buildPostBottomLayout => PostBottomLayout(
         postModel: model,
@@ -126,8 +151,19 @@ class _PostWidgetState extends State<PostWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             1.sizedBoxOnlyHeight,
-            Text("${model.text}", style: TextStyle(color: Colors.grey[700])),
+            Text("${model.text}"),
           ],
         )
       : Container();
+
+  _initializeValues() {
+    postViewModel.setPostModel(widget.model);
+    postViewModel.setHomeViewModel(widget.homeViewModel);
+    model = widget.model;
+    if (model.replyed == null || !model.replyed!) {
+      postViewModel.sharedPostRef = postViewModel.postDocRef(model.postId);
+    } else {
+      postViewModel.sharedPostRef = widget.postRef!;
+    }
+  }
 }
