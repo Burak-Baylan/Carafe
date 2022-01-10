@@ -1,10 +1,10 @@
-import 'package:Carafe/core/firebase/base/firebase_base.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/extensions/color_extensions.dart';
+import '../../../../../../core/firebase/base/firebase_base.dart';
 import '../../../../model/post_model.dart';
+import '../../../../model/replying_post_model.dart';
 import '../add_post_view_model.dart';
 
 class SharePost with FirebaseBase {
@@ -17,23 +17,33 @@ class SharePost with FirebaseBase {
   String postId = "";
   List<String> imageLinks = [];
   List<String> imagesDominantColors = [];
+  CollectionReference? postRef;
+  ReplyingPostModel? replyingPostModel;
 
-  Future<CustomError> share(AddPostViewModel viewModel) async {
+  Future<CustomError> share(
+    AddPostViewModel viewModel, {
+    CollectionReference? postRef,
+    ReplyingPostModel? replyingPostModel,
+  }) async {
     vm = viewModel;
     imageLinks = [];
     imagesDominantColors = [];
     postId = "";
     postId = vm.getRandomId;
-    await _uploadImages();
+    this.replyingPostModel = replyingPostModel;
+    this.postRef = postRef;
+    var uploadResponse = await _uploadImages();
+    if (uploadResponse.errorMessage != null) return uploadResponse;
     await _getImagesDominantColors();
-    PostModel postModel = _prepareModel(postId);
-    var response = await _uploadPost(postId, postModel);
+    PostModel model = _prepareModel(postId);
+    var response = await _uploadPost(postId, model);
     return response;
   }
 
   Future<CustomError> _uploadPost(String postId, PostModel model) async =>
       await vm.firestoreService.addDocument(
-        vm.firestore.collection(firebaseConstants.postsText).doc(postId),
+        postRef?.doc(postId) ??
+            vm.firestore.collection(firebaseConstants.postsText).doc(postId),
         model.toJson(),
       );
 
@@ -48,12 +58,15 @@ class SharePost with FirebaseBase {
         commentCount: 0,
         category: vm.selectedCategory,
         postNotifications: true,
+        replyed: replyingPostModel?.replyingPostId != null ? true : false,
+        replyedPostId: replyingPostModel?.replyingPostId,
+        replyedUserId: replyingPostModel?.replyingUserId,
       );
 
   Future<CustomError> _uploadImages() async {
     List<String> imagePaths = [];
     CustomError response = CustomError(null);
-    String folderPath = _createPath;
+    String folderPath = _createImageFolderPath;
     for (var i = 0; i < vm.images.length; i++) {
       var image = vm.images[i];
       if (image != null) {
@@ -76,7 +89,7 @@ class SharePost with FirebaseBase {
     return response;
   }
 
-  Future _getImagesDominantColors() async {
+  Future<void> _getImagesDominantColors() async {
     for (var element in vm.images) {
       if (element == null) {
         imagesDominantColors.add(Colors.black.getString);
@@ -96,7 +109,7 @@ class SharePost with FirebaseBase {
     imageLinks = [];
   }
 
-  String get _createPath {
+  String get _createImageFolderPath {
     String userId = vm.authService.auth.currentUser!.uid;
     return "users/$userId/post/$postId/images";
   }

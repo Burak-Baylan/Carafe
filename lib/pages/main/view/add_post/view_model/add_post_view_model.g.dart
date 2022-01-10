@@ -86,18 +86,18 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
     });
   }
 
-  final _$imageLengthAtom = Atom(name: '_AddPostViewModelBase.imageLength');
+  final _$imagesLengthAtom = Atom(name: '_AddPostViewModelBase.imagesLength');
 
   @override
-  int get imageLength {
-    _$imageLengthAtom.reportRead();
-    return super.imageLength;
+  int get imagesLength {
+    _$imagesLengthAtom.reportRead();
+    return super.imagesLength;
   }
 
   @override
-  set imageLength(int value) {
-    _$imageLengthAtom.reportWrite(value, super.imageLength, () {
-      super.imageLength = value;
+  set imagesLength(int value) {
+    _$imagesLengthAtom.reportWrite(value, super.imagesLength, () {
+      super.imagesLength = value;
     });
   }
 
@@ -132,18 +132,19 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
     });
   }
 
-  final _$lockStateAtom = Atom(name: '_AddPostViewModelBase.lockState');
+  final _$screenLockStateAtom =
+      Atom(name: '_AddPostViewModelBase.screenLockState');
 
   @override
-  bool get lockState {
-    _$lockStateAtom.reportRead();
-    return super.lockState;
+  bool get screenLockState {
+    _$screenLockStateAtom.reportRead();
+    return super.screenLockState;
   }
 
   @override
-  set lockState(bool value) {
-    _$lockStateAtom.reportWrite(value, super.lockState, () {
-      super.lockState = value;
+  set screenLockState(bool value) {
+    _$screenLockStateAtom.reportWrite(value, super.screenLockState, () {
+      super.screenLockState = value;
     });
   }
 
@@ -162,22 +163,22 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
   }
 
   @override
-  dynamic onTextChanged(String text) {
+  dynamic onPostTextChanged(String text) {
     final _$actionInfo = _$_AddPostViewModelBaseActionController.startAction(
-        name: '_AddPostViewModelBase.onTextChanged');
+        name: '_AddPostViewModelBase.onPostTextChanged');
     try {
-      return super.onTextChanged(text);
+      return super.onPostTextChanged(text);
     } finally {
       _$_AddPostViewModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic changeStateLock() {
+  dynamic changeScreenLockState() {
     final _$actionInfo = _$_AddPostViewModelBaseActionController.startAction(
-        name: '_AddPostViewModelBase.changeStateLock');
+        name: '_AddPostViewModelBase.changeScreenLockState');
     try {
-      return super.changeStateLock();
+      return super.changeScreenLockState();
     } finally {
       _$_AddPostViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -202,10 +203,10 @@ circularBarValue: ${circularBarValue},
 textLength: ${textLength},
 progressBarColor: ${progressBarColor},
 images: ${images},
-imageLength: ${imageLength},
+imagesLength: ${imagesLength},
 selectedCategory: ${selectedCategory},
 postText: ${postText},
-lockState: ${lockState}
+screenLockState: ${screenLockState}
     ''';
   }
 }
