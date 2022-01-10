@@ -13,6 +13,7 @@ class FirebasePostManager extends FirebaseBase {
   FirebasePostManager._init();
 
   late QueryDocumentSnapshot<Map<String, dynamic>> lastVisiblePost;
+  QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleComment;
 
   Query<Map<String, dynamic>> get allPostsRef =>
       firebaseConstants.postsCreatedDescending;
@@ -107,9 +108,6 @@ class FirebasePostManager extends FirebaseBase {
     return true;
   }
 
-  QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleComment;
-
-  //! service
   Future<CustomData<List<PostModel>>> getComments(
       CollectionReference<Map<String, dynamic>> postCommentsRef) async {
     firebaseConstants.getCommentsWithLimit(postCommentsRef);
