@@ -6,4 +6,7 @@ class StatusBarHelper {
 
   static close() =>
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
+  static edgeToEdgeScreen() =>
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 }

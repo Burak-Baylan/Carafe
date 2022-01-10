@@ -8,6 +8,7 @@ extension ContextExtension on BuildContext {
   get pop => Navigator.pop(this);
   get popSheet => Navigator.of(this, rootNavigator: true).pop();
   get unFocus => FocusScope.of(this).unfocus();
+  double get statusBarHeight => MediaQuery.of(this).viewPadding.top;
 }
 
 extension ValueExtension on BuildContext {

@@ -1,5 +1,5 @@
-import 'package:Carafe/core/firebase/base/firebase_base.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../firebase/base/firebase_base.dart';
 
 class FirebaseConstants extends FirebaseBase {
   static FirebaseConstants? _instance;
@@ -31,8 +31,10 @@ class FirebaseConstants extends FirebaseBase {
   String followerUserText = 'follower_user';
   String followingUserText = 'following_user';
   String pinnedPostText = 'pinned_post';
+  String postCommentsText = 'comments';
 
   int numberOfPostsToBeUploadedAtOnce = 15;
+  int numberOfCommentsToBeUploadedAtOnce = 6;
 
   @override
   CollectionReference<Map<String, dynamic>> get allUsersCollectionRef =>
@@ -40,6 +42,7 @@ class FirebaseConstants extends FirebaseBase {
   @override
   CollectionReference<Map<String, dynamic>> get allPostsCollectionRef =>
       firestore.collection(postsText);
+
   @override
   DocumentReference<Map<String, dynamic>> userDocRef(String userId) =>
       allUsersCollectionRef.doc(userId);
@@ -47,9 +50,13 @@ class FirebaseConstants extends FirebaseBase {
   DocumentReference<Map<String, dynamic>> postDocRef(String postId) =>
       allPostsCollectionRef.doc(postId);
 
-  CollectionReference<Map<String, dynamic>> postLikesCollectionRef(
+  CollectionReference<Map<String, dynamic>> allCommentsCollectionRef(
           String postId) =>
-      allPostsCollectionRef.doc(postId).collection(postLikersText);
+      firestore.collection(postsText).doc(postId).collection(postCommentsText);
+
+  CollectionReference<Map<String, dynamic>> postLikesCollectionRef(
+          DocumentReference docRef) =>
+      docRef.collection(postLikersText);
 
   CollectionReference<Map<String, dynamic>> userPostSaveCollectionRef(
           String userId) =>
@@ -60,6 +67,14 @@ class FirebaseConstants extends FirebaseBase {
 
   Query<Map<String, dynamic>> get postsCreatedAscending =>
       allPostsCollectionRef.orderBy(createdAtText, descending: false);
+
+  Query<Map<String, dynamic>> commentsCreatedDescending(
+          CollectionReference<Map<String, dynamic>> collectionRef) =>
+      collectionRef.orderBy(createdAtText, descending: true);
+
+  Query<Map<String, dynamic>> commentsCreatedAscending(String postId) =>
+      allCommentsCollectionRef(postId)
+          .orderBy(createdAtText, descending: false);
 
   Query<Map<String, dynamic>> userPinnedPostControlRef(
           String currentUserId, String postId) =>
@@ -83,10 +98,10 @@ class FirebaseConstants extends FirebaseBase {
           .where(followingUserText, isEqualTo: postOwnerUserId);
 
   Query<Map<String, dynamic>> userLikeStatusPath(
-    String postId,
+    DocumentReference docRef,
     String userId,
   ) =>
-      postLikesCollectionRef(postId).where(authorIdText, isEqualTo: userId);
+      docRef.collection(postLikersText).where(authorIdText, isEqualTo: userId);
 
   Query<Map<String, dynamic>> userSaveStatusPath(
     String postId,
@@ -102,7 +117,23 @@ class FirebaseConstants extends FirebaseBase {
           String userId) =>
       allUsersCollectionRef.doc(userId).collection(followingText);
 
-  dsad() {
-    allUsersCollectionRef.where("blockedUsers", isNotEqualTo: "");
-  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> likeCountStremRef(
+          DocumentReference docRef) =>
+      docRef.collection(postLikersText).snapshots();
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> commentCountStremRef(
+          DocumentReference docRef) =>
+      docRef.collection(postCommentsText).snapshots();
+
+  Query<Map<String, dynamic>> getCommentsWithLimit(
+          CollectionReference<Map<String, dynamic>> commentsRef) =>
+      commentsCreatedDescending(commentsRef)
+          .limit(numberOfCommentsToBeUploadedAtOnce);
+
+  Query<Map<String, dynamic>> getCommentsWithLimitStartAfterDocumentsRef(
+          QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleComment,
+          DocumentReference<Object?> postCommentsRef) =>
+      commentsCreatedDescending(
+              postCommentsRef.collection(firebaseConstants.postCommentsText))
+          .limit(firebaseConstants.numberOfCommentsToBeUploadedAtOnce);
 }
