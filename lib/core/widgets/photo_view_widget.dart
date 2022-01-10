@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../extensions/context_extensions.dart';
 
-class ZoomableImage extends StatefulWidget {
-  ZoomableImage({
+class PhotoViewWidget extends StatefulWidget {
+  PhotoViewWidget({
     required this.image,
     this.backgroundColor,
     this.width,
@@ -23,10 +23,10 @@ class ZoomableImage extends StatefulWidget {
   void Function(PhotoViewScaleState)? scaleStateChangedCallback;
 
   @override
-  State<ZoomableImage> createState() => _ZoomableImageState();
+  State<PhotoViewWidget> createState() => _PhotoViewWidgetState();
 }
 
-class _ZoomableImageState extends State<ZoomableImage> {
+class _PhotoViewWidgetState extends State<PhotoViewWidget> {
   Color? myColor;
   bool lockState = false;
 
