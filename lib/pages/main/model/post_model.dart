@@ -13,6 +13,9 @@ class PostModel {
   List<dynamic> imageLinks;
   List<dynamic> imagesDominantColors;
   bool postNotifications;
+  bool? replyed;
+  String? replyedPostId;
+  String? replyedUserId;
 
   PostModel({
     required this.postId,
@@ -25,6 +28,9 @@ class PostModel {
     this.likeCount = 0,
     this.commentCount = 0,
     this.category = PostContstants.ALL,
+    this.replyed = false,
+    this.replyedPostId,
+    this.replyedUserId,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +45,9 @@ class PostModel {
       postId: json['postId'] as String,
       text: json['text'] as String?,
       postNotifications: json['post_notifications'] as bool,
+      replyed: json['replyed'] as bool?,
+      replyedPostId: json['replyed_postId'] as String?,
+      replyedUserId: json['replyed_userId'] as String?,
     );
   }
 
@@ -53,6 +62,9 @@ class PostModel {
         'postId': postId,
         'text': text,
         'post_notifications': postNotifications,
+        'replyed': replyed,
+        'replyed_postId' : replyedPostId,
+        'replyed_userId' : replyedUserId,
       };
 
   @override
