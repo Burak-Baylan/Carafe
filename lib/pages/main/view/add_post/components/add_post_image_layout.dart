@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../../../core/base/view/base_view.dart';
 import '../../../../../core/extensions/int_extensions.dart';
-import '../../../../../core/init/navigation/navigator/navigator.dart';
 import '../../../../../core/widgets/full_screen_image.dart';
 import '../../../../../core/widgets/little_circle_button.dart';
 import '../view_model/add_post_view_model.dart';
@@ -45,7 +41,7 @@ class _AddPostImageLayoutState extends BaseView<AddPostImageLayout> {
               child: _buildFullScreenButton,
             ),
           ],
-        ),  
+        ),
       ),
     );
   }
@@ -78,7 +74,8 @@ class _AddPostImageLayoutState extends BaseView<AddPostImageLayout> {
         margin: const EdgeInsets.only(top: 5, right: 5),
       );
 
-  navigatoToFullScreenImage() => widget.viewModel.customNavigateToPage(page: FullScreenImage(image: _image, tag: _image.toString()));
+  navigatoToFullScreenImage() => widget.viewModel.customNavigateToPage(
+      page: FullScreenImage(image: _image, tag: _image.toString()));
   scrollToLastItem() => widget.viewModel.scrollToLastItem();
 
   _initializeValues() {
