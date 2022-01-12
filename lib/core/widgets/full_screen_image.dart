@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import '../../app/constants/app_constants.dart';
 import '../extensions/color_extensions.dart';
 import '../extensions/context_extensions.dart';
 import '../extensions/int_extensions.dart';
 import '../helpers/status_bar_helper.dart';
+import '../helpers/system_navigation_bar_helper.dart';
+import 'photo_view_widget.dart';
 import 'small_button_for_full_size_images.dart';
-import 'zoomable_image.dart';
 
 class FullScreenImage extends StatefulWidget {
   FullScreenImage({
@@ -43,19 +43,13 @@ class _FullScreenImageState extends State<FullScreenImage> {
 
   @override
   Widget build(BuildContext context) {
-    Colors.transparent.changeStatusBarColor;
-    return Container(
-      height: context.height,
-      width: context.width,
-      color: widget.backgroundColor ?? AppColors.black,
-      child: Hero(
-        tag: widget.tag!,
-        child: Stack(
-          children: [
-            Align(alignment: Alignment.center, child: _buildImage),
-            _getWidgets,
-          ],
-        ),
+    return Hero(
+      tag: widget.tag!,
+      child: Stack(
+        children: [
+          Align(alignment: Alignment.center, child: _buildImage),
+          _getWidgets,
+        ],
       ),
     );
   }
@@ -84,7 +78,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
   Widget get _buildImage => GestureDetector(
         onTap: () => onImageTap(),
         child: widget.imageWidget ??
-            ZoomableImage(
+            PhotoViewWidget(
               width: widget.width,
               height: widget.height,
               scaleStateChangedCallback: (state) =>
@@ -100,10 +94,11 @@ class _FullScreenImageState extends State<FullScreenImage> {
     visible = !visible;
     if (visible) {
       StatusBarHelper.open();
+      StatusBarHelper.edgeToEdgeScreen();
+      Colors.transparent.changeBottomNavBarColor;
     } else {
       StatusBarHelper.close();
     }
-    setState(() {});
   }
 
   onImageTap() {
@@ -123,8 +118,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
   @override
   void dispose() {
     StatusBarHelper.open();
-    Colors.transparent.changeStatusBarColor;
-    Colors.black.changeBottomNavBarColor;
+    SystemBottomNavigationBarHelper.lightBottomNavBar;
     super.dispose();
   }
 }

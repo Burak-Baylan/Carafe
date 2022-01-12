@@ -38,13 +38,11 @@ class FullScreenPostView extends StatefulWidget {
 class _FullScreenPostViewState extends State<FullScreenPostView> {
   late BuildContext context;
   late PostViewModel postViewModel;
+  late Future<List<PostModel>> commentsFuture;
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
-
-    postViewModel = widget.postViewModel;
-    postViewModel.findCommentsPath(widget.postRef);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => postViewModel.navigateToReplyScreen(),
@@ -60,10 +58,11 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
     super.initState();
     postViewModel = widget.postViewModel;
     postViewModel.findCommentsPath(widget.postRef);
+    commentsFuture = postViewModel.getComments();
   }
 
-  Widget get _body => FutureBuilder(
-        future: postViewModel.commentsFuture,
+  Widget get _body => FutureBuilder<List<PostModel>>(
+        future: commentsFuture,
         builder: (context, snapshot) => snapshot.hasData
             ? _postsListsBuilderSkeleton
             : const Center(child: CircularProgressIndicator()),
@@ -95,7 +94,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
       model: postViewModel.comments[index],
       homeViewModel: widget.homeViewModel,
       showReply: true,
-      postRef: postViewModel.findACommentPath(index),
+      postRef: postViewModel.findACommentPathFromComments(index),
     ));
     if (postViewModel.commentsLength - 1 == index) {
       postItem.add(10.0.sizedBoxOnlyHeight);
