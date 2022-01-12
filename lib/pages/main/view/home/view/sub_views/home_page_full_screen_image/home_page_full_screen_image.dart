@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../../../../../../core/extensions/color_extensions.dart';
 import '../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../core/extensions/int_extensions.dart';
 import '../../../../../../../core/extensions/string_extensions.dart';
@@ -36,10 +35,12 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
   @override
   Widget build(BuildContext context) {
     _firstInit();
-    return Scaffold(
-      backgroundColor: imageDominantColor,
-      body: _buildImageWidget,
-    );
+    return SafeArea(
+        maintainBottomViewPadding: true,
+        top: false,
+        bottom: false,
+        child: _buildImageWidget,
+      );
   }
 
   CarouselController controller = CarouselController();
@@ -51,14 +52,18 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
           .convertStringToColor;
 
   Widget get _buildImageWidget => Observer(
-        builder: (_) => Container(
+        builder: (_) => AnimatedContainer(
           color: fullScreenImageVm.color,
-          child: Stack(
-            children: [
-              Align(alignment: Alignment.center, child: _carouselBuilder),
-              Align(alignment: Alignment.topLeft, child: _buildBackButton),
-              SafeArea(child: _buildMoreButton)
-            ],
+          duration: 300.durationMilliseconds,
+          child: Container(
+            color: Colors.black.withOpacity(.3),
+            child: Stack(
+              children: [
+                Align(alignment: Alignment.center, child: _carouselBuilder),
+                Align(alignment: Alignment.topLeft, child: _buildBackButton),
+                SafeArea(child: _buildMoreButton)
+              ],
+            ),
           ),
         ),
       );
@@ -77,13 +82,13 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
           onDismiss: () => context.pop,
           disabled: fullScreenImageVm.dismissCloseState,
           direction: DismissDirection.vertical,
-          backgroundColor: fullScreenImageVm.color,
+          backgroundColor: Colors.transparent,
+          startingOpacity: 0,
           child: FullScreenImage(
             onImageTap: () => changeVisibility,
             scaleStateChangedCallback: (state) =>
                 fullScreenImageVm.photoScaleStateChanged(state),
             disableBackButton: true,
-            backgroundColor: fullScreenImageVm.color,
             tag: widget.imageUrls[index],
             image: widget.imageProviders[index],
           ),
@@ -102,7 +107,6 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
       );
 
   Widget get _buildBackButton => Observer(builder: (_) {
-        imageDominantColor.withOpacity(0.5).changeBottomNavBarColor;
         return SafeArea(
           child: FullSizeImageSmallButton(
             opacity: fullScreenImageVm.visible ? 1 : 0,
@@ -129,13 +133,12 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
 
   changeIndex(int index) {
     fullScreenImageVm.changeIndex(index);
-    imageDominantColor.changeStatusBarColor;
     fullScreenImageVm.setColor(imageDominantColor);
-    imageDominantColor.withOpacity(0.5).changeBottomNavBarColor;
   }
 
   _firstInit() {
     if (fullScreenImageVm.firstInit) {
+      //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       changeIndex(widget.imageIndex);
       fullScreenImageVm.firstInit = false;
     }
