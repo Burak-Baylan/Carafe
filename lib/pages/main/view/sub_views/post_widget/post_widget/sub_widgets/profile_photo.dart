@@ -16,20 +16,18 @@ class PostProfilePhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: context.height * 0.075,
       height: context.height * 0.075,
-      margin: const EdgeInsets.only(right: 3),
       child: CachedNetworkImage(
         fadeInDuration: 0.durationMilliseconds,
         filterQuality: FilterQuality.medium,
         placeholder: (context, url) => _placeHolder,
         placeholderFadeInDuration: 100.durationMilliseconds,
         imageBuilder: (context, provider) => _imageBuilder(provider),
-        //TODO Delete Placeholder
         imageUrl: postModel.imageLinks.isNotEmpty
             ? postModel.imageLinks[0]
-            : "https://via.placeholder.com/140x100",
+            : "https://bit.ly/3HTCLko",
         fit: BoxFit.cover,
       ),
     );

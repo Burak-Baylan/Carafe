@@ -33,8 +33,6 @@ class CustomAlertDialog extends StatelessWidget {
   List<Widget>? children;
   bool dismissable = true;
 
-  final double _titleTextSize = 25;
-
   @override
   Widget build(BuildContext context) {
     return _buildDialog;
@@ -75,8 +73,8 @@ class CustomAlertDialog extends StatelessWidget {
         child: SingleChildScrollView(
           child: Text(
             message ?? "",
-            style: GoogleFonts.ubuntu().copyWith(
-              fontSize: 16,
+            style: context.theme.textTheme.headline6?.copyWith(
+              fontSize: context.width / 23,
               color: context.colorScheme.secondary,
             ),
             overflow: TextOverflow.fade,
@@ -88,8 +86,8 @@ class CustomAlertDialog extends StatelessWidget {
         child: Text(
           title,
           textAlign: TextAlign.center,
-          style: GoogleFonts.ubuntu().copyWith(
-            fontSize: _titleTextSize,
+          style: context.theme.textTheme.headline6?.copyWith(
+            fontSize: context.width / 17,
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
           ),
@@ -111,7 +109,13 @@ class CustomAlertDialog extends StatelessWidget {
             onPressedNegativeButton!();
           }
         },
-        child: Text(negativeButtonText ?? "Cancel"),
+        child: Text(
+          negativeButtonText ?? "Cancel",
+          style: context.theme.textTheme.headline6?.copyWith(
+            color: context.colorScheme.primary,
+            fontSize: context.width / 25,
+          ),
+        ),
       );
 
   TextButton get _buildPositiveButton => TextButton(
@@ -121,6 +125,12 @@ class CustomAlertDialog extends StatelessWidget {
             onPressedPositiveButton!();
           }
         },
-        child: Text(positiveButtonText ?? "Confirm"),
+        child: Text(
+          positiveButtonText ?? "Confirm",
+          style: context.theme.textTheme.headline6?.copyWith(
+            color: context.colorScheme.primary,
+            fontSize: context.width / 25,
+          ),
+        ),
       );
 }

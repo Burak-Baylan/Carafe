@@ -74,7 +74,9 @@ class _PostWidgetState extends State<PostWidget> {
           widget.showReply ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
           _postBody,
           widget.showReply ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
-          const Divider(height: 0),
+          widget.showReply
+              ? const Divider(thickness: .5, height: 0)
+              : Container(),
         ],
       );
 
@@ -112,12 +114,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget get _topInformation => Align(
         alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            (context.height * 0.053).sizedBoxOnlyWidth,
-            PostTopInformation(model: model),
-          ],
-        ),
+        child: PostTopInformation(model: model),
       );
 
   Widget get _image => Column(
@@ -151,7 +148,13 @@ class _PostWidgetState extends State<PostWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             1.sizedBoxOnlyHeight,
-            Text("${model.text}"),
+            Text(
+              "${model.text}",
+              style: context.theme.textTheme.headline6?.copyWith(
+                  fontSize: context.width / 24,
+                  letterSpacing: 0.0,
+                  wordSpacing: 0),
+            ),
           ],
         )
       : Container();

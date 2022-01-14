@@ -36,11 +36,10 @@ class AddPostTopLayout extends StatelessWidget {
   }
 
   Widget _replyingText(BuildContext context) => ReplyingToWidget(
-        future: viewModel.firebaseManager
-            .getAUserInformation(ReplyingPostModel(
-      replyingUserId: viewModel.replyingPostPostModel!.authorId,
-      replyingPostId: viewModel.replyingPostPostModel!.postId,
-    ).replyingUserId),
+        future: viewModel.firebaseManager.getAUserInformation(ReplyingPostModel(
+          replyingUserId: viewModel.replyingPostPostModel!.authorId,
+          replyingPostId: viewModel.replyingPostPostModel!.postId,
+        ).replyingUserId),
       );
 
   Widget _selectCategoryWidget(BuildContext context) => Observer(
@@ -49,7 +48,11 @@ class AddPostTopLayout extends StatelessWidget {
             onPressed: () => AddPostCategorySelector.show(context, viewModel),
             child: Text(
               "Also share by category: " + viewModel.selectedCategory,
-              style: TextStyle(fontSize: context.width * 0.04),
+              style: context.theme.textTheme.headline6?.copyWith(
+                fontSize: context.width / 25,
+                color: context.colorScheme.primary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           );
         },

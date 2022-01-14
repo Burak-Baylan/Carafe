@@ -45,7 +45,17 @@ class _AnimatedButtonState extends State<AnimatedButton> {
 
   ElevatedButton get _button => ElevatedButton(
         style: widget.style ?? _buttonStyle(context),
-        child: FittedBox(child: widget.child ?? Text(widget.text ?? "Press")),
+        child: FittedBox(
+          child: widget.child ??
+              Text(
+                widget.text ?? "Press",
+                style: context.theme.textTheme.headline6?.copyWith(
+                  color: Colors.white,
+                  fontSize: context.width / 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+        ),
         onPressed: () => _onPressed(),
       );
 

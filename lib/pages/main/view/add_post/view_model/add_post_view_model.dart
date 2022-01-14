@@ -88,7 +88,8 @@ abstract class _AddPostViewModelBase extends BaseViewModel with Store {
     }
     changeScreenLockState();
     if (response.errorMessage != null) {
-      addPostAlertDiaogHelper.postSharingErrorAlert(context!, response.errorMessage!);
+      addPostAlertDiaogHelper.postSharingErrorAlert(
+          context!, response.errorMessage!);
       return;
     }
     context!.pop;
@@ -110,7 +111,13 @@ abstract class _AddPostViewModelBase extends BaseViewModel with Store {
 
   Widget _buildCupertinoItem(String text, Function() onPressed) =>
       CupertinoActionSheetAction(
-          onPressed: () => onPressed(), child: Text(text));
+        onPressed: () => onPressed(),
+        child: Text(
+          text,
+          style: context?.theme.textTheme.headline6
+              ?.copyWith(color: context?.colorScheme.primary),
+        ),
+      );
 
   Future _pickImage(ImageSource imageSource) async {
     if (imageSource == ImageSource.camera) {

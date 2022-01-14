@@ -121,7 +121,7 @@ class FirebasePostManager extends FirebaseBase {
     if (lastVisibleComment == null) return CustomData(null, CustomError(""));
     CustomData rawData = await firebaseService.getQuery(
         firebaseConstants.getCommentsWithLimitStartAfterDocumentsRef(
-            lastVisibleComment, postCommentsRef));
+            lastVisibleComment!, postCommentsRef));
     return prepareData(rawData);
   }
 

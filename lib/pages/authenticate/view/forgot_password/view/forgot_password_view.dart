@@ -53,15 +53,17 @@ class ForgotPasswordView extends StatelessWidget {
 
   Text get _detailText => Text(
         "Enter your current account email and click the link in your mailbox to create your new password.",
-        style: GoogleFonts.firaSans(
-            fontSize: 14, color: context.colorScheme.primary),
+        style: context.theme.textTheme.headline6?.copyWith(
+            fontSize: context.width / 25, color: context.colorScheme.primary),
         textAlign: TextAlign.center,
       );
 
   Text get _titleText => Text(
         "Forgot Your\nPassword?",
-        style: GoogleFonts.firaSans(
-            fontSize: 30, color: context.colorScheme.secondary),
+        style: context.theme.textTheme.headline6?.copyWith(
+          fontSize: context.width / 10,
+          color: context.colorScheme.secondary,
+        ),
         textAlign: TextAlign.center,
       );
 
@@ -89,6 +91,12 @@ class ForgotPasswordView extends StatelessWidget {
 
   AppBar get _appBar => AppBar(
         centerTitle: true,
-        title: const Text("Forgot Password"),
+        title: Text(
+          "Forgot Password",
+          style: context.theme.textTheme.headline6?.copyWith(
+            fontSize: context.width / 25,
+            color: Colors.white,
+          ),
+        ),
       );
 }

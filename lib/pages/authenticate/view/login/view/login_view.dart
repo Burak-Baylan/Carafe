@@ -106,7 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Align(
             child: Text(
               "Forgot Password?",
-              style: context.theme.textTheme.subtitle2,
+              style: context.theme.textTheme.subtitle2
+                  ?.copyWith(fontSize: context.width / 25),
             ),
             alignment: Alignment.centerRight,
           ),

@@ -131,9 +131,10 @@ class FirebaseConstants extends FirebaseBase {
           .limit(numberOfCommentsToBeUploadedAtOnce);
 
   Query<Map<String, dynamic>> getCommentsWithLimitStartAfterDocumentsRef(
-          QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleComment,
+          QueryDocumentSnapshot<Map<String, dynamic>> lastVisibleComment,
           DocumentReference<Object?> postCommentsRef) =>
       commentsCreatedDescending(
               postCommentsRef.collection(firebaseConstants.postCommentsText))
+          .startAfterDocument(lastVisibleComment)
           .limit(firebaseConstants.numberOfCommentsToBeUploadedAtOnce);
 }

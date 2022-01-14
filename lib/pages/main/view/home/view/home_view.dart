@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.backGroundGrey,
+      color: AppColors.white,
       child: FutureBuilder(
         future: postsFuture,
         builder: (context, snapshot) {
@@ -111,6 +111,7 @@ class _HomeViewState extends State<HomeView> {
     postItem.add(PostWidget(
       model: viewModel.posts[index],
       homeViewModel: viewModel,
+      showReply: true,
     ));
     if (viewModel.posts.length - 1 == index) {
       postItem.add(CenterDotText().center);

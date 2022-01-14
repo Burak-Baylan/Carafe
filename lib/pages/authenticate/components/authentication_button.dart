@@ -14,7 +14,10 @@ class AuthenticationButton extends StatelessWidget {
 
   Text _buttonText(BuildContext context) => Text(
         text,
-        style: TextStyle(color: Colors.white, fontSize: context.normalValue),
+        style: context.theme.textTheme.headline6?.copyWith(
+          color: Colors.white,
+          fontSize: context.normalValue,
+        ),
       );
 
   @override

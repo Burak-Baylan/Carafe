@@ -25,7 +25,8 @@ class PostMenuItems {
         builder: (_) => _listItem(
           3,
           postMenuVm.pinButtonText,
-          () async => itemClicked(() async => await postMenuVm.pinProfileClicked()),
+          () async =>
+              itemClicked(() async => await postMenuVm.pinProfileClicked()),
           Icons.push_pin_outlined,
         ),
       ),
@@ -47,11 +48,13 @@ class PostMenuItems {
   List<Widget> somoneElsePostItems() {
     var username = userModel.username;
     return [
+      //! //TODO ?
       Observer(
         builder: (_) => _listItem(
           2,
           '${postMenuVm.followButtonText} \'$username\'',
-          () async => itemClicked(() async => await postMenuVm.followUserClicked()),
+          () async =>
+              itemClicked(() async => await postMenuVm.followUserClicked()),
           Icons.person_add_alt_outlined,
         ),
       ),
@@ -83,10 +86,11 @@ class PostMenuItems {
 
   Widget _listItem(int index, String text, Function() onTap, IconData icon) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.secondary),
+      leading: Icon(icon, color: AppColors.secondary, size: context.width / 15),
       title: Text(
         text,
-        style: TextStyle(color: AppColors.secondary, fontSize: 16),
+        style: context.theme.textTheme.headline6?.copyWith(
+            color: AppColors.secondary, fontSize: context.width / 22),
       ),
       onTap: () => onTap(),
     );

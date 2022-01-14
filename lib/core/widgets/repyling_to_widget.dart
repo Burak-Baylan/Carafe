@@ -36,10 +36,12 @@ class ReplyingToWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildText(
+                context,
                 "Replying to ",
                 Colors.grey.shade600,
               ),
               _buildText(
+                context,
                 "@" + snapshot.data!.username,
                 context.theme.colorScheme.secondary,
               ),
@@ -48,8 +50,8 @@ class ReplyingToWidget extends StatelessWidget {
         ),
       );
 
-  _buildText(String text, Color color) => Text(
+  _buildText(BuildContext context, String text, Color color) => Text(
         text,
-        style: TextStyle(color: color),
+        style: context.theme.textTheme.headline6?.copyWith(color: color),
       );
 }

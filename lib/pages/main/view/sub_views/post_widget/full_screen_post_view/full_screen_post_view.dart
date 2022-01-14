@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
@@ -104,17 +105,17 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
     return Column(children: postItem);
   }
 
-  Widget get postBodySkeleton => SizedBox(
-        height: postViewModel.commentsLength == 0 ? context.height : null,
-        child: Column(
-          children: [
-            Container(margin: 10.0.edgeIntesetsRightLeftTop, child: postBody),
-            const Divider(height: 0),
-            postViewModel.commentsLength == 0
-                ? CenterDotText(textColor: Colors.grey.shade500)
-                : Container(),
-          ],
-        ),
+  Widget get postBodySkeleton => Column(
+        children: [
+          Container(margin: 10.0.edgeIntesetsRightLeftTop, child: postBody),
+          const Divider(thickness: 0.5, height: 0),
+          postViewModel.commentsLength == 0
+              ? CenterDotText(textColor: Colors.grey.shade500)
+              : Container(),
+          postViewModel.commentsLength == 0
+              ? (context.height / 10).sizedBoxOnlyHeight
+              : Container(),
+        ],
       );
 
   Widget get postBody => IntrinsicHeight(
@@ -134,6 +135,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildPp,
+          5.sizedBoxOnlyWidth,
           Expanded(
             child: SizedBox(
               height: context.height * 0.075,
@@ -162,7 +164,9 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
             1.sizedBoxOnlyHeight,
             Text(
               "${widget.postModel.text}",
-              style: TextStyle(fontSize: context.height / 40),
+              style: context.theme.textTheme.headline6?.copyWith(
+                fontSize: context.height / 35,
+              ),
             ),
           ],
         )
@@ -192,15 +196,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
 
   get _buildPp => PostProfilePhoto(postModel: widget.postModel);
 
-  Widget get _topInformation => Align(
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            (context.height * 0.053).sizedBoxOnlyWidth,
-            PostTopInformation(model: widget.postModel),
-          ],
-        ),
-      );
+  Widget get _topInformation => PostTopInformation(model: widget.postModel);
 
   Widget get _buildPostBottomLayout => FullScreenPostBottomLayout(
         postModel: widget.postModel,
@@ -213,7 +209,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
         title: Text(
           "Post",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: context.width / 20,
             color: context.theme.colorScheme.primary,
           ),
         ),

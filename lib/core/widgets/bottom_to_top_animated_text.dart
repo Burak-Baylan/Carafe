@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../extensions/double_extensions.dart';
@@ -23,15 +24,20 @@ class BottomToTopAnimatedText extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedSwitcher(
         transitionBuilder: (child, animation) => animate
             ? this.animation(child, animation)
-            : _buildText(text, fontSize: fontSize, color: color),
+            : _buildText(text, context, fontSize: fontSize, color: color),
         duration: 200.durationMilliseconds,
-        child: _buildText(text, fontSize: fontSize, color: color),
+        child: _buildText(text, context, fontSize: fontSize, color: color),
       );
 
-  Widget _buildText(String text, {double fontSize = 12, Color? color}) => Text(
+  Widget _buildText(String text, BuildContext context,
+          {double fontSize = 12, Color? color}) =>
+      Text(
         text,
         key: ValueKey<String>(randomId),
-        style: TextStyle(color: color ?? Colors.grey[700], fontSize: fontSize),
+        style: context.theme.textTheme.headline6?.copyWith(
+          color: color ?? Colors.grey[700],
+          fontSize: fontSize,
+        ),
       );
 
   Widget animation(Widget child, Animation<double> animation) =>

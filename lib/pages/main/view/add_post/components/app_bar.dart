@@ -40,7 +40,11 @@ class AddPostAppBar extends StatelessWidget {
           child: FittedBox(
             child: Text(
               viewModel.isAComment ? 'Reply' : 'Share',
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: context.theme.textTheme.headline6?.copyWith(
+                color: Colors.white,
+                fontSize: context.width / 27,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           style: ElevatedButton.styleFrom(

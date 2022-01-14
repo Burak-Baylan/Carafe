@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
 class CenterDotText extends StatelessWidget {
@@ -17,7 +18,7 @@ class CenterDotText extends StatelessWidget {
     return Text(
       " · ",
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
+      style: context.theme.textTheme.headline6?.copyWith(
         fontSize: fontSize,
         color: textColor,
         fontWeight: FontWeight.bold,

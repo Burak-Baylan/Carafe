@@ -31,7 +31,7 @@ class AddPostBottomLayout extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIcons,
-                _buildTextLengthCounter,
+                _buildTextLengthCounter(context),
               ],
             ),
           ),
@@ -41,16 +41,16 @@ class AddPostBottomLayout extends StatelessWidget {
   }
 
   Widget get _buildIcons => IgnorePointer(
-    ignoring: viewModel.screenLockState,
-    child: IconButton(
-      icon: const Icon(Icons.image_outlined),
-      color: _context.colorScheme.secondary,
-      iconSize: 25,
-      onPressed: () async => await viewModel.pickImageAlertSelector,
-    ),
-  );
+        ignoring: viewModel.screenLockState,
+        child: IconButton(
+          icon: const Icon(Icons.image_outlined),
+          color: _context.colorScheme.secondary,
+          iconSize: 25,
+          onPressed: () async => await viewModel.pickImageAlertSelector,
+        ),
+      );
 
-  Widget get _buildTextLengthCounter => Stack(
+  Widget _buildTextLengthCounter(BuildContext context) => Stack(
         alignment: Alignment.center,
         children: [
           CircularProgressIndicator(
@@ -61,7 +61,8 @@ class AddPostBottomLayout extends StatelessWidget {
           ),
           Text(
             viewModel.textLength.toString(),
-            style: GoogleFonts.firaSans(color: viewModel.progressBarColor),
+            style: context.theme.textTheme.headline6
+                ?.copyWith(color: viewModel.progressBarColor, fontSize: context.width / 26),
           ),
         ],
       );

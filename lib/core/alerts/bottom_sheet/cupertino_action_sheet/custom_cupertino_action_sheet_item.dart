@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class CustomCupertinoActionSheetItem extends StatelessWidget {
       onPressed: () => onPressed(),
       child: Text(
         text,
-        style: TextStyle(
+        style: context.theme.textTheme.headline6?.copyWith(
           color: textColor,
           fontSize: fontSize,
           fontWeight: fontWeight,

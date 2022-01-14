@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../app/constants/app_constants.dart';
 import '../../../core/base/view/base_view.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -65,16 +64,18 @@ class _MainScreenState extends BaseView<MainScreen> {
         centerTitle: true,
         title: Text(
           "Home",
-          style: TextStyle(
-            fontSize: 16,
+          style: context.theme.textTheme.headline6?.copyWith(
+            fontSize: context.width / 25,
+            fontWeight: FontWeight.bold,
             color: context.theme.colorScheme.primary,
           ),
         ),
         actions: [
           IconButton(
             icon: Icon(
-              Icons.filter_alt_outlined,
+              Icons.calendar_view_day_sharp,
               color: context.theme.colorScheme.primary,
+              size: context.width / 17,
             ),
             onPressed: () {},
           ),

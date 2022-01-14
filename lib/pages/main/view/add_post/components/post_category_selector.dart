@@ -35,7 +35,11 @@ class AddPostCategorySelector {
 
   Widget _buildItem(String text, int index) => CupertinoActionSheetAction(
         onPressed: () => _selector(index),
-        child: Text(text),
+        child: Text(
+          text,
+          style: context.theme.textTheme.headline6?.copyWith(
+              color: context.colorScheme.primary, fontSize: context.width / 23),
+        ),
       );
 
   _selector(int index) {

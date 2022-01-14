@@ -38,28 +38,33 @@ class MainBottomNavigation extends StatelessWidget {
   BottomNavyBarItem get _homeIcon => BottomNavyBarItem(
         icon: const Icon(Icons.home_outlined),
         activeColor: context.theme.colorScheme.primary,
-        title: const Text('Home'),
+        title: _buildText('Home'),
         inactiveColor: context.theme.colorScheme.secondary,
       );
 
   BottomNavyBarItem get _searchIcon => BottomNavyBarItem(
         icon: const Icon(Icons.search_outlined),
         activeColor: context.theme.colorScheme.primary,
-        title: const Text('Search'),
+        title: _buildText('Search'),
         inactiveColor: context.theme.colorScheme.secondary,
       );
 
   BottomNavyBarItem get _notificationsIcon => BottomNavyBarItem(
         icon: const Icon(Icons.notifications_outlined),
         activeColor: context.theme.colorScheme.primary,
-        title: const Text('Notification'),
+        title: _buildText('Notification'),
         inactiveColor: context.theme.colorScheme.secondary,
       );
 
   BottomNavyBarItem get _messagesIcon => BottomNavyBarItem(
         icon: const Icon(Icons.mail_outline_outlined),
         activeColor: context.theme.colorScheme.primary,
-        title: const Text('Messages'),
+        title: _buildText('Messages'),
         inactiveColor: context.theme.colorScheme.secondary,
+      );
+
+  _buildText(String text) => Text(
+        text,
+        style: TextStyle(fontSize: context.width / 24),
       );
 }

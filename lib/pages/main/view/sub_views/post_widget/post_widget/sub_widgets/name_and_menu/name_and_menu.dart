@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../../../core/extensions/timestamp_extensions.dart';
 import '../../../../../../../../core/widgets/center_dot_text.dart';
@@ -15,8 +16,8 @@ class PostNameAndMenu extends StatelessWidget {
     required this.postModel,
     required this.homeViewModel,
     required this.postViewModel,
-    this.nameFontSize = 13,
-    this.mailFontSize = 13,
+    this.nameFontSize,
+    this.mailFontSize,
     this.closeCenterDot = false,
     this.buildWithColumn = false,
   }) : super(key: key);
@@ -24,13 +25,15 @@ class PostNameAndMenu extends StatelessWidget {
   PostModel postModel;
   HomeViewModel homeViewModel;
   PostViewModel postViewModel;
-  double nameFontSize;
-  double mailFontSize;
+  double? nameFontSize;
+  double? mailFontSize;
   bool closeCenterDot;
   bool buildWithColumn;
+  late BuildContext context;
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return FutureBuilder<UserModel?>(
       future:
           homeViewModel.firebaseManager.getAUserInformation(postModel.authorId),
@@ -85,7 +88,7 @@ class PostNameAndMenu extends StatelessWidget {
             CenterDotText(textColor: Colors.grey.shade500),
             _buildText(
                 text: postModel.createdAt!.getTimeAgo,
-                fontSize: 11,
+                fontSize: context.width / 30,
                 textColor: Colors.grey.shade500),
           ],
         );
@@ -123,12 +126,14 @@ class PostNameAndMenu extends StatelessWidget {
             );
 
   List<Widget> _userInformationTexts(UserModel? userInformation) => [
-        _buildText(text: userInformation!.username, fontSize: nameFontSize),
+        _buildText(
+            text: userInformation!.username,
+            fontSize: nameFontSize ?? context.width / 28),
         closeCenterDot ? Container() : CenterDotText(),
         Expanded(
           child: _buildText(
             text: userInformation.email,
-            fontSize: mailFontSize,
+            fontSize: mailFontSize ?? context.width / 28,
             textColor: Colors.grey[500],
           ),
         ),
