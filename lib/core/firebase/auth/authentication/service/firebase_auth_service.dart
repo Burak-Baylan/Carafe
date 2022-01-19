@@ -36,7 +36,7 @@ class FirebaseAuthService extends FirebaseBase {
         email: loginModel.email!,
         password: loginModel.password!,
       );
-      await userCredential.user!.updateDisplayName(loginModel.displayName);
+      await userCredential.user!.updateDisplayName(loginModel.username);
       return CustomData<UserCredential>(userCredential, null);
     } on FirebaseException catch (e) {
       return CustomData<UserCredential>(null, CustomError(e.message));

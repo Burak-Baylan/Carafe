@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:Carafe/core/extensions/context_extensions.dart';
+import 'package:Carafe/core/extensions/double_extensions.dart';
 import 'package:Carafe/core/extensions/string_extensions.dart';
 import 'package:Carafe/core/widgets/animated_button.dart';
 import 'package:Carafe/core/widgets/custom_text_form.dart';
@@ -29,15 +30,32 @@ class _SignupViewState extends State<SignupView> {
           key: _signupVm.formKey,
           child: Column(
             children: [
-              const Spacer(flex: 2),
-              _usernameFormField,
-              _emailFormField,
-              _passwordFormFiled,
-              const Spacer(flex: 6),
-              _buildSignupButton,
-              const Spacer(),
-              _buildHaveAccountText,
-              const Spacer(),
+              10.0.sizedBoxOnlyHeight,
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _usernameFormField,
+                      _displayNameFormField,
+                      _emailFormField,
+                      _passwordFormFiled,
+                    ],
+                  ),
+                ),
+              ),
+              10.0.sizedBoxOnlyHeight,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: _buildSignupButton,
+              ),
+              10.0.sizedBoxOnlyHeight,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: _buildHaveAccountText,
+              ),
+              10.0.sizedBoxOnlyHeight,
             ],
           ),
         ),
@@ -45,12 +63,25 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 
+  Widget get _displayNameFormField => Observer(
+        builder: (_) => CustomTextFormField(
+          validator: (text) => _signupVm.displayNameValidator(text),
+          focusNode: _signupVm.displayNameFocusNode,
+          controller: _signupVm.displayNameController,
+          labelText: "Display Name",
+          hintText: 'Users can see your Display Name',
+          icon: Icons.person_outline,
+          readOnly: _signupVm.displayNameLock,
+        ),
+      );
+
   Widget get _usernameFormField => Observer(
         builder: (_) => CustomTextFormField(
           validator: (text) => _signupVm.usernameValidator(text),
           focusNode: _signupVm.usernameFocusNode,
           controller: _signupVm.usernameController,
           labelText: "Username",
+          hintText: 'Users can\'t see your Username',
           icon: Icons.person_outline,
           readOnly: _signupVm.usernameLock,
         ),
@@ -93,14 +124,11 @@ class _SignupViewState extends State<SignupView> {
               _signupVm.changeTabIndex(_signupVm.authVm.loginPageIndex),
           child: RichText(
             text: TextSpan(
-              style: context.theme.textTheme.headline6,
-              // ignore: prefer_const_literals_to_create_immutables
+              style: context.theme.textTheme.headline6
+                  ?.copyWith(color: context.colorScheme.secondary),
               children: [
                 TextSpan(text: "Have an account? "),
-                TextSpan(
-                  text: "Login",
-                  style: context.underlinedText,
-                ),
+                TextSpan(text: "Login", style: context.underlinedText),
               ],
             ),
           ),

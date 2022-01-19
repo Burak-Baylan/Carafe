@@ -32,6 +32,7 @@ class FirebaseConstants extends FirebaseBase {
   String followingUserText = 'following_user';
   String pinnedPostText = 'pinned_post';
   String postCommentsText = 'comments';
+  String usernameText = 'username';
 
   int numberOfPostsToBeUploadedAtOnce = 15;
   int numberOfCommentsToBeUploadedAtOnce = 6;

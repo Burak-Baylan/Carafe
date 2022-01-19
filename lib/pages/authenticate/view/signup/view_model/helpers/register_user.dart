@@ -23,17 +23,12 @@ class RegisterUser extends BaseViewModel {
   ) async {
     vm = viewModel;
     authenticationResponse = response;
-
     bool isResponseOkey = authSignupResponseControl(response);
-
     if (isResponseOkey) {
       CustomError userCreateResponse =
           await userManager.createUser(_getUserModel);
-
       response.error = userCreateResponse;
-
       bool isUserCrated = await firebaseSignupResponseControl(response);
-
       if (isUserCrated) {
         await authService.sendVerificationEmail();
         vm.showSignupSuccessAlert();
@@ -67,9 +62,10 @@ class RegisterUser extends BaseViewModel {
   }
 
   UserModel get _getUserModel => UserModel(
+        username: vm.username!,
         userId: authenticationResponse.data!.user!.uid,
         email: vm.email!,
-        username: vm.username!,
+        displayName: vm.displayName!,
         photoUrl: null,
         profileDescription: null,
         createdAt: Timestamp.now(),
@@ -79,6 +75,7 @@ class RegisterUser extends BaseViewModel {
         verified: false,
         profilePhotoBackgroundColor: AppColors.black,
         notifications: true,
+        displayNameLowerCase: vm.displayName?.toLowerCase(),
       );
 
   @override

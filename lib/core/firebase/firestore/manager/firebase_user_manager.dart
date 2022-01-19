@@ -13,11 +13,28 @@ class FirebaseUserManager extends FirebaseBase {
   FirebaseUserManager._init();
 
   Future<CustomError> createUser(UserModel userModel) async {
+    var userExistingControlResponse = await checkUsernameExisting(userModel);
+    if (userExistingControlResponse.errorMessage != null) {
+      return userExistingControlResponse;
+    }
     var customError = await firebaseService.addDocument(
       firestore.collection(firebaseConstants.usersText).doc(userModel.userId),
       userModel.toJson(),
     );
     return customError;
+  }
+
+  Future<CustomError> checkUsernameExisting(UserModel userModel) async {
+    var query = firebaseConstants.allUsersCollectionRef
+        .where(firebaseConstants.usernameText, isEqualTo: userModel.username);
+    var data = await firebaseService.getQuery(query);
+    if (data.error != null) {
+      return CustomError("An error occured. Please try again.");
+    }
+    if (data.data!.size > 0) {
+      return CustomError('This username is already in use.');
+    }
+    return CustomError(null);
   }
 
   Future<CustomError> updateUser(UserModel userModel) async => firebaseService

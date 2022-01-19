@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import '../../../app/constants/app_constants.dart';
 
 class UserModel {
-  String username;
+  String displayName;
   String email;
   String? photoUrl;
   String userId;
   String? profileDescription;
+  String? displayNameLowerCase;
   Timestamp? createdAt;
+  String username;
   bool profilePrivacy;
   int followersCount;
   int followingCount;
@@ -23,7 +25,8 @@ class UserModel {
   UserModel({
     required this.userId,
     required this.email,
-    this.username = "User",
+    required this.username,
+    this.displayName = "User",
     this.photoUrl,
     this.profileDescription,
     this.createdAt,
@@ -33,13 +36,15 @@ class UserModel {
     this.verified = false,
     this.profilePhotoBackgroundColor = AppColors.black,
     this.notifications = true,
+    this.displayNameLowerCase,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      username: json['username'] as String,
       userId: json['uid'] as String,
       email: json['email'] as String,
-      username: json["username"] as String,
+      displayName: json["display_name"] as String,
       photoUrl: json['photo_url'] as String?,
       profileDescription: json['profile_description'] as String?,
       createdAt: json['created_at'] as Timestamp,
@@ -51,13 +56,15 @@ class UserModel {
           (json['profile_photo_background_color'] as String)
               .convertStringToColor,
       notifications: json['notifications'] as bool,
+      displayNameLowerCase: json['display_name_lower_case'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() => {
+        'username': username,
         'uid': userId,
         'email': email,
-        'username': username,
+        'display_name': displayName,
         'photo_url': photoUrl,
         'profile_description': profileDescription,
         'created_at': createdAt,
@@ -67,5 +74,15 @@ class UserModel {
         'verified': verified,
         'profile_photo_background_color': profilePhotoBackgroundColor.getString,
         'notifications': notifications,
+        'display_name_lower_case': displayNameLowerCase,
       };
+
+  @override
+  String toString() {
+    return '{{{[[[((( uid: $userId --||-- email: $email --||-- username: $username --||-- display_name: $displayName --||--'
+        'photoUrl: $photoUrl --||-- profileDescription: $profileDescription --||-- createdAt: $createdAt'
+        ' --||-- profilePrivacy: $profilePrivacy --||-- followersCount: $followersCount --||-- followingCount: $followingCount'
+        ' --||-- verified: $verified --||-- profilePhotoBackgroundColor: $profilePhotoBackgroundColor --||--'
+        ' --||-- notifications: $notifications --||-- display_name_lower_case: $displayNameLowerCase )))]]]}}}';
+  }
 }

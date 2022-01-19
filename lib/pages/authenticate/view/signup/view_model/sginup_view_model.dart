@@ -17,18 +17,23 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
   @override
   BuildContext? context;
 
+  FocusNode displayNameFocusNode = FocusNode();
   FocusNode usernameFocusNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
+  TextEditingController displayNameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passworController = TextEditingController();
+  String? displayName;
   String? username;
   String? email;
   String? password;
 
   @observable
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  @observable
+  bool displayNameLock = false;
   @observable
   bool usernameLock = false;
   @observable
@@ -53,18 +58,27 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
   }
 
   Future _signup(SignupViewModel viewModel) async {
-    CustomData<UserCredential> authenticationResponse = await authService.signup(
-        LoginModel(email: email, password: password, displayName: username));
+    CustomData<UserCredential> authenticationResponse =
+        await authService.signup(
+      LoginModel(
+        email: email,
+        password: password,
+        username: username,
+        displayName: displayName,
+      ),
+    );
     await registerUser.register(authenticationResponse, viewModel);
   }
 
   initializeCredenticial() {
+    displayName = displayNameController.text;
     username = usernameController.text;
     email = emailController.text;
     password = passworController.text;
   }
 
   clearAllTextInputs() {
+    displayNameController.clear();
     usernameController.clear();
     emailController.clear();
     passworController.clear();
@@ -76,6 +90,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
 
   @action
   removeTextInputFocus() {
+    displayNameFocusNode.unfocus();
     usernameFocusNode.unfocus();
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
@@ -83,6 +98,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
 
   @action
   changeInputState() {
+    displayNameLock = !displayNameLock;
     usernameLock = !usernameLock;
     emailLock = !emailLock;
     passwordLock = !passwordLock;
@@ -100,6 +116,22 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     }
     if (text.length > 16) {
       return "Username cannot be greater than 16 characters";
+    }
+    return null;
+  }
+
+  String? displayNameValidator(String? text) {
+    if (text == null || text.isEmpty) {
+      return "Display Name cannot be empty";
+    }
+    if (!text.isUsernameValid) {
+      return "Display Name characters can be only alphabets, numbers, or underscores.";
+    }
+    if (text.length < 6) {
+      return "Display Name cannot be less than 6 characters";
+    }
+    if (text.length > 15) {
+      return "Display Name cannot be greater than 15 characters";
     }
     return null;
   }
