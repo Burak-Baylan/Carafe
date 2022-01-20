@@ -76,6 +76,7 @@ class RegisterUser extends BaseViewModel {
         profilePhotoBackgroundColor: AppColors.black,
         notifications: true,
         displayNameLowerCase: vm.displayName?.toLowerCase(),
+        usernameLowerCase: vm.username?.toLowerCase(),
       );
 
   @override

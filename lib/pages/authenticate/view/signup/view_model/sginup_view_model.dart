@@ -124,7 +124,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     if (text == null || text.isEmpty) {
       return "Display Name cannot be empty";
     }
-    if (!text.isUsernameValid) {
+    if (!text.isDisplayNameValid) {
       return "Display Name characters can be only alphabets, numbers, or underscores.";
     }
     if (text.length < 6) {

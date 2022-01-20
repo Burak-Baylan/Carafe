@@ -25,6 +25,9 @@ extension StringExtension on String {
   bool get isUsernameValid =>
       RegExp(GlobalConstants.USERNAME_REGEX).hasMatch(this);
 
+  bool get isDisplayNameValid =>
+      RegExp(GlobalConstants.DISPLAY_NAME_REGEX).hasMatch(this);
+
   Color get convertStringToColor =>
       Color(int.parse((("#" + this).substring(1, 7)), radix: 16) + 0xFF000000);
 

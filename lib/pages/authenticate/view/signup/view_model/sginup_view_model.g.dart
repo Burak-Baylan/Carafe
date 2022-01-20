@@ -24,6 +24,22 @@ mixin _$SignupViewModel on _SignupViewModelBase, Store {
     });
   }
 
+  final _$displayNameLockAtom =
+      Atom(name: '_SignupViewModelBase.displayNameLock');
+
+  @override
+  bool get displayNameLock {
+    _$displayNameLockAtom.reportRead();
+    return super.displayNameLock;
+  }
+
+  @override
+  set displayNameLock(bool value) {
+    _$displayNameLockAtom.reportWrite(value, super.displayNameLock, () {
+      super.displayNameLock = value;
+    });
+  }
+
   final _$usernameLockAtom = Atom(name: '_SignupViewModelBase.usernameLock');
 
   @override
@@ -117,6 +133,7 @@ mixin _$SignupViewModel on _SignupViewModelBase, Store {
   String toString() {
     return '''
 formKey: ${formKey},
+displayNameLock: ${displayNameLock},
 usernameLock: ${usernameLock},
 emailLock: ${emailLock},
 passwordLock: ${passwordLock}
