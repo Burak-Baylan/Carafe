@@ -13,6 +13,7 @@ class UserModel {
   String userId;
   String? profileDescription;
   String? displayNameLowerCase;
+  String? usernameLowerCase;
   Timestamp? createdAt;
   String username;
   bool profilePrivacy;
@@ -37,6 +38,7 @@ class UserModel {
     this.profilePhotoBackgroundColor = AppColors.black,
     this.notifications = true,
     this.displayNameLowerCase,
+    this.usernameLowerCase,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class UserModel {
               .convertStringToColor,
       notifications: json['notifications'] as bool,
       displayNameLowerCase: json['display_name_lower_case'] as String?,
+      usernameLowerCase: json['username_lower_case'],
     );
   }
 
@@ -75,6 +78,7 @@ class UserModel {
         'profile_photo_background_color': profilePhotoBackgroundColor.getString,
         'notifications': notifications,
         'display_name_lower_case': displayNameLowerCase,
+        'username_lower_case': usernameLowerCase,
       };
 
   @override
@@ -83,6 +87,7 @@ class UserModel {
         'photoUrl: $photoUrl --||-- profileDescription: $profileDescription --||-- createdAt: $createdAt'
         ' --||-- profilePrivacy: $profilePrivacy --||-- followersCount: $followersCount --||-- followingCount: $followingCount'
         ' --||-- verified: $verified --||-- profilePhotoBackgroundColor: $profilePhotoBackgroundColor --||--'
-        ' --||-- notifications: $notifications --||-- display_name_lower_case: $displayNameLowerCase )))]]]}}}';
+        ' --||-- notifications: $notifications --||-- display_name_lower_case: $displayNameLowerCase --||-- '
+        'username_lower_case: $usernameLowerCase)))]]]}}}';
   }
 }
