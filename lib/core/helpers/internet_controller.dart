@@ -1,9 +1,6 @@
 import 'dart:io';
 
 class InternetController {
-  static InternetController get instance => InternetController._init();
-  InternetController._init();
-
   static Future<bool> get check async {
     try {
       final result = await InternetAddress.lookup('google.com');

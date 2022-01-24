@@ -1,8 +1,7 @@
 import 'dart:io';
-
-import 'package:Carafe/core/error/custom_error.dart';
-import 'package:Carafe/core/firebase/base/firebase_base.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import '../../../error/custom_error.dart';
+import '../../base/firebase_base.dart';
 
 class FirebaseStorageService extends FirebaseBase {
   static FirebaseStorageService? _instance;
@@ -22,9 +21,9 @@ class FirebaseStorageService extends FirebaseBase {
     }
   }
 
-  Future<CustomError> delete(String path) async {
+  Future<CustomError> delete(String? path, {Reference? reference}) async {
     try {
-      await storage.ref(path).delete();
+      await (path != null ? storage.ref(path) : reference!).delete();
       return CustomError(null);
     } on FirebaseException catch (e) {
       return CustomError(e.message);

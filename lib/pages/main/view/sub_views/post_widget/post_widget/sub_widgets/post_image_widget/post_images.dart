@@ -10,6 +10,7 @@ class ImageWidgets extends StatelessWidget {
     required this.onPressedImage,
     this.fullSizeHeight,
     this.halfSizeHeight,
+    this.quarterSizeHeight,
   }) : super(key: key);
 
   List<dynamic> images;
@@ -18,11 +19,13 @@ class ImageWidgets extends StatelessWidget {
   List<ImageProvider<Object>?> imageProviders = [null, null, null, null];
   double? fullSizeHeight;
   double? halfSizeHeight;
+  double? quarterSizeHeight;
 
   Function(
     List<ImageProvider<Object>?> imageProviders,
     List<dynamic> imageUrls,
     int index,
+    String imageTag,
   ) onPressedImage;
 
   double get quarterSize =>
@@ -64,7 +67,8 @@ class ImageWidgets extends StatelessWidget {
         imageLink: images[0],
         borderRadius: 10.radiusAll,
         height: fullSize,
-        onPressedImage: () => onPressedImage(imageProviders, images, 0),
+        onPressedImage: (tagForImage) =>
+            onPressedImage(imageProviders, images, 0, tagForImage),
         getProvider: (prr) => imageProviders[0] = prr,
       ));
 
@@ -78,7 +82,8 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[0],
                 borderRadius: 10.radiusTopLeftBottomLeft,
                 height: halfSize,
-                onPressedImage: () => onPressedImage(imageProviders, images, 0),
+                onPressedImage: (tagForImage) =>
+                    onPressedImage(imageProviders, images, 0, tagForImage),
                 getProvider: (prr) => imageProviders[0] = prr,
               ),
             ),
@@ -88,7 +93,8 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[1],
                 borderRadius: 10.radiusTopRightBottomRight,
                 height: halfSize,
-                onPressedImage: () => onPressedImage(imageProviders, images, 1),
+                onPressedImage: (tagForImage) =>
+                    onPressedImage(imageProviders, images, 1, tagForImage),
                 getProvider: (prr) => imageProviders[1] = prr,
               ),
             ),
@@ -107,7 +113,8 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[0],
                 borderRadius: 10.radiusTopLeftBottomLeft,
                 height: halfSize + 3,
-                onPressedImage: () => onPressedImage(imageProviders, images, 0),
+                onPressedImage: (tagForImage) =>
+                    onPressedImage(imageProviders, images, 0, tagForImage),
                 getProvider: (provider) => imageProviders[0] = provider,
               ),
             ),
@@ -118,8 +125,8 @@ class ImageWidgets extends StatelessWidget {
                   imageLink: images[1],
                   borderRadius: 10.radiusTopRight,
                   height: quarterSize,
-                  onPressedImage: () =>
-                      onPressedImage(imageProviders, images, 1),
+                  onPressedImage: (tagForImage) =>
+                      onPressedImage(imageProviders, images, 1, tagForImage),
                   getProvider: (provider) => imageProviders[1] = provider,
                 ),
                 3.sizedBoxOnlyHeight,
@@ -127,8 +134,8 @@ class ImageWidgets extends StatelessWidget {
                   imageLink: images[2],
                   borderRadius: 10.radiusBottomRight,
                   height: quarterSize,
-                  onPressedImage: () =>
-                      onPressedImage(imageProviders, images, 2),
+                  onPressedImage: (tagForImage) =>
+                      onPressedImage(imageProviders, images, 2, tagForImage),
                   getProvider: (provider) => imageProviders[2] = provider,
                 ),
               ],
@@ -147,7 +154,7 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[0],
                 borderRadius: 10.radiusTopLeft,
                 height: quarterSize,
-                onPressedImage: () => onPressedImage(imageProviders, images, 0),
+                onPressedImage: (tagForImage) => onPressedImage(imageProviders, images, 0, tagForImage),
                 getProvider: (provider) => imageProviders[0] = provider,
               ),
               3.sizedBoxOnlyHeight,
@@ -155,7 +162,7 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[1],
                 borderRadius: 10.radiusBottomLeft,
                 height: quarterSize,
-                onPressedImage: () => onPressedImage(imageProviders, images, 1),
+                onPressedImage: (tagForImage) => onPressedImage(imageProviders, images, 1, tagForImage),
                 getProvider: (provider) => imageProviders[1] = provider,
               ),
             ]),
@@ -165,7 +172,7 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[2],
                 borderRadius: 10.radiusTopRight,
                 height: quarterSize,
-                onPressedImage: () => onPressedImage(imageProviders, images, 2),
+                onPressedImage: (tagForImage) => onPressedImage(imageProviders, images, 2, tagForImage),
                 getProvider: (provider) => imageProviders[2] = provider,
               ),
               3.sizedBoxOnlyHeight,
@@ -173,7 +180,7 @@ class ImageWidgets extends StatelessWidget {
                 imageLink: images[3],
                 borderRadius: 10.radiusBottomRight,
                 height: quarterSize,
-                onPressedImage: () => onPressedImage(imageProviders, images, 3),
+                onPressedImage: (tagForImage) => onPressedImage(imageProviders, images, 3, tagForImage),
                 getProvider: (provider) => imageProviders[3] = provider,
               ),
             ]),

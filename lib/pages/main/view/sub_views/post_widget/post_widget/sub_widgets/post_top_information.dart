@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../../../app/constants/app_constants.dart';
+import '../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../model/post_model.dart';
 
 
@@ -10,9 +11,11 @@ class PostTopInformation extends StatelessWidget {
   }) : super(key: key);
 
   PostModel model;
+  late BuildContext context;
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     _findCategory();
     return _buildCategoryWidget;
   }
@@ -55,29 +58,32 @@ class PostTopInformation extends StatelessWidget {
 
   _categoryWidget(bool nameIsNull) => SizedBox(
         height: nameIsNull ? 0 : null,
-        child: InkWell(
-          onTap: () {},
-          child: Row(
-            children: [
-              Align(
+        child: Row(
+          children: [
+            SizedBox(
+              width: (context.height * 0.075),
+              child: Align(
                 child: nameIsNull
                     ? null
-                    : Icon(categoryIcon, size: 16, color: AppColors.secondary),
+                    : Icon(categoryIcon, size: context.width / 25, color: AppColors.secondary),
                 alignment: Alignment.centerRight,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: InkWell(
+                onTap: (){},
                 child: Text(
                   nameIsNull ? "" : "Category: $categoryName",
                   style: TextStyle(
                     color: AppColors.secondary,
-                    fontSize: 12,
+                    fontSize: context.width / 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 }

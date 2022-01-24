@@ -42,7 +42,7 @@ class _AddPostPageState extends State<AddPostPage> with WidgetsBindingObserver {
     return WillPopScope(
       onWillPop: addPostViewModel.canPageClose,
       child: Scaffold(
-        backgroundColor: AppColors.backGroundGrey,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: _buildPage,
         ),
@@ -135,10 +135,10 @@ class _AddPostPageState extends State<AddPostPage> with WidgetsBindingObserver {
         fontSize: 15,
         onTextChanged: (text) => addPostViewModel.onPostTextChanged(text),
         maxLines: 10,
-        backgroundColor: AppColors.backGroundGrey,
+        backgroundColor: AppColors.white,
         inputBorder: InputBorder.none,
         controller: controller,
-        hintText: "Write what you want!",
+        hintText: addPostViewModel.isAComment ? 'Write your reply!' : "Write what you want!",
         disableLeading: true,
       );
 

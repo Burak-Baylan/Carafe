@@ -17,6 +17,7 @@ class HomePageFullScreenImage extends StatefulWidget {
     required this.imageUrls,
     required this.imageIndex,
     required this.imagesDominantColor,
+    required this.tag,
     this.onPageChanged,
   }) : super(key: key);
 
@@ -25,6 +26,7 @@ class HomePageFullScreenImage extends StatefulWidget {
   List<dynamic> imagesDominantColor;
   int imageIndex;
   Function(int index, CarouselPageChangedReason reason)? onPageChanged;
+  String tag;
 
   @override
   State<HomePageFullScreenImage> createState() =>
@@ -89,7 +91,7 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
             scaleStateChangedCallback: (state) =>
                 fullScreenImageVm.photoScaleStateChanged(state),
             disableBackButton: true,
-            tag: widget.imageUrls[index],
+            tag: widget.tag,
             image: widget.imageProviders[index],
           ),
         ),

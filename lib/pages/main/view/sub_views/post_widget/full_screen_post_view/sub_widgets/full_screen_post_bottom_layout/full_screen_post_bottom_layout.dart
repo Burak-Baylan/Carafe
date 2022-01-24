@@ -8,7 +8,6 @@ import '../../../../../../../../core/extensions/timestamp_extensions.dart';
 import '../../../../../../../../core/widgets/bottom_to_top_animated_text.dart';
 import '../../../../../../../../core/widgets/place_holder_with_border.dart';
 import '../../../../../../model/post_model.dart';
-import '../../../../../home/view_model/home_view_model.dart';
 import '../../../post_widget/view_model/post_view_model.dart';
 import 'sub_widgets/full_screen_post_bottom_layout_count_and_text_widget.dart';
 import 'sub_widgets/full_screen_post_bottom_layout_small_button.dart';
@@ -18,12 +17,10 @@ class FullScreenPostBottomLayout extends StatelessWidget {
     Key? key,
     required this.postModel,
     required this.postViewModel,
-    required this.homeViewModel,
   }) : super(key: key);
 
   PostModel postModel;
   PostViewModel postViewModel;
-  HomeViewModel homeViewModel;
 
   late BuildContext context;
 
@@ -81,7 +78,7 @@ class FullScreenPostBottomLayout extends StatelessWidget {
               _buildCommentButton,
             ],
           ),
-          _buildSaveButton,
+          _buildRightButton,
         ],
       );
 
@@ -142,11 +139,16 @@ class FullScreenPostBottomLayout extends StatelessWidget {
       onTab: () => postViewModel.navigateToReplyScreen(),
       icon: Icons.mode_comment_outlined);
 
-  Widget get _buildSaveButton =>
+  Widget get _buildRightButton =>
       postModel.authorId == postViewModel.authService.userId
-          ? Container()
+          ? FullScreenPostBottomLayoutSmallButton(
+              onTab: () => postViewModel.navigateToPostStatus(postViewModel),
+              icon: Icons.bar_chart_rounded,
+            )
           : Observer(
               builder: (context) => FullScreenPostBottomLayoutSmallButton(
-                  onTab: () => postViewModel.save(),
-                  icon: postViewModel.postSaveIcon));
+                onTab: () => postViewModel.save(),
+                icon: postViewModel.postSaveIcon,
+              ),
+            );
 }

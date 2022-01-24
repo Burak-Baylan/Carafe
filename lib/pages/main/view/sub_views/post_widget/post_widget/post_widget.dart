@@ -175,7 +175,6 @@ class _PostWidgetState extends State<PostWidget> {
     postViewModel.setPostModel(widget.model);
     postViewModel.setContext(context);
     postViewModel.setHomeViewModel(widget.homeViewModel);
-    postViewModel.postIndex = widget.index;
     model = widget.model;
     if (model.replyed == null || !model.replyed!) {
       postViewModel.sharedPostRef = postViewModel.postDocRef(model.postId);

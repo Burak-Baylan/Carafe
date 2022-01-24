@@ -1,7 +1,7 @@
-import 'package:Carafe/core/extensions/context_extensions.dart';
-import 'package:Carafe/core/widgets/place_holder_with_border.dart';
-import 'package:Carafe/pages/authenticate/model/user_model.dart';
 import 'package:flutter/material.dart';
+import '../../pages/authenticate/model/user_model.dart';
+import '../extensions/context_extensions.dart';
+import 'place_holder_with_border.dart';
 
 class ReplyingToWidget extends StatelessWidget {
   ReplyingToWidget({
@@ -42,7 +42,7 @@ class ReplyingToWidget extends StatelessWidget {
               ),
               _buildText(
                 context,
-                "@" + snapshot.data!.username,
+                "@" + snapshot.data!.displayName,
                 context.theme.colorScheme.secondary,
               ),
             ],

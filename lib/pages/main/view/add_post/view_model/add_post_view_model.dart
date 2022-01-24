@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../../../../../core/helpers/internet_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,6 +72,10 @@ abstract class _AddPostViewModelBase extends BaseViewModel with Store {
   changeScreenLockState() => screenLockState = !screenLockState;
 
   Future sharePost(AddPostViewModel viewModel) async {
+    if (!(await InternetController.check)){
+      showNoInternetAlert(context!);
+      return;
+    }
     if (textLength == 0 && images.isEmpty) return;
     changeScreenLockState();
     CustomError response;

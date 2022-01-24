@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:uuid/uuid.dart';
 import '../../alerts/alert_dialog/demonstrator/custom_alert_dialog_demonstrator.dart';
 import '../../extensions/double_extensions.dart';
 import '../../firebase/base/firebase_base.dart';
 import '../../helpers/colorful_print.dart';
 import '../../helpers/image_colors_getter.dart';
+import '../../helpers/no_internet_alert_dialog.dart';
+import '../../helpers/random_id.dart';
+import '../../hive/hive_helper.dart';
 import '../../init/navigation/service/navigation_service.dart';
 
 abstract class BaseViewModel with FirebaseBase {
@@ -16,6 +18,7 @@ abstract class BaseViewModel with FirebaseBase {
   Timestamp get currentTime => Timestamp.now();
 
   ImageColorsGetter imageColorsGetter = ImageColorsGetter();
+  HiveHelper hiveHelper = HiveHelper.instance;
 
   navigateToPage({required String path, required Object? data}) =>
       NavigationService.instance.navigateToPage(path: path, data: data);
@@ -35,6 +38,9 @@ abstract class BaseViewModel with FirebaseBase {
       );
 
   showToast(String message) => Fluttertoast.showToast(msg: message);
+
+  showNoInternetAlert(BuildContext context) =>
+      NoInternetAlertDialog.show(context);
 
   showAlert(
     String title,
@@ -67,5 +73,5 @@ abstract class BaseViewModel with FirebaseBase {
 
   printGreen(String text) => ColorfulPrint.green(text);
 
-  get getRandomId => const Uuid().v4();
+  get randomId => getRandomId();
 }

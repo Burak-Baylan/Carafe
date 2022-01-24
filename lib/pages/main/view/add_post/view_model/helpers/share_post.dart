@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/extensions/color_extensions.dart';
 import '../../../../../../core/firebase/base/firebase_base.dart';
+import '../../../../../../core/helpers/random_id.dart';
 import '../../../../model/post_model.dart';
 import '../../../../model/replying_post_model.dart';
 import '../add_post_view_model.dart';
@@ -29,7 +30,7 @@ class SharePost with FirebaseBase {
     imageLinks = [];
     imagesDominantColors = [];
     postId = "";
-    postId = vm.getRandomId;
+    postId = getRandomId();
     this.replyingPostModel = replyingPostModel;
     this.postRef = postRef;
     var uploadResponse = await _uploadImages();
@@ -61,16 +62,16 @@ class SharePost with FirebaseBase {
         replyed: replyingPostModel?.replyingPostId != null ? true : false,
         replyedPostId: replyingPostModel?.replyingPostId,
         replyedUserId: replyingPostModel?.replyingUserId,
+        isPostDeleted: false,
       );
 
   Future<CustomError> _uploadImages() async {
     List<String> imagePaths = [];
     CustomError response = CustomError(null);
     String folderPath = _createImageFolderPath;
-    for (var i = 0; i < vm.images.length; i++) {
-      var image = vm.images[i];
+    for (var image in vm.images) {
       if (image != null) {
-        String imageId = vm.getRandomId;
+        String imageId = vm.randomId;
         String path = "$folderPath/$imageId";
         response = await vm.storageService.upload(path, image);
         imagePaths.add(folderPath);
