@@ -39,8 +39,50 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
     });
   }
 
+  final _$postViewTypeAtom = Atom(name: '_MainViewViewModelBase.postViewType');
+
+  @override
+  PostViewType get postViewType {
+    _$postViewTypeAtom.reportRead();
+    return super.postViewType;
+  }
+
+  @override
+  set postViewType(PostViewType value) {
+    _$postViewTypeAtom.reportWrite(value, super.postViewType, () {
+      super.postViewType = value;
+    });
+  }
+
+  final _$followingUsersIdsAtom =
+      Atom(name: '_MainViewViewModelBase.followingUsersIds');
+
+  @override
+  List<String> get followingUsersIds {
+    _$followingUsersIdsAtom.reportRead();
+    return super.followingUsersIds;
+  }
+
+  @override
+  set followingUsersIds(List<String> value) {
+    _$followingUsersIdsAtom.reportWrite(value, super.followingUsersIds, () {
+      super.followingUsersIds = value;
+    });
+  }
+
   final _$_MainViewViewModelBaseActionController =
       ActionController(name: '_MainViewViewModelBase');
+
+  @override
+  dynamic changePostViewType(bool type) {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.changePostViewType');
+    try {
+      return super.changePostViewType(type);
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic changeFabVisibility(bool visibility) {
@@ -65,10 +107,23 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
   }
 
   @override
+  dynamic updateFollowingUserIds(List<String> followingUsersIds) {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.updateFollowingUserIds');
+    try {
+      return super.updateFollowingUserIds(followingUsersIds);
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 currentIndex: ${currentIndex},
-isFabVisible: ${isFabVisible}
+isFabVisible: ${isFabVisible},
+postViewType: ${postViewType},
+followingUsersIds: ${followingUsersIds}
     ''';
   }
 }

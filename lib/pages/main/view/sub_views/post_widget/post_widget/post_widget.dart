@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
@@ -17,20 +18,20 @@ class PostWidget extends StatefulWidget {
   PostWidget({
     Key? key,
     required this.model,
-    required this.homeViewModel,
     this.ppWidget,
     this.topInformation,
     this.topUserInformation,
     this.postText,
     this.image,
     this.bottomLayout,
-    this.removerCardView = false,
+    this.removeCardView = false,
     this.showReply = false,
     this.postRef,
+    this.index,
+    this.homeViewModel,
   }) : super(key: key);
 
   PostModel model;
-  HomeViewModel homeViewModel;
 
   Widget? topInformation;
   Widget? ppWidget;
@@ -38,9 +39,11 @@ class PostWidget extends StatefulWidget {
   Widget? postText;
   Widget? image;
   Widget? bottomLayout;
-  bool removerCardView;
+  bool removeCardView;
   bool showReply;
   DocumentReference? postRef;
+  int? index;
+  HomeViewModel? homeViewModel;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -53,16 +56,25 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     _initializeValues();
-    return Column(
-      children: [
-        widget.showReply ? 0.sizedBoxOnlyHeight : 15.sizedBoxOnlyHeight,
-        PostSkeleton(showReply: widget.showReply, child: _postContainer)
-      ],
+    return Observer(
+      builder: (_) => (postViewModel.isPostDeleted ||
+              (model.isPostDeleted == null || model.isPostDeleted!))
+          ? postIsDeletedWidget
+          : Column(
+              children: [
+                widget.showReply ? 0.sizedBoxOnlyHeight : 15.sizedBoxOnlyHeight,
+                PostSkeleton(
+                  showReply: widget.showReply,
+                  child: _postContainer,
+                )
+              ],
+            ),
     );
   }
 
   Widget get _postContainer => InkWell(
-        borderRadius: (widget.removerCardView || widget.showReply)
+        splashColor: Colors.grey.shade100.withOpacity(.0),
+        borderRadius: (widget.removeCardView || widget.showReply)
             ? 0.radiusAll
             : 10.radiusAll,
         onTap: () => postViewModel.navigateToFullScreenPostView(postViewModel),
@@ -122,26 +134,20 @@ class _PostWidgetState extends State<PostWidget> {
           5.sizedBoxOnlyHeight,
           ImageWidgets(
             images: model.imageLinks,
-            onPressedImage: (imageProviders, imageUrls, imageIndex) =>
-                postViewModel.onPressedImage(
-                    imageProviders, imageUrls, imageIndex),
+            onPressedImage: (iProvider, iUrl, iIndex, tag) =>
+                postViewModel.onPressedImage(iProvider, iUrl, iIndex, tag),
           ),
         ],
       );
 
-  Widget get _buildPp => PostProfilePhoto(postModel: model);
+  Widget get _buildPp =>
+      PostProfilePhoto(postModel: model, postViewModel: postViewModel);
 
-  Widget get _nameAndMoreMenu => PostNameAndMenu(
-        postModel: model,
-        homeViewModel: widget.homeViewModel,
-        postViewModel: postViewModel,
-      );
+  Widget get _nameAndMoreMenu =>
+      PostNameAndMenu(postModel: model, postViewModel: postViewModel);
 
-  Widget get _buildPostBottomLayout => PostBottomLayout(
-        postModel: model,
-        postViewModel: postViewModel,
-        homeViewModel: widget.homeViewModel,
-      );
+  Widget get _buildPostBottomLayout =>
+      PostBottomLayout(postModel: model, postViewModel: postViewModel);
 
   Widget get _buildPostText => model.text != null
       ? Column(
@@ -151,22 +157,31 @@ class _PostWidgetState extends State<PostWidget> {
             Text(
               "${model.text}",
               style: context.theme.textTheme.headline6?.copyWith(
-                  fontSize: context.width / 24,
-                  letterSpacing: 0.0,
-                  wordSpacing: 0),
+                fontSize: context.width / 24,
+                letterSpacing: 0.0,
+                wordSpacing: 0,
+              ),
             ),
           ],
         )
       : Container();
 
-  _initializeValues() {
+  Widget get postIsDeletedWidget => Builder(builder: (context) {
+        if (!(model.isPostDeleted!)) model.isPostDeleted = true;
+        return Container();
+      });
+
+  _initializeValues() async {
     postViewModel.setPostModel(widget.model);
+    postViewModel.setContext(context);
     postViewModel.setHomeViewModel(widget.homeViewModel);
+    postViewModel.postIndex = widget.index;
     model = widget.model;
     if (model.replyed == null || !model.replyed!) {
       postViewModel.sharedPostRef = postViewModel.postDocRef(model.postId);
     } else {
       postViewModel.sharedPostRef = widget.postRef!;
     }
+    await postViewModel.addToPostViews();
   }
 }

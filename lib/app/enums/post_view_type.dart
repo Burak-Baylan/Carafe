@@ -1,0 +1,1 @@
+enum PostViewType { CardView, FlatView }
