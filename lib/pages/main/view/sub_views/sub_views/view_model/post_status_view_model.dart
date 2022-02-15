@@ -13,7 +13,6 @@ abstract class _PostStatusViewModelBase extends BaseViewModel with Store {
   late PostModel postModel;
   late UserModel userModel;
   late PostViewModel postViewModel;
-
   late PostStatusInformationsModel postStatusInformationsModel;
 
   @override
@@ -26,39 +25,30 @@ abstract class _PostStatusViewModelBase extends BaseViewModel with Store {
     this.postViewModel = postViewModel;
   }
 
-  Future getInformations(String authorId) async {
+  Future<void> getInformations(String authorId) async {
     userModel = (await firebaseManager.getAUserInformation(authorId))!;
     postModel = (await firebaseManager.getPostInformations(
       null,
-      documentSnapshot: postViewModel.sharedPostRef,
+      documentSnapshot: postViewModel.currentPostRef,
     ))!;
-    var likeCount = await firebaseService.getCollection(
-      postViewModel.sharedPostRef.collection(firebaseConstants.postLikersText),
-    );
-    var commentCount = await firebaseService.getCollection(
-      postViewModel.sharedPostRef
-          .collection(firebaseConstants.postCommentsText),
-    );
+    var likeCount = await postViewModel.postManager
+        .getPostLikeCount(postViewModel.currentPostRef);
+    var commentCount = await postViewModel.postManager
+        .getPostCommentsCount(postViewModel.currentPostRef);
     await getStatusInformations();
-    if (likeCount.error != null) {
-      postModel.likeCount = 0;
-    }
-    postModel.likeCount = likeCount.data!.size;
-    if (commentCount.error != null) {
-      postModel.commentCount = 0;
-    }
-    postModel.commentCount = commentCount.data!.size;
+    postModel.likeCount = likeCount;
+    postModel.commentCount = commentCount;
   }
 
   Future<void> getStatusInformations() async {
     var postViewsCount = await postViewModel.postStatusInformationsManager
-        .getPostViews(postViewModel.sharedPostRef);
+        .getPostViews(postViewModel.currentPostRef);
     var postClicksCount = await postViewModel.postStatusInformationsManager
-        .getPostClicked(postViewModel.sharedPostRef);
+        .getPostClicked(postViewModel.currentPostRef);
     var profileVisitsCount = await postViewModel.postStatusInformationsManager
-        .getProfileVisits(postViewModel.sharedPostRef);
+        .getProfileVisits(postViewModel.currentPostRef);
     var interactionCount = await postViewModel.postStatusInformationsManager
-        .getInteractions(postViewModel.sharedPostRef);
+        .getInteractions(postViewModel.currentPostRef);
     postStatusInformationsModel = PostStatusInformationsModel(
       views: postViewsCount,
       interactions: interactionCount,
