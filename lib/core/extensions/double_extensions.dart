@@ -26,3 +26,7 @@ extension OffsetExtension on double{
   Offset get offsetX => Offset(this, 0.0);
   Offset get offsetY => Offset(0.0, this);
 }
+
+extension SizeExtension on double{
+  Size get sizeFromHeight => Size.fromHeight(this);
+}

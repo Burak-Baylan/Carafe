@@ -9,6 +9,9 @@ extension ContextExtension on BuildContext {
   get popSheet => Navigator.of(this, rootNavigator: true).pop();
   get unFocus => FocusScope.of(this).unfocus();
   double get statusBarHeight => MediaQuery.of(this).viewPadding.top;
+  bool get isKeyboardOpen =>
+      MediaQuery.of(this).viewInsets.bottom > 0 ? true : false;
+  void get closeKeyboard => FocusScope.of(this).unfocus();
 }
 
 extension ValueExtension on BuildContext {
@@ -56,6 +59,6 @@ extension TextStyleExtensions on BuildContext {
       const TextStyle(decoration: TextDecoration.underline);
 }
 
-extension AlerDialogExtensions on BuildContext{
+extension AlerDialogExtensions on BuildContext {
   get closeAlerDialog => Navigator.of(this).pop();
 }
