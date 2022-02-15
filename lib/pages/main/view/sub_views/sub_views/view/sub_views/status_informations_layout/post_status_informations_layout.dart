@@ -23,6 +23,7 @@ class _PostStatusInformationsLayoutState
   Widget build(BuildContext context) {
     return BorderContainer.all(
       radius: 15,
+      color: Colors.transparent,
       decoration: BoxDecoration(
         border: Border.all(width: .5, color: Colors.grey.shade500),
         borderRadius: 15.radiusAll,

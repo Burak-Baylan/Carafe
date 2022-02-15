@@ -60,8 +60,9 @@ class PostStatusInformationsManager {
     int profileVisitCount = await getProfileVisits(postRef);
     int likeCount = _getCollectionSize(await firestoreService
         .getCollection(postRef.collection(firebaseConstants.postLikersText)));
-    int commentCount = _getCollectionSize(await firestoreService
-        .getCollection(postRef.collection(firebaseConstants.postCommentsText)));
+    int commentCount = _getCollectionSize(await firestoreService.getQuery(
+      firebaseConstants.allUndeletedCommentsCollection(postRef),
+    ));
     return postClickedCount + likeCount + commentCount + profileVisitCount;
   }
 

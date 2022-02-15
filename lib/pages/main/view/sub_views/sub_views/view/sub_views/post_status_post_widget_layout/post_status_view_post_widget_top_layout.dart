@@ -27,7 +27,8 @@ class PostStatusPostWidgetTopLayout extends StatelessWidget {
           height: context.width / 10,
           child: PostProfilePhoto(
             postModel: postModel,
-            onClicked: () => null,
+            onClicked: (_) => null,
+            imageUrl: userModel.photoUrl,
           ),
         ),
         Flexible(

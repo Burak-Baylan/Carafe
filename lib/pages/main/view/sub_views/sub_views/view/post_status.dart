@@ -36,6 +36,7 @@ class _PostStatusViewState extends State<PostStatusView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: _appBar(),
       body: FutureBuilder(
         future: postStatusViewModel.getInformations(widget.postModel.authorId),
@@ -49,49 +50,13 @@ class _PostStatusViewState extends State<PostStatusView> {
     );
   }
 
-  AppBar _appBar() => AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () => context.pop,
-        ),
-        title: Text(
-          "Post Status",
-          style: TextStyle(
-            fontSize: context.width / 20,
-            color: context.theme.colorScheme.primary,
-          ),
-        ),
-        iconTheme: IconThemeData(color: context.theme.colorScheme.primary),
-      );
-
   Widget get body {
     return SingleChildScrollView(
       child: Container(
         margin: 15.0.edgeIntesetsAll,
         child: Column(
           children: [
-            BorderContainer.all(
-              radius: 15,
-              decoration: BoxDecoration(
-                border: Border.all(width: .5, color: Colors.grey.shade500),
-                borderRadius: 15.radiusAll,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PostStatausViewPostWidget(
-                    postModel: postStatusViewModel.postModel,
-                    userModel: postStatusViewModel.userModel,
-                  ),
-                  Divider(
-                      height: 0, color: Colors.grey.shade500, thickness: .5),
-                  PostStatusViewLikeAndCommentStatusWidget(
-                    postModel: postStatusViewModel.postModel,
-                  )
-                ],
-              ),
-            ),
+            postViewWidget,
             25.sizedBoxOnlyHeight,
             PostStatusInformationsLayout(
               postStatusInformationsModel:
@@ -102,4 +67,47 @@ class _PostStatusViewState extends State<PostStatusView> {
       ),
     );
   }
+
+  Widget get postViewWidget => BorderContainer.all(
+        color: Colors.transparent,
+        radius: 15,
+        decoration: BoxDecoration(
+          border: Border.all(width: .5, color: Colors.grey.shade500),
+          borderRadius: 15.radiusAll,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            PostStatausViewPostWidget(
+              postModel: postStatusViewModel.postModel,
+              userModel: postStatusViewModel.userModel,
+            ),
+            Divider(height: 0, color: Colors.grey.shade500, thickness: .5),
+            PostStatusViewLikeAndCommentStatusWidget(
+              postModel: postStatusViewModel.postModel,
+            )
+          ],
+        ),
+      );
+
+  AppBar _appBar() => AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_rounded),
+          onPressed: () => context.pop,
+        ),
+        elevation: 0,
+        title: Text(
+          "Post Status",
+          style: TextStyle(
+            fontSize: context.width / 20,
+            color: context.theme.colorScheme.primary,
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size(context.width, 1),
+          child: const Divider(height: 0),
+        ),
+        iconTheme: IconThemeData(color: context.theme.colorScheme.primary),
+      );
 }
