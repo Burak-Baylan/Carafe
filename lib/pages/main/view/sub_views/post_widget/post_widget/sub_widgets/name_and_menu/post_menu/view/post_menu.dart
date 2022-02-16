@@ -4,10 +4,11 @@ import '../../../../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../../../../../core/extensions/int_extensions.dart';
 import '../../../../../../../../../../core/extensions/widget_extension.dart';
-import '../../../../../../../../../../core/widgets/place_holder_with_border.dart';
+import '../../../../../../../../../../core/helpers/rounded_bottom_sheet.dart';
+import '../../../../../../../../../../core/widgets/bottom_sheet_top_rounded_container.dart';
 import '../../../../../../../../../authenticate/model/user_model.dart';
 import '../../../../../../../../model/post_model.dart';
-import '../../../../../../../home/view_model/home_view_model.dart';
+import '../../../../view_model/post_view_model.dart';
 import '../view_model/post_menu_view_model.dart';
 import 'sub_views/post_menu_items.dart';
 
@@ -15,15 +16,17 @@ class PostMenuButton extends StatelessWidget {
   PostMenuButton({
     Key? key,
     required this.postModel,
-    required this.viewModel,
     required this.userModel,
+    required this.postViewModel,
+    this.onPostPinnedOrUnpinned,
   }) : super(key: key);
 
   PostModel postModel;
-  HomeViewModel viewModel;
   UserModel userModel;
+  PostViewModel postViewModel;
   GlobalKey menuKey = GlobalKey();
   PostMenuViewModel postMenuVm = PostMenuViewModel();
+  Function? onPostPinnedOrUnpinned;
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +49,15 @@ class PostMenuButton extends StatelessWidget {
   }
 
   sheet(BuildContext context) {
-    showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: 20.radiusCircular,
-          topRight: 20.radiusCircular,
-        ),
-      ),
+    showRoundedBottomSheet(
       context: context,
       builder: (context) => FutureBuilder<bool>(
         future: findItems(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (!snapshot.data!) {
-              return const Center(child: Text("Error"));
+              context.pop;
+              return Container();
             }
             return sheetItems(context);
           }
@@ -84,9 +82,9 @@ class PostMenuButton extends StatelessWidget {
         margin: 10.0.edgeIntesetsTopBottom,
         child: Column(
           children: <Widget>[
-                Align(
+                const Align(
                   alignment: Alignment.topCenter,
-                  child: PlaceHolderWithBorder(height: context.height / 90),
+                  child: BottomSheetTopRoundedContainer(),
                 ),
                 15.sizedBoxOnlyHeight,
               ] +
@@ -102,6 +100,7 @@ class PostMenuButton extends StatelessWidget {
       postMenuVm: postMenuVm,
       userModel: userModel,
       postModel: postModel,
+      onPostPinnedOrUnpinned: onPostPinnedOrUnpinned,
     );
     if (postMenuVm.isItCurrentUserPost) {
       return menuItems.postOwnerItems();
@@ -109,9 +108,10 @@ class PostMenuButton extends StatelessWidget {
     return menuItems.somoneElsePostItems();
   }
 
-  setViewModel(BuildContext context) {
+  void setViewModel(BuildContext context) {
     postMenuVm.setContext(context);
     postMenuVm.setPostModel(postModel);
     postMenuVm.setUserModel(userModel);
+    postMenuVm.setPostViewModel(postViewModel);
   }
 }

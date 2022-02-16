@@ -24,26 +24,27 @@ class PostWidget extends StatefulWidget {
     this.postText,
     this.image,
     this.bottomLayout,
-    this.removeCardView = false,
-    this.showReply = false,
+    this.closeCardView = false,
     this.postRef,
     this.index,
     this.homeViewModel,
+    this.isPostPinned,
+    this.onPostPinnedOrUnpinned,
   }) : super(key: key);
 
   PostModel model;
-
   Widget? topInformation;
   Widget? ppWidget;
   Widget? topUserInformation;
   Widget? postText;
   Widget? image;
   Widget? bottomLayout;
-  bool removeCardView;
-  bool showReply;
+  bool? isPostPinned;
+  bool closeCardView;
   DocumentReference? postRef;
   int? index;
   HomeViewModel? homeViewModel;
+  Function? onPostPinnedOrUnpinned;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -57,43 +58,41 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     _initializeValues();
     return Observer(
-      builder: (_) => (postViewModel.isPostDeleted ||
-              (model.isPostDeleted == null || model.isPostDeleted!))
-          ? postIsDeletedWidget
-          : Column(
+      builder: (_) => (!postViewModel.isPostDeleted ||
+              (model.isPostDeleted != null && !(model.isPostDeleted!)))
+          ? Column(
               children: [
-                widget.showReply ? 0.sizedBoxOnlyHeight : 15.sizedBoxOnlyHeight,
+                widget.closeCardView
+                    ? 0.sizedBoxOnlyHeight
+                    : 15.sizedBoxOnlyHeight,
                 PostSkeleton(
-                  showReply: widget.showReply,
-                  child: _postContainer,
-                )
+                    closeCardView: widget.closeCardView, child: _postContainer)
               ],
-            ),
+            )
+          : postIsDeletedWidget,
     );
   }
 
   Widget get _postContainer => InkWell(
         splashColor: Colors.grey.shade100.withOpacity(.0),
-        borderRadius: (widget.removeCardView || widget.showReply)
-            ? 0.radiusAll
-            : 10.radiusAll,
+        borderRadius: widget.closeCardView ? 0.radiusAll : 10.radiusAll,
         onTap: () => postViewModel.navigateToFullScreenPostView(postViewModel),
         child: _postLayout,
       );
 
   Widget get _postLayout => Column(
         children: [
-          widget.showReply ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
+          widget.closeCardView ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
           _postBody,
-          widget.showReply ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
-          widget.showReply
+          widget.closeCardView ? 10.sizedBoxOnlyHeight : 0.sizedBoxOnlyHeight,
+          widget.closeCardView
               ? const Divider(thickness: .5, height: 0)
               : Container(),
         ],
       );
 
   Widget get _postBody => Container(
-        margin: widget.showReply
+        margin: widget.closeCardView
             ? const EdgeInsets.symmetric(horizontal: 10)
             : 10.0.edgeIntesetsAll,
         child: Column(
@@ -126,7 +125,10 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget get _topInformation => Align(
         alignment: Alignment.centerLeft,
-        child: PostTopInformation(model: model),
+        child: PostTopInformation(
+          model: model,
+          isPostPinned: widget.isPostPinned ?? false,
+        ),
       );
 
   Widget get _image => Column(
@@ -140,11 +142,21 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
 
-  Widget get _buildPp =>
-      PostProfilePhoto(postModel: model, postViewModel: postViewModel);
+  Widget get _buildPp => Observer(builder: (_) {
+        return PostProfilePhoto(
+          postModel: model,
+          postViewModel: postViewModel,
+          imageUrl: postViewModel.userModel != null
+              ? postViewModel.userModel!.photoUrl
+              : null,
+        );
+      });
 
-  Widget get _nameAndMoreMenu =>
-      PostNameAndMenu(postModel: model, postViewModel: postViewModel);
+  Widget get _nameAndMoreMenu => PostNameAndMenu(
+        postModel: model,
+        postViewModel: postViewModel,
+        onPostPinnedOrUnpinned: widget.onPostPinnedOrUnpinned,
+      );
 
   Widget get _buildPostBottomLayout =>
       PostBottomLayout(postModel: model, postViewModel: postViewModel);
@@ -166,21 +178,14 @@ class _PostWidgetState extends State<PostWidget> {
         )
       : Container();
 
-  Widget get postIsDeletedWidget => Builder(builder: (context) {
-        if (!(model.isPostDeleted!)) model.isPostDeleted = true;
-        return Container();
-      });
+  Widget get postIsDeletedWidget => Builder(builder: (context) => Container());
 
-  _initializeValues() async {
+  void _initializeValues() async {
     postViewModel.setPostModel(widget.model);
     postViewModel.setContext(context);
     postViewModel.setHomeViewModel(widget.homeViewModel);
+    postViewModel.initializeValues();
     model = widget.model;
-    if (model.replyed == null || !model.replyed!) {
-      postViewModel.sharedPostRef = postViewModel.postDocRef(model.postId);
-    } else {
-      postViewModel.sharedPostRef = widget.postRef!;
-    }
     await postViewModel.addToPostViews();
   }
 }
