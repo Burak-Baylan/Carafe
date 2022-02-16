@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../../../../core/base/view_model/base_view_model.dart';
-import '../../../../../core/extensions/widget_extension.dart';
+import '../../../../../core/firebase/firestore/manager/post_manager/post_manager.dart';
+import '../../../../../main.dart';
 import '../../../model/post_model.dart';
-import '../../main_screen.dart';
-
 part 'home_view_model.g.dart';
 
 class HomeViewModel = _HomeViewModelBase with _$HomeViewModel;
@@ -16,33 +13,41 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
   BuildContext? context;
 
   @override
-  setContext(BuildContext context) => this.context = context;
+  setContext(BuildContext context) {
+    this.context = context;
+    postManager = firebasePostManager;
+  }
+
   @observable
   List<PostModel> posts = [];
   @observable
-  Widget homeBody = Container();
-  @observable
   ScrollPhysics? postsScrollable;
   @observable
-  bool moreImageLoadingProgressState = false;
-  
   @action
-  changeHomeBody(Widget body) => homeBody = body;
-  @action
-  changePostsScrollable(ScrollPhysics? physics) => postsScrollable = physics;
+  changePostsScrollable(ScrollPhysics physics) => postsScrollable = physics;
   @action
   lockScrollable() =>
       changePostsScrollable(const NeverScrollableScrollPhysics());
   @action
-  openScrollable() => changePostsScrollable(null);
-  @action
-  changeMoreImageLoadingProgressState() =>
-      moreImageLoadingProgressState = !moreImageLoadingProgressState;
+  openScrollable() =>
+      changePostsScrollable(const AlwaysScrollableScrollPhysics());
+  late FirebasePostManager postManager;
+
+  bool canMorePostsUpload = true;
+
+  lockCanUploadMorePost() => canMorePostsUpload = false;
+  openCanUploadMorePost() => canMorePostsUpload = true;
+
+  @observable
+  bool showExploreWidget = false;
+
+  changeShowExploreWidgetState(bool state) => showExploreWidget = state;
 
   ScrollController get scrollController {
     var controller = ScrollController();
     mainVm.homeViewPostsScrollController = controller;
     controller.addListener(() async {
+      if (!canMorePostsUpload) return;
       if (controller.offset >= controller.position.maxScrollExtent) {
         lockScrollable();
         await loadMorePosts();
@@ -52,33 +57,36 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
     return controller;
   }
 
-  bool scrollDirectionController(UserScrollNotification notification) {
-    if (notification.direction == ScrollDirection.forward) {
-      if (!mainVm.isFabVisible) mainVm.changeFabVisibility(true);
-    } else if (notification.direction == ScrollDirection.reverse) {
-      if (mainVm.isFabVisible) mainVm.changeFabVisibility(false);
-    }
-    return true;
-  }
-
   @action
-  Future<List<PostModel>> getPosts(Widget postBody) async {
-    changeHomeBody(const CircularProgressIndicator().center);
+  Future<List<PostModel>> getPosts() async {
     lockScrollable();
-    posts.clear();
-    posts = await firebasePostManger.getPosts();
+    openCanUploadMorePost();
+    changeShowExploreWidgetState(false);
+    var postsData = await postManager.getPosts();
+    if (postsData.error == null) {
+      posts = postsData.data!;
+    }
     openScrollable();
-    changeHomeBody(postBody);
     return posts;
   }
 
   Future<List<PostModel>> loadMorePosts() async {
-    changeMoreImageLoadingProgressState();
-    var postList = await firebasePostManger.loadMorePost();
-    for (var post in postList) {
-      posts.add(post);
+    var postsData = await postManager.loadMorePost();
+    if (postsData.error == null) {
+      for (var comment in postsData.data!) {
+        posts.add(comment);
+      }
+      var loadedPosts = postsData.data!;
+      changeShowExploreWidgetState(false);
+      loadMoreCommentsLockControl(loadedPosts.length);
     }
-    changeMoreImageLoadingProgressState();
     return posts;
+  }
+
+  loadMoreCommentsLockControl(int size) {
+    if (size < firebaseConstants.numberOfPostsToBeReceiveAtOnce) {
+      lockCanUploadMorePost();
+      changeShowExploreWidgetState(true);
+    }
   }
 }

@@ -24,21 +24,6 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
     });
   }
 
-  final _$homeBodyAtom = Atom(name: '_HomeViewModelBase.homeBody');
-
-  @override
-  Widget get homeBody {
-    _$homeBodyAtom.reportRead();
-    return super.homeBody;
-  }
-
-  @override
-  set homeBody(Widget value) {
-    _$homeBodyAtom.reportWrite(value, super.homeBody, () {
-      super.homeBody = value;
-    });
-  }
-
   final _$postsScrollableAtom =
       Atom(name: '_HomeViewModelBase.postsScrollable');
 
@@ -55,46 +40,34 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
     });
   }
 
-  final _$moreImageLoadingProgressStateAtom =
-      Atom(name: '_HomeViewModelBase.moreImageLoadingProgressState');
+  final _$showExploreWidgetAtom =
+      Atom(name: '_HomeViewModelBase.showExploreWidget');
 
   @override
-  bool get moreImageLoadingProgressState {
-    _$moreImageLoadingProgressStateAtom.reportRead();
-    return super.moreImageLoadingProgressState;
+  bool get showExploreWidget {
+    _$showExploreWidgetAtom.reportRead();
+    return super.showExploreWidget;
   }
 
   @override
-  set moreImageLoadingProgressState(bool value) {
-    _$moreImageLoadingProgressStateAtom
-        .reportWrite(value, super.moreImageLoadingProgressState, () {
-      super.moreImageLoadingProgressState = value;
+  set showExploreWidget(bool value) {
+    _$showExploreWidgetAtom.reportWrite(value, super.showExploreWidget, () {
+      super.showExploreWidget = value;
     });
   }
 
   final _$getPostsAsyncAction = AsyncAction('_HomeViewModelBase.getPosts');
 
   @override
-  Future<List<PostModel>> getPosts(Widget postBody) {
-    return _$getPostsAsyncAction.run(() => super.getPosts(postBody));
+  Future<List<PostModel>> getPosts() {
+    return _$getPostsAsyncAction.run(() => super.getPosts());
   }
 
   final _$_HomeViewModelBaseActionController =
       ActionController(name: '_HomeViewModelBase');
 
   @override
-  dynamic changeHomeBody(Widget body) {
-    final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
-        name: '_HomeViewModelBase.changeHomeBody');
-    try {
-      return super.changeHomeBody(body);
-    } finally {
-      _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic changePostsScrollable(ScrollPhysics? physics) {
+  dynamic changePostsScrollable(ScrollPhysics physics) {
     final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
         name: '_HomeViewModelBase.changePostsScrollable');
     try {
@@ -127,23 +100,11 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   }
 
   @override
-  dynamic changeMoreImageLoadingProgressState() {
-    final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
-        name: '_HomeViewModelBase.changeMoreImageLoadingProgressState');
-    try {
-      return super.changeMoreImageLoadingProgressState();
-    } finally {
-      _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 posts: ${posts},
-homeBody: ${homeBody},
 postsScrollable: ${postsScrollable},
-moreImageLoadingProgressState: ${moreImageLoadingProgressState}
+showExploreWidget: ${showExploreWidget}
     ''';
   }
 }
