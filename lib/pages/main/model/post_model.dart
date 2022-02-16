@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../../app/constants/app_constants.dart';
 
 class PostModel {
@@ -16,12 +15,16 @@ class PostModel {
   bool? replyed;
   String? replyedPostId;
   String? replyedUserId;
+  bool? isPostDeleted = false;
+  bool? hasImage;
+  String postPath;
 
   PostModel({
     required this.postId,
     required this.authorId,
     required this.imageLinks,
     required this.imagesDominantColors,
+    required this.postPath,
     this.postNotifications = true,
     this.text,
     this.createdAt,
@@ -31,6 +34,8 @@ class PostModel {
     this.replyed = false,
     this.replyedPostId,
     this.replyedUserId,
+    this.isPostDeleted,
+    this.hasImage,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -48,6 +53,9 @@ class PostModel {
       replyed: json['replyed'] as bool?,
       replyedPostId: json['replyed_postId'] as String?,
       replyedUserId: json['replyed_userId'] as String?,
+      isPostDeleted: json['is_post_deleted'] as bool?,
+      hasImage: json['has_image'] as bool?,
+      postPath: json['post_path'] as String,
     );
   }
 
@@ -63,12 +71,17 @@ class PostModel {
         'text': text,
         'post_notifications': postNotifications,
         'replyed': replyed,
-        'replyed_postId' : replyedPostId,
-        'replyed_userId' : replyedUserId,
+        'replyed_postId': replyedPostId,
+        'replyed_userId': replyedUserId,
+        'is_post_deleted': isPostDeleted,
+        'has_image': hasImage,
+        'post_path': postPath
       };
 
   @override
   String toString() =>
-      "[[[(((PostId: $postId | Text: $text | AuthorId: $authorId | CreatedAt: $createdAt | LikeCount: $likeCount | CommentCount: $commentCount" +
-      "| ImageLinks: {{{$imageLinks}}} | ImageDominantColors: {{{$imagesDominantColors}}} | PostNotifications: $postNotifications)))]]]";
+      "[[[(((PostId: $postId | Text: $text | AuthorId: $authorId | CreatedAt: $createdAt | LikeCount: $likeCount | CommentCount: $commentCount"
+      "| ImageLinks: {{{$imageLinks}}} | ImageDominantColors: {{{$imagesDominantColors}}}"
+      "| PostNotifications: $postNotifications | IsPostDeleted: $isPostDeleted | HasImage: $hasImage"
+      "| PostPath: $postPath)))]]]";
 }
