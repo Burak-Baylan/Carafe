@@ -13,16 +13,16 @@ abstract class _AuthenticateViewModelBase with Store{
   int signupPageIndex = 1;
 
   @observable
-  String headerImage = SVGConstants.instance.login;
+  String headerImage = SVGConstants.login;
 
   @action
   changeHeaderImage(int index) {
     switch (index) {
       case 0:
-        headerImage = SVGConstants.instance.login;
+        headerImage = SVGConstants.login;
         break;
       case 1:
-        headerImage = SVGConstants.instance.signup;
+        headerImage = SVGConstants.signup;
         break;
     }
   }

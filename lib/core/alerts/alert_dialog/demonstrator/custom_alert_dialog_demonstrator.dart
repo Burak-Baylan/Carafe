@@ -18,6 +18,7 @@ class CustomAlerDialogDemonstrator {
     Function? onPressedPositiveButton,
     Function? onPressedNegativeButton,
     double? borderRadius,
+    bool dismissible = true,
   }) {
     CustomAlertDialog(
       context: context,
@@ -30,6 +31,7 @@ class CustomAlerDialogDemonstrator {
       onPressedNegativeButton: onPressedNegativeButton,
       negativeButtonText: negativeButtonText,
       borderRadius: borderRadius,
+      dismissible: dismissible,
     ).show();
   }
 }

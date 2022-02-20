@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/widgets/animated_button.dart';
-import '../../../../../core/widgets/border_container.dart';
 import '../view_model/add_post_view_model.dart';
 
 class AddPostAppBar extends StatelessWidget {
@@ -14,20 +12,20 @@ class AddPostAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    return BorderContainer(
-      bottomLeft: 20,
-      bottomRight: 20,
-      elevation: 3,
-      child: SizedBox(
-        width: context.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildClosePageButton,
-            _shareButton,
-          ],
+    return Column(
+      children: [
+        SizedBox(
+          width: context.width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildClosePageButton,
+              _shareButton,
+            ],
+          ),
         ),
-      ),
+        const Divider(height: 0, thickness: 0.5),
+      ],
     );
   }
 
@@ -55,7 +53,7 @@ class AddPostAppBar extends StatelessWidget {
 
   Widget get _buildClosePageButton => IconButton(
         icon: const Icon(Icons.close),
-        color: Colors.black,
+        color: context.colorScheme.primary,
         onPressed: () => viewModel.controlAndCloseThePage,
       );
 }

@@ -30,14 +30,13 @@ class _AuthenticateViewState extends BaseView<AuthenticateView>
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
-    tabController!.addListener(() {
-      authVm.changeHeaderImage(tabController!.index);
-    });
+    tabController!
+        .addListener(() => authVm.changeHeaderImage(tabController!.index));
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Observer(
+    return Observer(
       builder: (_) => Scaffold(
         backgroundColor: context.colorScheme.background,
         body: SafeArea(
@@ -45,9 +44,7 @@ class _AuthenticateViewState extends BaseView<AuthenticateView>
             children: [
               _buildImage,
               _buildTabBar,
-              Expanded(
-                child: _tabBarView,
-              ),
+              Expanded(child: _tabBarView),
             ],
           ),
         ),
@@ -57,7 +54,6 @@ class _AuthenticateViewState extends BaseView<AuthenticateView>
 
   TabBarView get _tabBarView => TabBarView(
         controller: tabController,
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           LoginScreen(),
           SignupView(),
@@ -89,8 +85,7 @@ class _AuthenticateViewState extends BaseView<AuthenticateView>
         indicatorColor: context.colorScheme.primary,
         indicatorWeight: 3,
         indicatorSize: TabBarIndicatorSize.label,
-        // ignore: prefer_const_literals_to_create_immutables
-        tabs: [
+        tabs: const [
           Tab(text: "Login"),
           Tab(text: "Signup"),
         ],

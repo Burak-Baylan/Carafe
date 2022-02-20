@@ -182,7 +182,7 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
     return pinnedPostModel;
   }
 
-  showUnfollowAlert() => showAlert(
+  void showUnfollowAlert() => showAlert(
         'Unfollow ${userModel!.username}?',
         'Are you sure you want to unfollow @${userModel!.username}',
         context: context!,

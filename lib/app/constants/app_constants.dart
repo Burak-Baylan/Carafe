@@ -30,10 +30,12 @@ class PostContstants {
   static const String GAMES = "Games";
   static const String ADVICES = "Advices";
   static const String ENTERPRISE = "Enterprise";
+  static const String PINNED_POST = "Pinned Post";
 
   static const IconData TECHNOLOGY_ICON = Icons.phone_android_outlined;
   static const IconData SOFTWARE_ICON = Icons.laptop_mac_outlined;
   static const IconData GAMES_ICON = Icons.games_outlined;
   static const IconData ADVICES_ICON = Icons.book_outlined;
   static const IconData ENTERPRISE_ICON = Icons.attach_money_outlined;
+  static const IconData PINNED_POST_ICON = Icons.push_pin_sharp;
 }

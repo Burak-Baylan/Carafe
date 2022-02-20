@@ -18,6 +18,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.message,
     this.disableNegativeButton = false,
     this.disablePositiveButton = false,
+    this.dismissible = true,
   }) : super(key: key);
 
   BuildContext context;
@@ -31,7 +32,7 @@ class CustomAlertDialog extends StatelessWidget {
   Function? onPressedNegativeButton;
   Function? onPressedPositiveButton;
   List<Widget>? children;
-  bool dismissable = true;
+  bool dismissible;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class CustomAlertDialog extends StatelessWidget {
   }
 
   show() => showDialog(
-        barrierDismissible: dismissable,
+        barrierDismissible: dismissible,
         context: context,
         builder: (context) => this,
       );
