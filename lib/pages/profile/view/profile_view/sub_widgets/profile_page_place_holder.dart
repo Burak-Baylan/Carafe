@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/extensions/context_extensions.dart';
-import '../../../../core/extensions/double_extensions.dart';
+import '../../../../../core/extensions/context_extensions.dart';
+import '../../../../../core/extensions/double_extensions.dart';
 import 'place_holders/profile_following_and_followers_place_holder_layout.dart';
 import 'place_holders/profile_view_description_place_holder.dart';
 import 'place_holders/profile_view_follow_button_place_holder.dart';
