@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/extensions/context_extensions.dart';
-import '../../../../../core/extensions/double_extensions.dart';
-import '../../../../../core/widgets/place_holder_with_border.dart';
+import '../../../../../../core/extensions/context_extensions.dart';
+import '../../../../../../core/extensions/double_extensions.dart';
+import '../../../../../../core/widgets/place_holder_with_border.dart';
 
 class ProfileViewDescriptionPlaceHolder extends StatelessWidget {
   ProfileViewDescriptionPlaceHolder({Key? key}) : super(key: key);
