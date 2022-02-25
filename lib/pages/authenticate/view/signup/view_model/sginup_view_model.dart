@@ -104,37 +104,9 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     passwordLock = !passwordLock;
   }
 
-  String? usernameValidator(String? text) {
-    if (text == null || text.isEmpty) {
-      return "Username cannot be empty";
-    }
-    if (!text.isUsernameValid) {
-      return "Username characters can be only alphabets, numbers, or underscores.";
-    }
-    if (text.length < 5) {
-      return "Username cannot be less than 5 characters";
-    }
-    if (text.length > 16) {
-      return "Username cannot be greater than 16 characters";
-    }
-    return null;
-  }
+  String? usernameValidator(String? text) => text?.usernameValidator;
 
-  String? displayNameValidator(String? text) {
-    if (text == null || text.isEmpty) {
-      return "Display Name cannot be empty";
-    }
-    if (!text.isDisplayNameValid) {
-      return "Display Name characters can be only alphabets, numbers, or underscores.";
-    }
-    if (text.length < 6) {
-      return "Display Name cannot be less than 6 characters";
-    }
-    if (text.length > 15) {
-      return "Display Name cannot be greater than 15 characters";
-    }
-    return null;
-  }
+  String? displayNameValidator(String? text) => text?.displayNameValidator;
 
   showSignupSuccessAlert() => showAlert(
         "Success",

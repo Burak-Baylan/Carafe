@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
-
 import '../constants/global_constants/constants.dart';
 
 extension StringExtension on String {
@@ -22,6 +20,8 @@ extension StringExtension on String {
     return null;
   }
 
+  bool get urlControl => Uri.tryParse(this)?.hasAbsolutePath ?? false;
+
   bool get isUsernameValid =>
       RegExp(GlobalConstants.USERNAME_REGEX).hasMatch(this);
 
@@ -32,4 +32,36 @@ extension StringExtension on String {
       Color(int.parse((("#" + this).substring(1, 7)), radix: 16) + 0xFF000000);
 
   String get randomId => const Uuid().v1();
+
+  String? get usernameValidator {
+    if (this == null || isEmpty) {
+      return "Username cannot be empty";
+    }
+    if (!isUsernameValid) {
+      return "Username characters can be only alphabets, numbers, or underscores.";
+    }
+    if (length < 5) {
+      return "Username cannot be less than 5 characters";
+    }
+    if (length > 16) {
+      return "Username cannot be greater than 16 characters";
+    }
+    return null;
+  }
+
+  String? get displayNameValidator {
+    if (this == null || isEmpty) {
+      return "Display Name cannot be empty";
+    }
+    if (!isDisplayNameValid) {
+      return "Display Name characters can be only alphabets, numbers, or underscores.";
+    }
+    if (length < 6) {
+      return "Display Name cannot be less than 6 characters";
+    }
+    if (length > 15) {
+      return "Display Name cannot be greater than 15 characters";
+    }
+    return null;
+  }
 }
