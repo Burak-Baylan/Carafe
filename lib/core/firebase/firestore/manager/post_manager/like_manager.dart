@@ -12,14 +12,28 @@ class PostLikeManager extends FirebaseBase {
   late String userId;
   late String postId;
 
-  Map<String, dynamic> _getLikeJson(Timestamp currentTime) =>
-      LikeModel(authorId: userId, createdAt: currentTime).toJson();
+  Map<String, dynamic> _getLikeJson(
+          DocumentReference ref, Timestamp currentTime, String postId) =>
+      LikeModel(
+              authorId: userId,
+              postId: postId,
+              createdAt: currentTime,
+              likedPostRefPath: ref.path)
+          .toJson();
 
-  Future<bool> likePost(DocumentReference docRef, Timestamp currentTime) async {
+  Future<bool> likePost(
+    DocumentReference docRef,
+    Timestamp currentTime,
+    String postId,
+  ) async {
     userId = authService.userId.toString();
     await _incraseLike(docRef);
-    Map<String, dynamic> json = _getLikeJson(currentTime);
-    var addRespones = await firebaseService.addDocument(_likeRef(docRef), json);
+    Map<String, dynamic> likeJson = _getLikeJson(docRef, currentTime, postId);
+    var addRespones =
+        await firebaseService.addDocument(_likeRef(docRef), likeJson);
+    await firebaseService.addDocument(
+        firebaseConstants.currentUserLikedPostsCollectionRef.doc(postId),
+        likeJson);
     return await _controlResponse(addRespones, _likeRef(docRef));
   }
 
@@ -33,9 +47,11 @@ class PostLikeManager extends FirebaseBase {
     return true;
   }
 
-  Future<bool> unlikePost(DocumentReference ref) async {
+  Future<bool> unlikePost(DocumentReference ref, String postId) async {
     userId = authService.userId.toString();
     await _decraseLike(ref);
+    await firebaseService.deleteDocument(
+        firebaseConstants.currentUserLikedPostsCollectionRef.doc(postId));
     var deleteResponse = await _deleteLikeFromFirebase(ref);
     if (deleteResponse.errorMessage != null) {
       await _incraseLike(ref);
