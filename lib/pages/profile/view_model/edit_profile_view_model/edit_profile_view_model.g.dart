@@ -28,7 +28,7 @@ mixin _$EditProfileViewModel on _EditProfileViewModelBase, Store {
       ActionController(name: '_EditProfileViewModelBase');
 
   @override
-  dynamic changePpImageFile(File? file) {
+  void changePpImageFile(File? file) {
     final _$actionInfo = _$_EditProfileViewModelBaseActionController
         .startAction(name: '_EditProfileViewModelBase.changePpImageFile');
     try {

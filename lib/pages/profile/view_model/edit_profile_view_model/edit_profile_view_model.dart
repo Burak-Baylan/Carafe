@@ -23,10 +23,10 @@ abstract class _EditProfileViewModelBase extends BaseViewModel with Store {
   File? ppImageFile;
 
   @action
-  changePpImageFile(File? file) => ppImageFile = file;
+  void changePpImageFile(File? file) => ppImageFile = file;
 
   @override
-  setContext(BuildContext context) {
+  void setContext(BuildContext context) {
     this.context = context;
     prepareCurrentValues();
   }
@@ -107,7 +107,8 @@ abstract class _EditProfileViewModelBase extends BaseViewModel with Store {
     }
 
     if (isWebsiteChanged()) {
-      if (!(newWebsite.urlControl)) {
+      if (!(newWebsite.urlControl) && newWebsite != '') {
+        dismissLoadingBar();
         showToast("Url type is not correct");
         return;
       }
@@ -158,7 +159,7 @@ abstract class _EditProfileViewModelBase extends BaseViewModel with Store {
     );
   }
 
-  selectDateTime(DateTime date) {
+  void selectDateTime(DateTime date) {
     var formattedDate = DateFormat("MMMM d, yyyy").format(date);
     birthDate = Timestamp.fromDate(date);
     birthDateController.text = formattedDate;
