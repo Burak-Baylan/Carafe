@@ -1,8 +1,11 @@
+import 'package:Carafe/pages/main/sub_views/report/view/report_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../../../../../../../core/base/view_model/base_view_model.dart';
+import '../../../../../../../../../../core/firebase/firestore/manager/post_manager/post_manager.dart';
 import '../../../../../../../../../authenticate/model/user_model.dart';
 import '../../../../../../../../model/post_model.dart';
+import '../../../../view_model/post_view_model.dart';
 part 'post_menu_view_model.g.dart';
 
 class PostMenuViewModel = _PostMenuViewModelBase with _$PostMenuViewModel;
@@ -11,12 +14,20 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
   @override
   BuildContext? context;
   @override
-  setContext(BuildContext context) => this.context = context;
+  setContext(BuildContext context) {
+    this.context = context;
+    postManager = firebasePostManager;
+  }
 
   late PostModel postModel;
   late UserModel postOwnerUserModel;
+  late PostViewModel postViewModel;
   setPostModel(PostModel postModel) => this.postModel = postModel;
   setUserModel(UserModel userModel) => postOwnerUserModel = userModel;
+  setPostViewModel(PostViewModel postViewModel) =>
+      this.postViewModel = postViewModel;
+
+  late FirebasePostManager postManager;
 
   @observable
   String pinButtonText = 'Pin to profile';
@@ -38,7 +49,8 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
   @observable
   @action
   Future<bool> findPinButtonActionAndText() async {
-    var data = await postManager.userPinnedPostState(postOwnerUserModel.userId, postModel.postId);
+    var data = await postManager.userPinnedPostState(
+        postOwnerUserModel.userId, postModel.postId);
     if (data.error != null) return false;
     if (data.data!) {
       pinButtonText = "Pin to profile";
@@ -55,14 +67,24 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
     var data = await userManager.followingState(postModel.authorId);
     if (data.error != null) return false;
     if (data.data!) {
-      followButtonText = 'Follow';
-      currentUserIsFollowingThePostOwner = false;
-    } else {
-      followButtonText = "Unfollow";
+      followButtonText = 'Unfollow';
       currentUserIsFollowingThePostOwner = true;
+    } else {
+      followButtonText = "Follow";
+      currentUserIsFollowingThePostOwner = false;
     }
     return true;
   }
+
+  void reportClicked(ReportType reportType) => customNavigateToPage(
+        page: ReportView(
+          reportType: reportType,
+          userModel: postOwnerUserModel,
+          postModel: postModel,
+          viewModel: postViewModel,
+        ),
+        animate: true,
+      );
 
   Future pinProfileClicked() async {
     if (thisPostPinnedToProfile) {
@@ -81,8 +103,7 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
   }
 
   Future pinToProfile() async {
-    var response =
-        await postManager.pinPostToProfile(currentTime, postModel.postId);
+    var response = await postManager.pinPostToProfile(currentTime, postModel);
     if (!response) showPostNotPinnedAlert();
     showPostPinnedSuccessfullyAlert();
   }
@@ -106,6 +127,15 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
     showUnfollowingSuccessAlert();
   }
 
+  Future deletePost() async => showAlert(
+        'Delete Post',
+        'Are you sure you want to delete this post? You can\'t get it back.',
+        context: context!,
+        positiveButtonText: 'Delete',
+        negativeButtonText: 'Cancel',
+        onPressedPositiveButton: () => postViewModel.delete(postModel.replyed!),
+      );
+
   void showPostPinnedSuccessfullyAlert() => showToast("Post pinned");
 
   void showPostNotPinnedAlert() => showToast("Could not be pinned");
@@ -115,12 +145,12 @@ abstract class _PostMenuViewModelBase extends BaseViewModel with Store {
   void showPostNotUnpinnedAlert() => showToast("Could not be unpinned");
 
   void showFollowingSuccessAlert() =>
-      showToast("You followed '${postOwnerUserModel.username}'");
+      showToast("You followed @${postOwnerUserModel.username}");
 
   void showFollowingUnsuccessAlert() => showToast("Could not be followed");
 
   void showUnfollowingSuccessAlert() =>
-      showToast("You unfollowed '${postOwnerUserModel.username}'");
+      showToast("You unfollowed @${postOwnerUserModel.username}");
 
   void showUnfollowingUnsuccessAlert() => showToast("Could not be unfollowed");
 }

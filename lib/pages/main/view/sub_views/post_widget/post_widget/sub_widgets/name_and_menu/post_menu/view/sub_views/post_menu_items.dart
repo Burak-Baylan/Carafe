@@ -1,3 +1,4 @@
+import 'package:Carafe/pages/main/sub_views/report/view/report_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../../../../../../app/constants/app_constants.dart';
@@ -11,35 +12,36 @@ class PostMenuItems {
   UserModel userModel;
   PostModel postModel;
   BuildContext context;
+  Function? onPostPinnedOrUnpinned;
 
   PostMenuItems({
     required this.context,
     required this.postMenuVm,
     required this.userModel,
     required this.postModel,
+    this.onPostPinnedOrUnpinned,
   });
 
   List<Widget> postOwnerItems() {
+    postMenuVm.postViewModel.saveLock;
     return [
       Observer(
         builder: (_) => _listItem(
           3,
           postMenuVm.pinButtonText,
-          () async =>
-              itemClicked(() async => await postMenuVm.pinProfileClicked()),
+          () async => itemClicked(() async {
+            await postMenuVm.pinProfileClicked();
+            if (onPostPinnedOrUnpinned != null) {
+              onPostPinnedOrUnpinned!();
+            }
+          }),
           Icons.push_pin_outlined,
         ),
       ),
       _listItem(
         3,
-        "Edit",
-        () => context.pop,
-        Icons.edit_outlined,
-      ),
-      _listItem(
-        3,
         "Delete",
-        () => context.pop,
+        () => itemClicked(() async => await postMenuVm.deletePost()),
         Icons.delete_forever_outlined,
       ),
     ];
@@ -48,32 +50,32 @@ class PostMenuItems {
   List<Widget> somoneElsePostItems() {
     var username = userModel.username;
     return [
-      //! //TODO ?
-      Observer(
-        builder: (_) => _listItem(
-          2,
-          '${postMenuVm.followButtonText} \'$username\'',
-          () async =>
-              itemClicked(() async => await postMenuVm.followUserClicked()),
-          Icons.person_add_alt_outlined,
-        ),
+      _listItem(
+        2,
+        '${postMenuVm.followButtonText} @$username',
+        () async =>
+            itemClicked(() async => await postMenuVm.followUserClicked()),
+        Icons.person_add_alt_outlined,
       ),
       _listItem(
         2,
-        'Block \'$username\'',
+        'Block @$username',
         () => context.pop,
         Icons.block_outlined,
       ),
       _listItem(
         2,
-        'Report \'$username\'',
-        () => context.pop,
+        'Report @$username',
+        () =>
+            itemClicked(() => postMenuVm.reportClicked(ReportType.userReport)),
         Icons.report_gmailerrorred_outlined,
       ),
+      const Divider(height: 0),
       _listItem(
         2,
         'Report post',
-        () => context.pop,
+        () =>
+            itemClicked(() => postMenuVm.reportClicked(ReportType.postReport)),
         Icons.flag_outlined,
       ),
     ];
