@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../../../core/extensions/double_extensions.dart';
@@ -17,7 +18,7 @@ class FullScreenPostBottomLayoutSmallButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      customBorder: const CircleBorder(),
+      borderRadius: 10.radiusAll,
       onTap: () => onTab(),
       child: Padding(
         padding: 3.0.edgeIntesetsAll,

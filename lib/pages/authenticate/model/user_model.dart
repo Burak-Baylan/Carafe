@@ -1,10 +1,8 @@
-import 'package:Carafe/core/extensions/color_extensions.dart';
-import 'package:Carafe/core/extensions/string_extensions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../../app/constants/app_constants.dart';
+import '../../../core/extensions/color_extensions.dart';
+import '../../../core/extensions/string_extensions.dart';
 
 class UserModel {
   String displayName;
@@ -22,6 +20,8 @@ class UserModel {
   bool verified;
   Color profilePhotoBackgroundColor;
   bool notifications;
+  Timestamp? birthDate;
+  String? website;
 
   UserModel({
     required this.userId,
@@ -39,6 +39,8 @@ class UserModel {
     this.notifications = true,
     this.displayNameLowerCase,
     this.usernameLowerCase,
+    this.birthDate,
+    this.website,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +62,8 @@ class UserModel {
       notifications: json['notifications'] as bool,
       displayNameLowerCase: json['display_name_lower_case'] as String?,
       usernameLowerCase: json['username_lower_case'],
+      birthDate: json['birth_date'],
+      website: json['website'],
     );
   }
 
@@ -79,6 +83,8 @@ class UserModel {
         'notifications': notifications,
         'display_name_lower_case': displayNameLowerCase,
         'username_lower_case': usernameLowerCase,
+        'birth_date': birthDate,
+        'website': website
       };
 
   @override
@@ -88,6 +94,6 @@ class UserModel {
         ' --||-- profilePrivacy: $profilePrivacy --||-- followersCount: $followersCount --||-- followingCount: $followingCount'
         ' --||-- verified: $verified --||-- profilePhotoBackgroundColor: $profilePhotoBackgroundColor --||--'
         ' --||-- notifications: $notifications --||-- display_name_lower_case: $displayNameLowerCase --||-- '
-        'username_lower_case: $usernameLowerCase)))]]]}}}';
+        'username_lower_case: $usernameLowerCase --||-- birth_date: $birthDate --||-- website: $website)))]]]}}}';
   }
 }

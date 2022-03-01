@@ -31,12 +31,15 @@ class CustomTextFormField extends StatelessWidget {
     this.fontSize,
     this.maxLength,
     this.hideCounterText,
+    this.inputDecoration,
+    this.iconSize,
   }) : super(key: key);
 
   final TextInputType? keyboardType;
   final TextEditingController controller;
   final String? labelText;
   final IconData? icon;
+  final double? iconSize;
   final bool readOnly;
   final String? Function(String?)? validator;
   final String? hintText;
@@ -54,6 +57,7 @@ class CustomTextFormField extends StatelessWidget {
   final double? fontSize;
   final int? maxLength;
   final bool? hideCounterText;
+  final InputDecoration? inputDecoration;
   bool obscureText;
 
   late BuildContext context;
@@ -83,10 +87,8 @@ class CustomTextFormField extends StatelessWidget {
         readOnly: readOnly,
         controller: controller,
         obscureText: obscureText,
-        decoration: _buildInputDecoration(
-          text: labelText,
-          icon: icon,
-        ),
+        decoration: inputDecoration ??
+            _buildInputDecoration(text: labelText, icon: icon),
         style: _textStyle,
       );
 
@@ -117,6 +119,7 @@ class CustomTextFormField extends StatelessWidget {
       child: Icon(
         icon,
         color: iconColor ?? context.colorScheme.primary,
+        size: iconSize,
       ),
     );
   }

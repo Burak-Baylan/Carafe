@@ -1,12 +1,10 @@
 import '../../extensions/string_extensions.dart';
 
 class SVGConstants {
-  static SVGConstants? _instance;
-  static SVGConstants get instance =>
-      _instance = _instance == null ? SVGConstants._init() : _instance!;
-  SVGConstants._init();
-
-  String get login => "login".toSvg;
-  String get signup => "signup".toSvg;
-  String get forgotPassword => "forgotPassword".toSvg;
+  static String get login => "login".toSvg;
+  static String get signup => "signup".toSvg;
+  static String get forgotPassword => "forgotPassword".toSvg;
+  static String get sad => 'sad'.toSvg;
+  static String get nothingHere => 'nothing_here'.toSvg;
+  static String get noFollowing => 'no_following'.toSvg;
 }

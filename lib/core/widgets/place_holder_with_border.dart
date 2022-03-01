@@ -32,7 +32,7 @@ class PlaceHolderWithBorder extends StatelessWidget {
 
   _initializeValues(BuildContext context){
     width = width ?? context.width / 9;
-    height = height ?? context.height / 70;
+    height = height ?? context.height / 90;
     color = color ?? Colors.grey[300];
   }
 }

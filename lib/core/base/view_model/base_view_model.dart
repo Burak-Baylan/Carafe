@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../../alerts/alert_dialog/demonstrator/custom_alert_dialog_demonstrator.dart';
+import '../../alerts/alert_dialog/custom_alert_dialog.dart';
 import '../../extensions/double_extensions.dart';
 import '../../firebase/base/firebase_base.dart';
 import '../../helpers/colorful_print.dart';
@@ -13,36 +13,41 @@ import '../../init/navigation/service/navigation_service.dart';
 
 abstract class BaseViewModel with FirebaseBase {
   BuildContext? context;
-  setContext(BuildContext context);
+  void setContext(BuildContext context);
 
   Timestamp get currentTime => Timestamp.now();
 
   ImageColorsGetter imageColorsGetter = ImageColorsGetter();
   HiveHelper hiveHelper = HiveHelper.instance;
 
-  navigateToPage({required String path, required Object? data}) =>
+  void navigateToPage({required String path, required Object? data}) =>
       NavigationService.instance.navigateToPage(path: path, data: data);
-  replacePage({required String path, required Object? data}) =>
+  void replacePage({required String path, required Object? data}) =>
       NavigationService.instance.replacePageNamed(path: path, data: data);
 
-  customNavigateToPage({required Widget page, bool animate = false}) =>
+  void customNavigateToPage({required Widget page, bool animate = false}) =>
       NavigationService.instance.customNavigateToPage(page, animate: animate);
-  customReplacePage({required Widget page, bool animate = false}) =>
+
+  void customReplacePage({
+    required Widget page,
+    bool animate = false,
+  }) =>
       NavigationService.instance.replacePage(page, animate: animate);
 
-  bottomToTopAnimation(Widget child, Animation<double> animation) =>
+  SlideTransition bottomToTopAnimation(
+          Widget child, Animation<double> animation) =>
       SlideTransition(
         child: child,
         position: Tween<Offset>(begin: 1.0.offsetY, end: 0.0.offsetXY)
             .animate(animation),
       );
 
-  showToast(String message) => Fluttertoast.showToast(msg: message);
+  void showToast(String message) => Fluttertoast.showToast(msg: message);
 
-  showNoInternetAlert(BuildContext context) =>
+  void showNoInternetAlert(BuildContext context) =>
       NoInternetAlertDialog.show(context);
 
-  showAlert(
+  void showAlert(
     String title,
     String message, {
     required BuildContext context,
@@ -53,10 +58,11 @@ abstract class BaseViewModel with FirebaseBase {
     Function? onPressedPositiveButton,
     Function? onPressedNegativeButton,
     double? borderRadius,
+    bool dismissible = true,
   }) =>
-      CustomAlerDialogDemonstrator.instance.show(
-        title,
-        message,
+      CustomAlertDialog(
+        title: title,
+        message: message,
         context: context,
         disableNegativeButton: disableNegativeButton,
         disablePositiveButton: disablePositiveButton,
@@ -65,13 +71,14 @@ abstract class BaseViewModel with FirebaseBase {
         onPressedNegativeButton: onPressedNegativeButton,
         onPressedPositiveButton: onPressedPositiveButton,
         borderRadius: borderRadius,
-      );
+        dismissible: dismissible,
+      ).show();
 
-  printYellow(String text) => ColorfulPrint.yellow(text);
+  void printYellow(String text) => ColorfulPrint.yellow(text);
 
-  printRed(String text) => ColorfulPrint.red(text);
+  void printRed(String text) => ColorfulPrint.red(text);
 
-  printGreen(String text) => ColorfulPrint.green(text);
+  void printGreen(String text) => ColorfulPrint.green(text);
 
   get randomId => getRandomId();
 }

@@ -5,7 +5,6 @@ import '../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../../core/extensions/widget_extension.dart';
 import '../../../../../../../core/widgets/center_dot_text.dart';
-import '../../../../../../../core/widgets/small_circular_progress_indicator.dart';
 import '../../../../../../../main.dart';
 import '../../../../../model/post_model.dart';
 import '../../../../sub_views/post_widget/post_widget/post_widget.dart';
@@ -41,7 +40,6 @@ class _HomeViewState extends State<HomeView>
       appBar: _appBar,
       body: Column(
         children: [
-          const Divider(height: 1, thickness: 1),
           Expanded(
             child: FutureBuilder<List<PostModel>>(
               future: postsFuture,
@@ -95,13 +93,6 @@ class _HomeViewState extends State<HomeView>
               ),
             )
           ],
-        ),
-      );
-
-  Widget get morePostLoadingWidget => const Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
-        child: Center(
-          child: SmallCircularProgressIndicator(),
         ),
       );
 
@@ -160,6 +151,10 @@ class _HomeViewState extends State<HomeView>
             color: context.theme.colorScheme.primary,
           ),
         ),
+        bottom: PreferredSize(
+          preferredSize: Size(context.width, 1),
+          child: const Divider(height: 1, thickness: 1),
+        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -174,10 +169,11 @@ class _HomeViewState extends State<HomeView>
 
   Widget get _leading => Container(
         margin: 7.0.edgeIntesetsAll,
-        child: Observer(builder: (_) => PostProfilePhoto(
-            imageUrl: (mainVm.currentUserModel)?.photoUrl,
-            onClicked: (_) => context.openDrawer,
-          )),
+        child: Observer(
+            builder: (_) => PostProfilePhoto(
+                  imageUrl: (mainVm.currentUserModel)?.photoUrl,
+                  onClicked: (_) => context.openDrawer,
+                )),
       );
 
   @override

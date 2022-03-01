@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import '../../../../../../app/constants/app_constants.dart';
 import '../../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../../../core/data/custom_data.dart';
@@ -17,7 +16,7 @@ class RegisterUser extends BaseViewModel {
   late SignupViewModel vm;
   late CustomData<UserCredential> authenticationResponse;
 
-  Future register(
+  Future<void> register(
     CustomData<UserCredential> response,
     SignupViewModel viewModel,
   ) async {
@@ -77,8 +76,10 @@ class RegisterUser extends BaseViewModel {
         notifications: true,
         displayNameLowerCase: vm.displayName?.toLowerCase(),
         usernameLowerCase: vm.username?.toLowerCase(),
+        birthDate: null,
+        website: null,
       );
 
   @override
-  setContext(BuildContext context) {}
+  setContext(context) {}
 }

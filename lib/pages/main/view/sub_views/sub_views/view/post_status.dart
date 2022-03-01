@@ -3,6 +3,7 @@ import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
 import '../../../../../../core/widgets/border_container.dart';
+import '../../../../../../core/widgets/small_circular_progress_indicator.dart';
 import '../../../../model/post_model.dart';
 import '../../post_widget/post_widget/view_model/post_view_model.dart';
 import '../view_model/post_status_view_model.dart';
@@ -44,7 +45,7 @@ class _PostStatusViewState extends State<PostStatusView> {
           if (snapshot.connectionState == ConnectionState.done) {
             return body;
           }
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: SmallCircularProgressIndicator());
         },
       ),
     );

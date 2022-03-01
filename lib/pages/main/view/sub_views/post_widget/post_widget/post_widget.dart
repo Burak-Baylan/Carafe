@@ -6,11 +6,11 @@ import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
 import '../../../../model/post_model.dart';
 import '../../../home/view_model/home_view_model.dart';
-import 'sub_widgets/bottom_layout.dart';
 import 'sub_widgets/name_and_menu/name_and_menu.dart';
 import 'sub_widgets/post_image_widget/post_images.dart';
 import 'sub_widgets/post_skeleton.dart';
 import 'sub_widgets/post_top_information.dart';
+import 'sub_widgets/post_widget_bottom_layout.dart';
 import 'sub_widgets/profile_photo.dart';
 import 'view_model/post_view_model.dart';
 
@@ -66,7 +66,9 @@ class _PostWidgetState extends State<PostWidget> {
                     ? 0.sizedBoxOnlyHeight
                     : 15.sizedBoxOnlyHeight,
                 PostSkeleton(
-                    closeCardView: widget.closeCardView, child: _postContainer)
+                  closeCardView: widget.closeCardView,
+                  child: _postContainer,
+                )
               ],
             )
           : postIsDeletedWidget,
@@ -103,7 +105,7 @@ class _PostWidgetState extends State<PostWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widget.ppWidget ?? _buildPp,
-                5.sizedBoxOnlyWidth,
+                10.sizedBoxOnlyWidth,
                 Expanded(child: _postComponents),
               ],
             ),
@@ -142,15 +144,17 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
 
-  Widget get _buildPp => Observer(builder: (_) {
-        return PostProfilePhoto(
+  Widget get _buildPp => Observer(
+        builder: (_) => PostProfilePhoto(
+          height: context.width / 7.5,
+          width: context.width / 7.5,
           postModel: model,
           postViewModel: postViewModel,
           imageUrl: postViewModel.userModel != null
               ? postViewModel.userModel!.photoUrl
               : null,
-        );
-      });
+        ),
+      );
 
   Widget get _nameAndMoreMenu => PostNameAndMenu(
         postModel: model,
@@ -183,7 +187,6 @@ class _PostWidgetState extends State<PostWidget> {
   void _initializeValues() async {
     postViewModel.setPostModel(widget.model);
     postViewModel.setContext(context);
-    postViewModel.setHomeViewModel(widget.homeViewModel);
     postViewModel.initializeValues();
     model = widget.model;
     await postViewModel.addToPostViews();

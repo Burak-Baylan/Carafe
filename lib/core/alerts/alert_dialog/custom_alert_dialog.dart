@@ -39,13 +39,13 @@ class CustomAlertDialog extends StatelessWidget {
     return _buildDialog;
   }
 
-  show() => showDialog(
+  void show() => showDialog(
         barrierDismissible: dismissible,
         context: context,
         builder: (context) => this,
       );
 
-  get _buildDialog => AlertDialog(
+  Widget get _buildDialog => AlertDialog(
         shape: _shape,
         content: Wrap(
           children: [

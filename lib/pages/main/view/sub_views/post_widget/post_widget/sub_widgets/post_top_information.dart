@@ -67,7 +67,7 @@ class PostTopInformation extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: (context.height * 0.075),
+              width: context.width / 7.5,
               child: Align(
                 child: categoryNameIsNull
                     ? null
@@ -77,7 +77,7 @@ class PostTopInformation extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 5),
+              padding: const EdgeInsets.only(left: 10),
               child: InkWell(
                 onTap: () {},
                 child: Text(

@@ -83,7 +83,7 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
     return posts;
   }
 
-  loadMoreCommentsLockControl(int size) {
+  void loadMoreCommentsLockControl(int size) {
     if (size < firebaseConstants.numberOfPostsToBeReceiveAtOnce) {
       lockCanUploadMorePost();
       changeShowExploreWidgetState(true);
