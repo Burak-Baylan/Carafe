@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/alerts/alert_dialog/demonstrator/custom_alert_dialog_demonstrator.dart';
+import '../../../../../../core/alerts/alert_dialog/custom_alert_dialog.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 
 class AddPostAlertDialogHelper {
-  showQuitAlert(BuildContext context) =>
-      CustomAlerDialogDemonstrator.instance.show(
-        "Remove Post",
-        "Are you sure you want to delete your post and exit.",
+  Future<void> showQuitAlert(BuildContext context) async => CustomAlertDialog(
+        title: "Remove Post",
+        message: "Are you sure you want to delete your post and exit.",
         context: context,
         negativeButtonText: "Cancel",
         positiveButtonText: "Exit",
         onPressedPositiveButton: () => context.pop,
-      );
+      ).show();
 
-  putImageErrorAlert(BuildContext context) =>
-      CustomAlerDialogDemonstrator.instance.show(
-        "Message",
-        "You can only select 4 image.\nIf you want, you can delete one of the photos you have uploaded.",
+  void putImageErrorAlert(BuildContext context) => CustomAlertDialog(
+        title: "Message",
+        message:
+            "You can only select 4 image.\nIf you want, you can delete one of the photos you have uploaded.",
         context: context,
         disableNegativeButton: true,
-      );
+      ).show();
 
-  postSharingErrorAlert(BuildContext context, String message) =>
-      CustomAlerDialogDemonstrator.instance.show(
-        "Error",
-        message,
+  void postSharingErrorAlert(BuildContext context, String message) =>
+      CustomAlertDialog(
+        title: "Error",
+        message: message,
         context: context,
         negativeButtonText: "Cancel",
         positiveButtonText: "Exit",
         onPressedPositiveButton: () => context.pop,
-      );
+      ).show();
 }

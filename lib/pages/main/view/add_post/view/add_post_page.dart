@@ -5,7 +5,6 @@ import '../../../../../app/constants/app_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/widgets/custom_text_form.dart';
 import '../../../model/post_model.dart';
-import '../../../model/replying_post_model.dart';
 import '../components/add_post_image_layout.dart';
 import '../components/app_bar.dart';
 import '../components/bottom_layout.dart';
@@ -21,7 +20,6 @@ class AddPostPage extends StatefulWidget {
   }) : super(key: key);
 
   bool isAComment;
-  ReplyingPostModel? replyingPostModel;
   CollectionReference? postAddingReference;
   PostModel? replyingPostPostModel;
 
