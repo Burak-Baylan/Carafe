@@ -1,4 +1,4 @@
-import 'package:Carafe/pages/main/sub_views/report/view_model/report_view_model.dart';
+import '../view_model/report_view_model.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../../core/extensions/context_extensions.dart';
