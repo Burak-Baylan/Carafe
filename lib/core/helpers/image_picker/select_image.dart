@@ -43,7 +43,7 @@ class SelectImage {
       //if (!(await CameraPermission.instance.request())) return null;
       onSelected(await PickImage.instance.camera());
     } else {
-      if (!(await Permissions.instance.storagePermission())) return null;
+      if (!(await Permissions.instance.storagePermission())) return;
       onSelected(await PickImage.instance.gallery());
     }
   }

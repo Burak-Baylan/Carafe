@@ -14,7 +14,7 @@ class SharePost with FirebaseBase {
       _instance = _instance == null ? SharePost._init() : _instance!;
   SharePost._init();
 
-  late AddPostViewModel vm;
+  late AddPostViewModel addPostViewModel;
   String postId = "";
   List<String> imageLinks = [];
   List<String> imagesDominantColors = [];
@@ -26,60 +26,60 @@ class SharePost with FirebaseBase {
     CollectionReference? postRef,
     ReplyingPostModel? replyingPostModel,
   }) async {
-    vm = viewModel;
+    addPostViewModel = viewModel;
     imageLinks = [];
     imagesDominantColors = [];
-    postId = "";
     postId = getRandomId();
     this.replyingPostModel = replyingPostModel;
     this.postRef = postRef;
     var uploadResponse = await _uploadImages();
     if (uploadResponse.errorMessage != null) return uploadResponse;
     await _getImagesDominantColors();
-    PostModel model = _prepareModel(postId);
-    var response = await _uploadPost(postId, model);
+    PostModel model = _prepareModel();
+    var response = await _uploadPost(model);
     return response;
   }
 
-  Future<CustomError> _uploadPost(String postId, PostModel model) async =>
-      await vm.firestoreService.addDocument(
-        postRef?.doc(postId) ??
-            vm.firestore.collection(firebaseConstants.postsText).doc(postId),
-        model.toJson(),
-      );
+  Future<CustomError> _uploadPost(PostModel model) async =>
+      await firestoreService.addDocument(getUploadRef, model.toJson());
 
-  PostModel _prepareModel(String postId) => PostModel(
+  DocumentReference<Object?> get getUploadRef =>
+      postRef?.doc(postId) ?? allPostsCollectionRef.doc(postId);
+
+  PostModel _prepareModel() => PostModel(
         postId: postId,
-        authorId: vm.authService.auth.currentUser!.uid,
+        authorId: authService.userId!,
         imageLinks: imageLinks,
         imagesDominantColors: imagesDominantColors,
-        text: vm.postText,
-        createdAt: vm.currentTime,
+        text: addPostViewModel.postText,
+        createdAt: addPostViewModel.currentTime,
         likeCount: 0,
         commentCount: 0,
-        category: vm.selectedCategory,
+        category: addPostViewModel.selectedCategory,
         postNotifications: true,
         replyed: replyingPostModel?.replyingPostId != null ? true : false,
         replyedPostId: replyingPostModel?.replyingPostId,
         replyedUserId: replyingPostModel?.replyingUserId,
         isPostDeleted: false,
+        hasImage: imageLinks.isNotEmpty,
+        postPath: getUploadRef.path,
       );
 
   Future<CustomError> _uploadImages() async {
     List<String> imagePaths = [];
     CustomError response = CustomError(null);
     String folderPath = _createImageFolderPath;
-    for (var image in vm.images) {
+    for (var image in addPostViewModel.images) {
       if (image != null) {
-        String imageId = vm.randomId;
+        String imageId = addPostViewModel.randomId;
         String path = "$folderPath/$imageId";
-        response = await vm.storageService.upload(path, image);
+        response = await storageService.upload(path, image);
         imagePaths.add(folderPath);
         if (response.errorMessage != null) {
           await _deletePreviousPhotos(imagePaths);
           return response;
         }
-        String? imageLink = await vm.storageService.getDownloadUrl(path);
+        String? imageLink = await storageService.getDownloadUrl(path);
         if (imageLink == null) {
           await _deletePreviousPhotos(imagePaths);
           return CustomError("Somethings went wrong. Please try again.");
@@ -91,27 +91,27 @@ class SharePost with FirebaseBase {
   }
 
   Future<void> _getImagesDominantColors() async {
-    for (var element in vm.images) {
+    for (var element in addPostViewModel.images) {
       if (element == null) {
         imagesDominantColors.add(Colors.black.getString);
         continue;
       }
       Color dominantColor =
-          await vm.imageColorsGetter.findSuitableColor(element);
+          await addPostViewModel.imageColorsGetter.findSuitableColor(element);
       imagesDominantColors.add(dominantColor.getString);
     }
   }
 
-  Future _deletePreviousPhotos(List<String> paths) async {
+  Future<void> _deletePreviousPhotos(List<String> paths) async {
     for (var i = 0; i < paths.length; i++) {
       var path = paths[i];
-      await vm.storageService.delete(path);
+      await storageService.delete(path);
     }
     imageLinks = [];
   }
 
   String get _createImageFolderPath {
-    String userId = vm.authService.auth.currentUser!.uid;
+    String userId = authService.userId!;
     return "users/$userId/post/$postId/images";
   }
 }
