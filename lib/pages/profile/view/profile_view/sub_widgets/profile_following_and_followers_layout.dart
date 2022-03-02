@@ -44,19 +44,23 @@ class _ProfileFollowingAndFollowersLayoutState
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildWidget(
-          text: 'Followers',
-          userListType: UserListType.followerUsers,
-          collectionName:
-              widget.profileViewModel.firebaseConstants.followersText,
-          count: widget.profileViewModel.followersCount,
+        Observer(
+          builder: (context) => _buildWidget(
+            text: 'Followers',
+            userListType: UserListType.followerUsers,
+            collectionName:
+                widget.profileViewModel.firebaseConstants.followersText,
+            count: widget.profileViewModel.followersCount,
+          ),
         ),
-        _buildWidget(
-          text: 'Following',
-          userListType: UserListType.followingUsers,
-          collectionName:
-              widget.profileViewModel.firebaseConstants.followingText,
-          count: widget.profileViewModel.followingCount,
+        Observer(
+          builder: (context) => _buildWidget(
+            text: 'Following',
+            userListType: UserListType.followingUsers,
+            collectionName:
+                widget.profileViewModel.firebaseConstants.followingText,
+            count: widget.profileViewModel.followingCount,
+          ),
         ),
       ],
     );
@@ -80,13 +84,11 @@ class _ProfileFollowingAndFollowersLayoutState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Observer(builder: (_) {
-                return ProfileTextWidget(
-                  text: count.shorten,
-                  fontWeight: FontWeight.w600,
-                  fontSize: context.width / 25,
-                );
-              }),
+              ProfileTextWidget(
+                text: count.shorten,
+                fontWeight: FontWeight.w600,
+                fontSize: context.width / 25,
+              ),
               ProfileTextWidget(
                 text: text,
                 fontWeight: FontWeight.w300,

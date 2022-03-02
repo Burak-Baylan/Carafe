@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../app/constants/app_constants.dart';
-import '../../../../../core/extensions/context_extensions.dart';
-import '../../../../../core/widgets/border_container.dart';
+import '../../../../../../app/constants/app_constants.dart';
+import '../../../../../../core/extensions/context_extensions.dart';
+import '../../../../../../core/widgets/border_container.dart';
 
 class ProfileViewProfilePhotoPlaceHolder extends StatelessWidget {
   ProfileViewProfilePhotoPlaceHolder({Key? key}) : super(key: key);
