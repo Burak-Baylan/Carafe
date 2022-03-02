@@ -1,18 +1,17 @@
-// ignore_for_file: override_on_non_overriding_member
-
-import 'package:Carafe/core/constants/navigation/navigation_constants.dart';
-import 'package:Carafe/core/data/custom_data.dart';
-import 'package:Carafe/core/firebase/auth/authentication/service/firebase_auth_service.dart';
-import 'package:Carafe/pages/authenticate/view/login/model/login_model.dart';
-import 'package:Carafe/pages/authenticate/view_model/base_authentication_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import '../../../../../core/constants/navigation/navigation_constants.dart';
+import '../../../../../core/data/custom_data.dart';
+import '../../../../../main.dart';
+import '../../../view_model/base_authentication_view_model.dart';
+import '../model/login_model.dart';
 part 'login_view_model.g.dart';
 
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
 
 abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
+  @override
   BuildContext? context;
 
   TextEditingController emailController = TextEditingController();
@@ -29,10 +28,10 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
   bool passwordTextInputLock = false;
 
   @override
-  setContext(BuildContext context) => this.context = context;
+  void setContext(BuildContext context) => this.context = context;
 
   @action
-  loginControl() async {
+  Future<void> loginControl() async {
     changeInputState();
     if (!formKey.currentState!.validate()) {
       changeInputState();
@@ -43,21 +42,21 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
     changeInputState();
   }
 
-  _login() async {
+  Future<void> _login() async {
     _initializeCredenticial();
     await authService
         .login(LoginModel(email: email, password: password))
-        .then((value) {
-      _responseControl(value);
+        .then((value) async {
+      await _responseControl(value);
     });
   }
 
-  _initializeCredenticial() {
+  void _initializeCredenticial() {
     email = emailController.text.trim();
     password = passworController.text.trim();
   }
 
-  _responseControl(CustomData<UserCredential> response) async {
+  Future<void> _responseControl(CustomData<UserCredential> response) async {
     if (response.error != null) {
       showAlert(
         "Error",
@@ -67,11 +66,17 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
       );
       return;
     }
-    _emailValidateControl();
+    await _emailValidateControl();
   }
 
-  _emailValidateControl() async {
+  Future<void> _emailValidateControl() async {
+    await mainVm.startApp();
+    //replacePage(path: NavigationConstans.MAIN_VIEW, data: null);
+    //return;
+
     if (authService.isEmailValid!) {
+      //await FirebaseManager.instance.getFollowingUsersIds();
+      await mainVm.startApp();
       replacePage(path: NavigationConstans.MAIN_VIEW, data: null);
     } else {
       showAlert(
@@ -84,22 +89,23 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
           await authService.sendVerificationEmail();
           await auth.signOut();
         },
-      );
+        onPressedNegativeButton: () => auth.signOut(),
+      ).then((value) => auth.signOut());
     }
   }
 
   @override
   @action
-  changeTabIndex(int index) => authVm.changeTabIndex(index);
+  void changeTabIndex(int index) => authVm.changeTabIndex(index);
 
   @action
-  changeInputState() {
+  void changeInputState() {
     emailTextInputLock = !emailTextInputLock;
     passwordTextInputLock = !passwordTextInputLock;
   }
 
   @action
-  removeTextInputFocus() {
+  void removeTextInputFocus() {
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
   }
