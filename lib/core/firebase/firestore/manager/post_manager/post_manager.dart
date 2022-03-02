@@ -1,4 +1,6 @@
+import 'package:Carafe/core/firebase/firestore/manager/post_manager/liked_posts_getter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../../main.dart';
 import '../../../../../pages/main/model/pinned_post_model.dart';
 import '../../../../../pages/main/model/post_model.dart';
 import '../../../../../pages/main/model/post_save_model.dart';
@@ -7,36 +9,43 @@ import '../../../../error/custom_error.dart';
 import '../../../base/firebase_base.dart';
 
 class FirebasePostManager extends FirebaseBase {
-  static FirebasePostManager? _instance;
-  static FirebasePostManager get instance =>
-      _instance = _instance == null ? FirebasePostManager._init() : _instance!;
-  FirebasePostManager._init();
+  static FirebasePostManager get instance => FirebasePostManager();
 
-  late QueryDocumentSnapshot<Map<String, dynamic>> lastVisiblePost;
-  QueryDocumentSnapshot<Map<String, dynamic>>? lastVisibleComment;
+  QueryDocumentSnapshot<Map<String, dynamic>>? lastVisiblePost;
 
   Query<Map<String, dynamic>> get allPostsRef =>
       firebaseConstants.postsCreatedDescending;
 
-  var numberOfPostsToBeUploadedAtOnce = 0;
+  LikedPostsGetter likedPostsGetter = LikedPostsGetter();
 
-  Future<List<PostModel>> getPosts() async {
-    var dataList = await allPostsRef
-        .limit(firebaseConstants.numberOfPostsToBeUploadedAtOnce)
-        .get();
-    return getModels(dataList);
+  Future<CustomData<List<PostModel>>> getPosts({
+    Query<Map<String, dynamic>>? ref,
+  }) async {
+    var rawData = await firebaseService.getQuery(ref ?? getPostsRef);
+    return prepareData(rawData);
   }
 
-  Future<List<PostModel>> loadMorePost() async {
-    var dataList = await allPostsRef
-        .startAfterDocument(lastVisiblePost)
-        .limit(firebaseConstants.numberOfPostsToBeUploadedAtOnce)
-        .get();
-    return getModels(dataList);
+  Future<CustomData<List<PostModel>>> loadMorePost(
+      {Query<Map<String, dynamic>>? ref}) async {
+    if (lastVisiblePost == null) return errorData;
+    var rawData = await firebaseService.getQuery(
+        ref?.startAfterDocument(lastVisiblePost!) ?? loadMorePostsRef);
+    return prepareData(rawData);
   }
 
-  List<PostModel> getModels(QuerySnapshot<Map<String, dynamic>> dataList,
-      {bool isAComment = false}) {
+  Query<Map<String, dynamic>> get getPostsRef => allPostsRef
+      .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce)
+      .where(firebaseConstants.authorIdText,
+          whereIn:
+              mainVm.followingUsersIds.isEmpty ? [] : mainVm.followingUsersIds)
+      .where(firebaseConstants.isPostDeletedText, isEqualTo: false);
+
+  Query<Map<String, dynamic>> get loadMorePostsRef => allPostsRef
+      .startAfterDocument(lastVisiblePost!)
+      .where(firebaseConstants.authorIdText, whereIn: mainVm.followingUsersIds)
+      .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce);
+
+  List<PostModel> getModels(QuerySnapshot<Map<String, dynamic>> dataList) {
     List<PostModel> models = [];
     int i = 0;
     for (var doc in dataList.docs) {
@@ -44,22 +53,19 @@ class FirebasePostManager extends FirebaseBase {
       var data = PostModel.fromJson(doc.data());
       models.add(data);
       if (dataList.docs.length == i) {
-        if (isAComment) {
-          lastVisibleComment = dataList.docs[dataList.docs.length - 1];
-        } else {
-          lastVisiblePost = dataList.docs[dataList.docs.length - 1];
-        }
+        lastVisiblePost = dataList.docs[dataList.docs.length - 1];
       }
     }
     return models;
   }
 
-  Future<bool> likePost(
-          DocumentReference docRef, Timestamp currentTime) async =>
-      await postLikeManager.likePost(docRef, currentTime);
+  Future<bool> likePost(DocumentReference docRef, Timestamp currentTime,
+          String postId) async =>
+      await postLikeManager.likePost(docRef, currentTime, postId);
 
-  Future<bool> unlikePost(DocumentReference docRef, String userId) async =>
-      await postLikeManager.unlikePost(docRef);
+  Future<bool> unlikePost(
+          DocumentReference docRef, String userId, String postId) async =>
+      await postLikeManager.unlikePost(docRef, postId);
 
   Future<bool> savePost(PostSaveModel postSaveModel) async =>
       await postSaveManager.savePost(postSaveModel);
@@ -89,11 +95,16 @@ class FirebasePostManager extends FirebaseBase {
     }
   }
 
-  Future<bool> pinPostToProfile(Timestamp currentTime, String postId) async {
+  Future<bool> pinPostToProfile(
+      Timestamp currentTime, PostModel postModel) async {
     var userId = auth.currentUser!.uid;
     var ref = firebaseConstants.userPinnedPostCollectionRef(userId).doc(userId);
     var pinnedPostModel = PinnedPostModel(
-        authorId: userId, createdAt: currentTime, postId: postId);
+      authorId: userId,
+      createdAt: currentTime,
+      postId: postModel.postId,
+      pinnedPostPath: postModel.postPath,
+    );
     var savePostResponse =
         await firebaseService.addDocument(ref, pinnedPostModel.toJson());
     if (savePostResponse.errorMessage != null) return false;
@@ -108,28 +119,38 @@ class FirebasePostManager extends FirebaseBase {
     return true;
   }
 
-  Future<CustomData<List<PostModel>>> getComments(
-      CollectionReference<Map<String, dynamic>> postCommentsRef) async {
-    firebaseConstants.getCommentsWithLimit(postCommentsRef);
-    CustomData rawData = await firebaseService
-        .getQuery(firebaseConstants.getCommentsWithLimit(postCommentsRef));
-    return prepareData(rawData);
-  }
-
-  Future<CustomData<List<PostModel>>> loadMoreComment(
-      DocumentReference postCommentsRef) async {
-    if (lastVisibleComment == null) return CustomData(null, CustomError(""));
-    CustomData rawData = await firebaseService.getQuery(
-        firebaseConstants.getCommentsWithLimitStartAfterDocumentsRef(
-            lastVisibleComment!, postCommentsRef));
-    return prepareData(rawData);
-  }
-
   CustomData<List<PostModel>> prepareData(CustomData rawData) {
     if (rawData.error != null) {
-      return CustomData(null, CustomError(rawData.error!.errorMessage));
+      return errorData;
     } else {
-      return CustomData(getModels(rawData.data, isAComment: true), null);
+      return CustomData(getModels(rawData.data), null);
     }
   }
+
+  Future<void> addToPostCollection(DocumentReference ref, Object? data) async =>
+      await firestoreService.addDocument(ref, data);
+
+  Future<CustomError> delete(DocumentReference postRef) async =>
+      await postDeleter.delete(postRef);
+
+  Future<int> getPostCommentsCount(DocumentReference postRef) async {
+    var response = await firebaseService
+        .getQuery(firebaseConstants.allUndeletedCommentsCollection(postRef));
+    if (response.error != null) {
+      return 0;
+    }
+    return response.data!.size;
+  }
+
+  Future<int> getPostLikeCount(DocumentReference ref) async {
+    var response = await firebaseService
+        .getCollection(ref.collection(firebaseConstants.postLikersText));
+    if (response.error != null) {
+      return 0;
+    }
+    return response.data!.size;
+  }
+
+  CustomData<List<PostModel>> get errorData =>
+      CustomData(null, CustomError("Something went wrong. Please try again."));
 }
