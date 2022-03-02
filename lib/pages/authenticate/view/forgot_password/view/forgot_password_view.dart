@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../../../core/constants/svg/svg_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/int_extensions.dart';
@@ -84,18 +82,26 @@ class ForgotPasswordView extends StatelessWidget {
               ? 0
               : context.height * 0.25,
           child: Center(
-            child: SvgPicture.asset(SVGConstants.instance.forgotPassword),
+            child: SvgPicture.asset(SVGConstants.forgotPassword),
           ),
         ),
       );
 
   AppBar get _appBar => AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: context.colorScheme.primary,
+          ),
+          onPressed: () => context.pop,
+        ),
         title: Text(
           "Forgot Password",
           style: context.theme.textTheme.headline6?.copyWith(
             fontSize: context.width / 25,
-            color: Colors.white,
+            color: context.colorScheme.primary,
           ),
         ),
       );
