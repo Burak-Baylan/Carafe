@@ -47,7 +47,7 @@ abstract class BaseViewModel with FirebaseBase {
   void showNoInternetAlert(BuildContext context) =>
       NoInternetAlertDialog.show(context);
 
-  void showAlert(
+  Future<void> showAlert(
     String title,
     String message, {
     required BuildContext context,

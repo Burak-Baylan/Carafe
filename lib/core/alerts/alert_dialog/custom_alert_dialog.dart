@@ -39,7 +39,7 @@ class CustomAlertDialog extends StatelessWidget {
     return _buildDialog;
   }
 
-  void show() => showDialog(
+  Future<void> show() => showDialog(
         barrierDismissible: dismissible,
         context: context,
         builder: (context) => this,
