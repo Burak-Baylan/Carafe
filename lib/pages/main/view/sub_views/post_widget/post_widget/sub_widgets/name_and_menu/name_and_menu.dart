@@ -1,12 +1,13 @@
-import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../../core/extensions/timestamp_extensions.dart';
 import '../../../../../../../../core/widgets/center_dot_text.dart';
 import '../../../../../../../../core/widgets/place_holder_with_border.dart';
 import '../../../../../../../../core/widgets/repyling_to_widget.dart';
+import '../../../../../../../../core/widgets/user_name_username_text.dart';
 import '../../../../../../../authenticate/model/user_model.dart';
 import '../../../../../../model/post_model.dart';
-import '../../../../../home/view_model/home_view_model.dart';
 import '../../view_model/post_view_model.dart';
 import 'post_menu/view/post_menu.dart';
 
@@ -14,92 +15,80 @@ class PostNameAndMenu extends StatelessWidget {
   PostNameAndMenu({
     Key? key,
     required this.postModel,
-    required this.homeViewModel,
     required this.postViewModel,
     this.nameFontSize,
     this.mailFontSize,
     this.closeCenterDot = false,
     this.buildWithColumn = false,
+    this.closeMenuButton = false,
+    this.onPostPinnedOrUnpinned,
   }) : super(key: key);
 
   PostModel postModel;
-  HomeViewModel homeViewModel;
   PostViewModel postViewModel;
   double? nameFontSize;
   double? mailFontSize;
   bool closeCenterDot;
   bool buildWithColumn;
+  bool closeMenuButton;
+  Function? onPostPinnedOrUnpinned;
   late BuildContext context;
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    return FutureBuilder<UserModel?>(
-      future:
-          homeViewModel.firebaseManager.getAUserInformation(postModel.authorId),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data == null) return _loadingWidget;
-          UserModel userModel = snapshot.data!;
-          return _body(userModel);
-        }
-        return _loadingWidget;
-      },
+    return Observer(
+        builder: (_) =>
+            postViewModel.userModel != null ? _body() : _loadingWidget);
+  }
+
+  Widget _body() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+                child: _buildUserInformationLayout(postViewModel.userModel)),
+            _buildTimeAgoTextAndMenuButton(),
+          ],
+        ),
+        _replyedWidget,
+      ],
     );
   }
 
-  Widget _body(UserModel userModel) => SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(child: _buildUserInformationLayout(userModel)),
-                _buildTimeAgoTextAndMenuButton(userModel),
-              ],
-            ),
-            _replyedWidget,
-          ],
-        ),
-      );
+  Widget _buildTimeAgoTextAndMenuButton() => closeMenuButton
+      ? Container()
+      : PostMenuButton(
+          postModel: postModel,
+          userModel: postViewModel.userModel!,
+          postViewModel: postViewModel,
+          onPostPinnedOrUnpinned: onPostPinnedOrUnpinned,
+        );
 
-  Widget _buildTimeAgoTextAndMenuButton(UserModel userModel) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+  Widget get _buildTimeAgoText => Row(
         children: [
-          _buildTimeAgoText,
-          PostMenuButton(
-            postModel: postModel,
-            viewModel: homeViewModel,
-            userModel: userModel,
+          CenterDotText(textColor: Colors.grey.shade500),
+          _buildText(
+            text: postModel.createdAt!.getTimeAgo,
+            fontSize: context.width / 30,
+            textColor: Colors.grey.shade500,
           ),
         ],
       );
-
-  // if closeCenterDot == true, the post widget is full screen and
-  // we don't want to show 'time ago' when the page full screen.
-  Widget get _buildTimeAgoText => closeCenterDot
-      ? Container()
-      : Row(
-          children: [
-            CenterDotText(textColor: Colors.grey.shade500),
-            _buildText(
-                text: postModel.createdAt!.getTimeAgo,
-                fontSize: context.width / 30,
-                textColor: Colors.grey.shade500),
-          ],
-        );
 
   Widget get _replyedWidget {
     if (postModel.replyed == null || !postModel.replyed!) {
       return Container();
     } else {
       return ReplyingToWidget(
-        future: homeViewModel.firebaseManager
+        future: postViewModel.firebaseManager
             .getAUserInformation(postModel.replyedUserId!),
+        viewModel: postViewModel,
       );
     }
   }
@@ -122,21 +111,18 @@ class PostNameAndMenu extends StatelessWidget {
             )
           : Row(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: _userInformationTexts(userInformation),
             );
 
+  // if closeCenterDot == true, the post widget is full screen and
+  // we don't want to show 'time ago' when the page full screen.
   List<Widget> _userInformationTexts(UserModel? userInformation) => [
-        _buildText(
-            text: userInformation!.username,
-            fontSize: nameFontSize ?? context.width / 28),
-        closeCenterDot ? Container() : CenterDotText(),
-        Expanded(
-          child: _buildText(
-            text: userInformation.email,
-            fontSize: mailFontSize ?? context.width / 28,
-            textColor: Colors.grey[500],
-          ),
+        UserNameUsernameText(
+          userModel: userInformation!,
+          buildWithColumn: buildWithColumn,
         ),
+        closeCenterDot ? Container() : _buildTimeAgoText
       ];
 
   Widget _buildText({
@@ -146,9 +132,14 @@ class PostNameAndMenu extends StatelessWidget {
     Color? textColor,
   }) =>
       Text(
-        text,
+        text.replaceAll("", "\u{200B}"),
+        textWidthBasis: TextWidthBasis.longestLine,
+        maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-            fontSize: fontSize, fontWeight: fontWeight, color: textColor),
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: textColor,
+        ),
       );
 }
