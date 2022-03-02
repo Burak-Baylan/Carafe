@@ -1,9 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../../../core/extensions/context_extensions.dart';
-import '../../../../../core/widgets/border_container.dart';
 import '../../../view_model/main_view_view_model.dart';
 
 class MainBottomNavigation extends StatelessWidget {
@@ -18,20 +16,24 @@ class MainBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    return BorderContainer.all(
-      radius: 30,
-      child: Observer(builder: (_) {
-        return BottomNavyBar(
-          selectedIndex: viewModel.currentIndex,
-          items: <BottomNavyBarItem>[
-            _homeIcon,
-            _searchIcon,
-            _notificationsIcon,
-            _messagesIcon,
-          ],
-          onItemSelected: (index) => viewModel.changeIndex(index),
-        );
-      }),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Divider(height: 0, thickness: 1),
+        Observer(builder: (_) {
+          return BottomNavyBar(
+            showElevation: false,
+            selectedIndex: viewModel.currentIndex,
+            items: <BottomNavyBarItem>[
+              _homeIcon,
+              _searchIcon,
+              _notificationsIcon,
+              _messagesIcon,
+            ],
+            onItemSelected: (index) => viewModel.changeIndex(index),
+          );
+        }),
+      ],
     );
   }
 

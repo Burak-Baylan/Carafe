@@ -17,26 +17,26 @@ class AddPostBottomLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    return BorderContainer(
-      topLeft: 20,
-      topRight: 20,
-      color: Colors.white,
-      child: Observer(
-        builder: (_) => SizedBox(
-          width: context.width,
-          height: 50,
-          child: Container(
-            padding: const EdgeInsets.only(right: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildIcons,
-                _buildTextLengthCounter(context),
-              ],
+    return Column(
+      children: [
+        const Divider(height: 0, thickness: 0.5),
+        Observer(
+          builder: (_) => SizedBox(
+            width: context.width,
+            height: 50,
+            child: Container(
+              padding: const EdgeInsets.only(right: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildIcons,
+                  _buildTextLengthCounter(context),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 
