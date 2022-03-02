@@ -8,6 +8,8 @@ import '../../../../../../../../core/extensions/timestamp_extensions.dart';
 import '../../../../../../../../core/widgets/bottom_to_top_animated_text.dart';
 import '../../../../../../../../core/widgets/place_holder_with_border.dart';
 import '../../../../../../model/post_model.dart';
+import '../../../../../../sub_views/users_list_view/view/users_list_view.dart';
+import '../../../../../../sub_views/users_list_view/view_model/users_list_view_model.dart';
 import '../../../post_widget/view_model/post_view_model.dart';
 import 'sub_widgets/full_screen_post_bottom_layout_count_and_text_widget.dart';
 import 'sub_widgets/full_screen_post_bottom_layout_small_button.dart';
@@ -85,14 +87,14 @@ class FullScreenPostBottomLayout extends StatelessWidget {
   Widget _buildLikeText(double fontSize) =>
       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: postViewModel.firebaseConstants
-            .likeCountStremRef(postViewModel.sharedPostRef),
+            .likeCountStremRef(postViewModel.currentPostRef),
         builder: (context, snapshot) => _find(snapshot, fontSize),
       );
 
   Widget _buildCommentText(double fontSize) =>
       StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: postViewModel.firebaseConstants
-            .commentCountStremRef(postViewModel.sharedPostRef),
+            .commentsStremRef(postViewModel.currentPostRef),
         builder: (context, snapshot) => _find(snapshot, fontSize),
       );
 
@@ -112,7 +114,14 @@ class FullScreenPostBottomLayout extends StatelessWidget {
   }
 
   Widget get likeCountLayout => FullScreenPostBottomLayoutCountAndTextWidget(
-        onTap: () {},
+        onTap: () => postViewModel.customNavigateToPage(
+          page: UsersListView(
+            appBarText: 'Liked by',
+            userListType: UserListType.likes,
+            listingUsersRef: postViewModel.postLikesRef(),
+          ),
+          animate: true,
+        ),
         children: [
           _buildLikeText(fontSize),
           3.sizedBoxOnlyWidth,
@@ -122,7 +131,14 @@ class FullScreenPostBottomLayout extends StatelessWidget {
       );
 
   Widget get commentCountLayout => FullScreenPostBottomLayoutCountAndTextWidget(
-        onTap: () {},
+        onTap: () => postViewModel.customNavigateToPage(
+          page: UsersListView(
+            appBarText: 'Commented by',
+            userListType: UserListType.comments,
+            listingUsersRef: postViewModel.postCommentsRawRef(),
+          ),
+          animate: true,
+        ),
         children: [
           _buildCommentText(fontSize),
           3.sizedBoxOnlyWidth,
