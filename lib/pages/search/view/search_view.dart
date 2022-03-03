@@ -48,18 +48,7 @@ class _SearchViewState extends State<SearchView>
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: kToolbarHeight.sizeFromHeight,
-          child: Observer(
-            builder: (context) => searchViewModel.isSearching
-                ? SearchViewSearchingAppBar(searchViewModel: searchViewModel)
-                : SearchViewAppBar(
-                    context: this.context,
-                    searchViewModel: searchViewModel,
-                    showAppBarBackButton: widget.showAppBarBackButton,
-                  ),
-          ),
-        ),
+        appBar: appBar,
         body: PageView(
           controller: searchViewModel.pageController,
           children: pages,
@@ -68,6 +57,19 @@ class _SearchViewState extends State<SearchView>
       ),
     );
   }
+
+  PreferredSize get appBar => PreferredSize(
+        preferredSize: kToolbarHeight.sizeFromHeight,
+        child: Observer(
+          builder: (context) => searchViewModel.isSearching
+              ? SearchViewSearchingAppBar(searchViewModel: searchViewModel)
+              : SearchViewAppBar(
+                  context: this.context,
+                  searchViewModel: searchViewModel,
+                  showAppBarBackButton: widget.showAppBarBackButton,
+                ),
+        ),
+      );
 
   @override
   bool get wantKeepAlive => true;
