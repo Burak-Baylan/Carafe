@@ -77,20 +77,21 @@ class _FullScreenImageState extends State<FullScreenImage> {
 
   Widget get _buildImage => GestureDetector(
         onTap: () => onImageTap(),
-        child: widget.imageWidget ??
-            PhotoViewWidget(
-              width: widget.width,
-              height: widget.height,
-              scaleStateChangedCallback: (state) =>
-                  widget.scaleStateChangedCallback != null
-                      ? widget.scaleStateChangedCallback!(state)
-                      : null,
-              image: widget.image!,
-              backgroundColor: widget.backgroundColor,
-            ),
+        child: widget.imageWidget ?? photoView,
       );
 
-  _changeVisibility() {
+  Widget get photoView => PhotoViewWidget(
+        width: widget.width,
+        height: widget.height,
+        scaleStateChangedCallback: (state) =>
+            widget.scaleStateChangedCallback != null
+                ? widget.scaleStateChangedCallback!(state)
+                : null,
+        image: widget.image!,
+        backgroundColor: widget.backgroundColor,
+      );
+
+  void _changeVisibility() {
     visible = !visible;
     if (visible) {
       StatusBarHelper.open();
@@ -101,14 +102,14 @@ class _FullScreenImageState extends State<FullScreenImage> {
     }
   }
 
-  onImageTap() {
+  void onImageTap() {
     if (widget.onImageTap != null) {
       widget.onImageTap!();
     }
     _changeVisibility();
   }
 
-  _closePage() => context.pop;
+  void _closePage() => context.pop;
 
   Widget get _buildBackButton => FullSizeImageSmallButton(
         icon: Icons.chevron_left_sharp,
