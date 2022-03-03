@@ -152,7 +152,7 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
       ActionController(name: '_AddPostViewModelBase');
 
   @override
-  dynamic selectCategory(String category) {
+  void selectCategory(String category) {
     final _$actionInfo = _$_AddPostViewModelBaseActionController.startAction(
         name: '_AddPostViewModelBase.selectCategory');
     try {
@@ -163,7 +163,7 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
   }
 
   @override
-  dynamic onPostTextChanged(String text) {
+  void onPostTextChanged(String text) {
     final _$actionInfo = _$_AddPostViewModelBaseActionController.startAction(
         name: '_AddPostViewModelBase.onPostTextChanged');
     try {
@@ -174,7 +174,7 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
   }
 
   @override
-  dynamic changeScreenLockState() {
+  void changeScreenLockState() {
     final _$actionInfo = _$_AddPostViewModelBaseActionController.startAction(
         name: '_AddPostViewModelBase.changeScreenLockState');
     try {
@@ -185,7 +185,7 @@ mixin _$AddPostViewModel on _AddPostViewModelBase, Store {
   }
 
   @override
-  dynamic _lengthController() {
+  void _lengthController() {
     final _$actionInfo = _$_AddPostViewModelBaseActionController.startAction(
         name: '_AddPostViewModelBase._lengthController');
     try {
