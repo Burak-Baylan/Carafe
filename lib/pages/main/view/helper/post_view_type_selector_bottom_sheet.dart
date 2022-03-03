@@ -3,18 +3,18 @@ import '../../../../app/managers/hive_manager.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/int_extensions.dart';
 import '../../../../core/helpers/rounded_bottom_sheet.dart';
-import '../../../../core/widgets/place_holder_with_border.dart';
+import '../../../../core/widgets/bottom_sheet_top_rounded_container.dart';
 import '../../../../main.dart';
 
-class WidgetViewTypeSelectorBottomSheet {
+class PostViewTypeSelectorBottomSheet {
   static show(BuildContext context) async =>
-      WidgetViewTypeSelectorBottomSheet(context).build();
+      PostViewTypeSelectorBottomSheet(context).build();
 
-  WidgetViewTypeSelectorBottomSheet(this.context);
+  PostViewTypeSelectorBottomSheet(this.context);
 
   BuildContext context;
 
-  build() async {
+  void build() async {
     var type = await HiveManager.getPostWidgetViewType;
     showRoundedBottomSheet(
       context: context,
@@ -22,7 +22,7 @@ class WidgetViewTypeSelectorBottomSheet {
         mainAxisSize: MainAxisSize.min,
         children: [
           10.sizedBoxOnlyHeight,
-          PlaceHolderWithBorder(height: context.height / 75),
+          const BottomSheetTopRoundedContainer(),
           10.sizedBoxOnlyHeight,
           ListTile(
             onTap: () => _clicked(() => mainVm.updatePostViewType(true)),
@@ -45,11 +45,16 @@ class WidgetViewTypeSelectorBottomSheet {
   }
 
   Widget _buildText(String text) => Text(text,
-      style: context.theme.textTheme.headline6
-          ?.copyWith(color: context.colorScheme.secondary));
+      style: context.theme.textTheme.headline6?.copyWith(
+        color: context.colorScheme.secondary,
+        fontSize: context.width / 26,
+      ));
 
   Widget get _bodylessWidget => const SizedBox(width: 0, height: 0);
 
-  Widget get _checkmarkIcon =>
-      Icon(Icons.check, color: context.colorScheme.primary);
+  Widget get _checkmarkIcon => Icon(
+        Icons.check,
+        color: context.colorScheme.primary,
+        size: context.width / 18,
+      );
 }
