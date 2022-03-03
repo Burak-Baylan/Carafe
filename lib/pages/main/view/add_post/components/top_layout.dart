@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/widgets/repyling_to_widget.dart';
-import '../../../model/replying_post_model.dart';
+import '../../../../../main.dart';
+import '../../sub_views/post_widget/post_widget/sub_widgets/profile_photo.dart';
 import '../view_model/add_post_view_model.dart';
 import 'post_category_selector.dart';
 
@@ -20,12 +21,10 @@ class AddPostTopLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CircleAvatar(
-            radius: context.width * 0.06,
-            //TODO change url
-            backgroundImage: const NetworkImage(
-              "https://via.placeholder.com/140x100",
-            ),
+          PostProfilePhoto(
+            imageUrl: mainVm.currentUserModel?.photoUrl,
+            width: context.width / 8,
+            onClicked: (_) {},
           ),
           viewModel.isAComment
               ? _replyingText(context)
@@ -36,10 +35,9 @@ class AddPostTopLayout extends StatelessWidget {
   }
 
   Widget _replyingText(BuildContext context) => ReplyingToWidget(
-        future: viewModel.firebaseManager.getAUserInformation(ReplyingPostModel(
-          replyingUserId: viewModel.replyingPostPostModel!.authorId,
-          replyingPostId: viewModel.replyingPostPostModel!.postId,
-        ).replyingUserId),
+        future: viewModel.firebaseManager
+            .getAUserInformation(viewModel.replyingPostPostModel!.authorId),
+        viewModel: viewModel,
       );
 
   Widget _selectCategoryWidget(BuildContext context) => Observer(
