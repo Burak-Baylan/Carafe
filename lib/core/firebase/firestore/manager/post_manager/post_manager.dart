@@ -43,7 +43,8 @@ class FirebasePostManager extends FirebaseBase {
   Query<Map<String, dynamic>> get loadMorePostsRef => allPostsRef
       .startAfterDocument(lastVisiblePost!)
       .where(firebaseConstants.authorIdText, whereIn: mainVm.followingUsersIds)
-      .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce);
+      .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce)
+      .where(firebaseConstants.isPostDeletedText, isEqualTo: false);
 
   List<PostModel> getModels(QuerySnapshot<Map<String, dynamic>> dataList) {
     List<PostModel> models = [];

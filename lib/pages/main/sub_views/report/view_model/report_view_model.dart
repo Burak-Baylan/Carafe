@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import '../../../../../core/alerts/alert_dialog/success_alert_dialog.dart';
+import '../../../../../core/alerts/alert_dialog/success_and_error_alert_dialog.dart';
 import '../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/string_extensions.dart';

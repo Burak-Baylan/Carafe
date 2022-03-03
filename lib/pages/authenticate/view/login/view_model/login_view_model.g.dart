@@ -46,7 +46,7 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
       AsyncAction('_LoginViewModelBase.loginControl');
 
   @override
-  Future loginControl() {
+  Future<void> loginControl() {
     return _$loginControlAsyncAction.run(() => super.loginControl());
   }
 
@@ -65,7 +65,7 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
   }
 
   @override
-  dynamic changeInputState() {
+  void changeInputState() {
     final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
         name: '_LoginViewModelBase.changeInputState');
     try {
@@ -76,7 +76,7 @@ mixin _$LoginViewModel on _LoginViewModelBase, Store {
   }
 
   @override
-  dynamic removeTextInputFocus() {
+  void removeTextInputFocus() {
     final _$actionInfo = _$_LoginViewModelBaseActionController.startAction(
         name: '_LoginViewModelBase.removeTextInputFocus');
     try {
