@@ -45,7 +45,16 @@ dependencies:
   dismissible_page: ^0.6.4
   hive_flutter: ^1.1.0
   firestore_search: ^0.1.9
-  
+  flutter_linkify: ^5.0.2
+  url_launcher: ^6.0.18
+  syncfusion_flutter_datepicker: ^19.4.47
+  flutter_native_splash: ^2.0.1+1
+  page_transition: ^2.0.5
+  auto_size_text: ^3.0.0
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/example.png
 
 dev_dependencies:
   flutter_test:
