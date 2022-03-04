@@ -76,6 +76,7 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
         _homeTabClicked(index);
         break;
       case 1:
+        _searchTabClicked(index);
         currentIndex = index;
         break;
       case 2:
@@ -110,18 +111,31 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     changePostViewType(data);
   }
 
-  void showPostViewTypeSelector() => PostViewTypeSelectorBottomSheet.show(context!);
+  void showPostViewTypeSelector() =>
+      PostViewTypeSelectorBottomSheet.show(context!);
 
   late ScrollController homeViewPostsScrollController;
+  late ScrollController exploreViewPostsScrollController;
 
   void _homeTabClicked(int index) {
     if (currentIndex == 0) {
-      homeViewPostsScrollController.animateTo(
-        homeViewPostsScrollController.position.minScrollExtent,
-        duration: 300.durationMilliseconds,
-        curve: Curves.fastOutSlowIn,
-      );
+      sendToFirstIndex(homeViewPostsScrollController);
     }
     currentIndex = index;
+  }
+
+  void _searchTabClicked(int index) {
+    if (currentIndex == 1) {
+      sendToFirstIndex(exploreViewPostsScrollController);
+    }
+    currentIndex = index;
+  }
+
+  void sendToFirstIndex(ScrollController controller) {
+    controller.animateTo(
+      controller.position.minScrollExtent,
+      duration: 300.durationMilliseconds,
+      curve: Curves.fastOutSlowIn,
+    );
   }
 }

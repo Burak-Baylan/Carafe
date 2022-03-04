@@ -1,3 +1,4 @@
+import 'package:Carafe/core/widgets/small_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../../app/constants/app_constants.dart';
@@ -53,7 +54,7 @@ class _HomeViewState extends State<HomeView>
                 if (snapshot.hasError) {
                   return _errorLayout;
                 }
-                return const CircularProgressIndicator().center;
+                return const SmallCircularProgressIndicator().center;
               },
             ),
           ),

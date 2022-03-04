@@ -105,7 +105,7 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
       AsyncAction('_MainViewViewModelBase.initalizeStartingPage');
 
   @override
-  Future initalizeStartingPage(Widget page) {
+  Future<void> initalizeStartingPage(Widget page) {
     return _$initalizeStartingPageAsyncAction
         .run(() => super.initalizeStartingPage(page));
   }
@@ -114,7 +114,7 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
       ActionController(name: '_MainViewViewModelBase');
 
   @override
-  dynamic changePostViewType(bool type) {
+  void changePostViewType(bool type) {
     final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
         name: '_MainViewViewModelBase.changePostViewType');
     try {
@@ -125,7 +125,7 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
   }
 
   @override
-  dynamic changeFabVisibility(bool visibility) {
+  void changeFabVisibility(bool visibility) {
     final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
         name: '_MainViewViewModelBase.changeFabVisibility');
     try {
@@ -136,7 +136,7 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
   }
 
   @override
-  dynamic changeIndex(int index) {
+  void changeIndex(int index) {
     final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
         name: '_MainViewViewModelBase.changeIndex');
     try {
@@ -169,7 +169,7 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
   }
 
   @override
-  dynamic updateFollowingUserIds(List<String> followingUsersIds) {
+  void updateFollowingUserIds(List<String> followingUsersIds) {
     final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
         name: '_MainViewViewModelBase.updateFollowingUserIds');
     try {
