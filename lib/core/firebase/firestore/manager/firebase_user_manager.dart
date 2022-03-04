@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'package:Carafe/pages/main/model/pinned_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../main.dart';
 import '../../../../pages/authenticate/model/follow_user_model.dart';
 import '../../../../pages/authenticate/model/user_model.dart';
 import '../../../../pages/main/model/post_model.dart';
@@ -11,6 +14,8 @@ class FirebaseUserManager extends FirebaseBase {
   static FirebaseUserManager get instance =>
       _instance = _instance == null ? FirebaseUserManager._init() : _instance!;
   FirebaseUserManager._init();
+
+  String get currentUserId => authService.userId!;
 
   Future<CustomError> createUser(UserModel userModel) async {
     var userExistingControlResponse = await checkUsernameExisting(userModel);
@@ -37,9 +42,6 @@ class FirebaseUserManager extends FirebaseBase {
     return CustomError(null);
   }
 
-  Future<CustomError> updateUser(UserModel userModel) async => firebaseService
-      .updateDocument(firebaseConstants.userDocRef(userModel.userId), {});
-
   Future<CustomError> updateFollowersCount(UserModel userModel) async {
     try {
       var ref = firebaseConstants.userDocRef(userModel.userId);
@@ -54,67 +56,152 @@ class FirebaseUserManager extends FirebaseBase {
     }
   }
 
-  Future<CustomData<String>> userPinnedPostId(String userId) async {
-    var customPostModelData = await userPinnedPost(userId);
-    if (customPostModelData.error != null) {
-      return CustomData(null, CustomError('Something went wrong'));
-    }
-    return CustomData(customPostModelData.data!.postId, null);
-  }
-
   Future<CustomData<PostModel>> userPinnedPost(String userId) async {
     var pinnedPostRef = firebaseConstants.userPinnedPostDocRef(userId);
     var pinnedPostData = await firebaseService.getDocument(pinnedPostRef);
-    if (pinnedPostData.error != null) {
+    if (pinnedPostData.error != null || pinnedPostData.data?.data() == null) {
       return CustomData(null, CustomError('Something went wrong'));
     }
-    var postIdData = firebaseService.getAField<String>(
-        pinnedPostData.data!, firebaseConstants.postIdText);
-    if (postIdData.error != null) {
+    var pinnedPostModel = PinnedPostModel.fromJson(
+        pinnedPostData.data!.data() as Map<String, dynamic>);
+    var rawPostData = await firebaseService
+        .getDocument(firestore.doc(pinnedPostModel.pinnedPostPath));
+    if (rawPostData.error != null || rawPostData.data?.data() == null) {
       return CustomData(null, CustomError('Something went wrong'));
     }
-    var rawPostData = await firebaseService.getDocument(
-        firebaseConstants.allPostsCollectionRef.doc(postIdData.data));
     var postData = rawPostData.data!.data() as Map<String, dynamic>;
     PostModel postModel = PostModel.fromJson(postData);
+    if (postModel.isPostDeleted != null && (postModel.isPostDeleted!)) {
+      return CustomData(null, CustomError('Pinned post deleted'));
+    }
     return CustomData(postModel, null);
   }
 
   Future<CustomData<bool>> followingState(String followingUserId) async {
-    String currentUserId = authService.userId!;
     var path = firebaseConstants.userFollowingControlRef(
         currentUserId, followingUserId);
     var data = await firebaseService.getQuery(path);
     if (data.error != null) return CustomData(null, CustomError(""));
     if (data.data!.docs.isEmpty) {
-      return CustomData(true, null);
-    } else {
       return CustomData(false, null);
+    } else {
+      return CustomData(true, null);
     }
   }
 
   Future<bool> followUser(String followingUserId, Timestamp currentTime) async {
-    var currentUserId = authService.userId;
-    var followUserRef = firebaseConstants
-        .userFollowingCollectionRef(currentUserId!)
+    var followersUserFollowingRef = firebaseConstants
+        .userFollowingCollectionRef(currentUserId)
         .doc(followingUserId);
+    var followingUserFollowersRef = firebaseConstants
+        .userFollowersCollectionRef(followingUserId)
+        .doc(currentUserId);
     var data = FollowUserModel(
             followerUserId: currentUserId,
             followingUserId: followingUserId,
             followedAt: currentTime)
         .toJson();
-    var response = await firebaseService.addDocument(followUserRef, data);
-    if (response.errorMessage != null) false;
+    mainVm.addToFollowing(followingUserId);
+    var response =
+        await firebaseService.addDocument(followersUserFollowingRef, data);
+    var response2 =
+        await firebaseService.addDocument(followingUserFollowersRef, data);
+    if (response.errorMessage != null || response2.errorMessage != null) {
+      await unfollowUser(followingUserId);
+      return false;
+    }
     return true;
   }
 
   Future<bool> unfollowUser(String unfollowingUserId) async {
-    var currentUserId = authService.userId;
-    var unfollowUserRef = firebaseConstants
-        .userFollowingCollectionRef(currentUserId!)
+    var unfollowerUserFollowingRef = firebaseConstants
+        .userFollowingCollectionRef(currentUserId)
         .doc(unfollowingUserId);
-    var response = await firebaseService.deleteDocument(unfollowUserRef);
-    if (response.errorMessage != null) false;
+    var unfollowingUserFollowersRef = firebaseConstants
+        .userFollowersCollectionRef(unfollowingUserId)
+        .doc(currentUserId);
+    mainVm.removeFromFollowing(unfollowingUserId);
+    var response =
+        await firebaseService.deleteDocument(unfollowerUserFollowingRef);
+    var response2 =
+        await firestoreService.deleteDocument(unfollowingUserFollowersRef);
+    if (response.errorMessage != null || response2.errorMessage != null) false;
+    return true;
+  }
+
+  Future<int?> getCurrentUserFollowersCount() async =>
+      await getAUserFollowersCount(currentUserId);
+
+  Future<int?> getCurrentUserFollowingCount() async =>
+      await getAUserFollowingCount(currentUserId);
+
+  Future<int?> getAUserFollowersCount(String userId) async {
+    var ref = firebaseConstants.userFollowersCollectionRef(userId);
+    var data = await firebaseService.getCollection(ref);
+    if (data.error != null) {
+      return null;
+    }
+    return data.data!.size;
+  }
+
+  Future<int?> getAUserFollowingCount(String userId) async {
+    var ref = firebaseConstants.userFollowingCollectionRef(userId);
+    var data = await firebaseService.getCollection(ref);
+    if (data.error != null) {
+      return null;
+    }
+    return data.data!.size;
+  }
+
+  Future<bool> updateCurrentUserDisplayName(String newDisplayName) async =>
+      updateAField(
+          fieldName: firebaseConstants.displayNameText, value: newDisplayName);
+
+  Future<bool> updateCurrentUserDescription(String newDescription) async =>
+      updateAField(
+          fieldName: firebaseConstants.profileDescriptionText,
+          value: newDescription);
+
+  Future<bool> updateCurrentUserWebsite(String newWebsiteUrl) async =>
+      await updateAField(
+          fieldName: firebaseConstants.websiteText, value: newWebsiteUrl);
+
+  Future<bool> updateCurrentUserBirthDate(Timestamp date) async =>
+      await updateAField(
+        fieldName: firebaseConstants.birthDateText,
+        value: date,
+      );
+
+  Future<bool> updateUserProfilePhoto(File image) async {
+    String path = "users/$currentUserId/profilePhoto/pp";
+    var photoUploadResponse = await storageService.upload(path, image);
+    if (photoUploadResponse.errorMessage != null) {
+      return false;
+    }
+    var imageLink = await storageService.getDownloadUrl(path);
+    if (imageLink == null) {
+      await storageService.delete(path);
+      return false;
+    }
+    var fileUpdateResponse = await updateAField(
+        fieldName: firebaseConstants.ppUrlText, value: imageLink);
+    if (!fileUpdateResponse) {
+      await storageService.delete(path);
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> updateAField({
+    required String fieldName,
+    required Object value,
+  }) async {
+    var ref = firebaseConstants.allUsersCollectionRef.doc(currentUserId);
+    var response =
+        await firebaseService.updateDocument(ref, {fieldName: value});
+    if (response.errorMessage != null) {
+      return false;
+    }
     return true;
   }
 }
