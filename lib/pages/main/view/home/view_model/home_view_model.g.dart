@@ -67,7 +67,7 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
       ActionController(name: '_HomeViewModelBase');
 
   @override
-  dynamic changePostsScrollable(ScrollPhysics physics) {
+  void changePostsScrollable(ScrollPhysics physics) {
     final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
         name: '_HomeViewModelBase.changePostsScrollable');
     try {
@@ -78,7 +78,7 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   }
 
   @override
-  dynamic lockScrollable() {
+  void lockScrollable() {
     final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
         name: '_HomeViewModelBase.lockScrollable');
     try {

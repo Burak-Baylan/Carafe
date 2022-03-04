@@ -24,9 +24,10 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
   ScrollPhysics? postsScrollable;
   @observable
   @action
-  changePostsScrollable(ScrollPhysics physics) => postsScrollable = physics;
+  void changePostsScrollable(ScrollPhysics physics) =>
+      postsScrollable = physics;
   @action
-  lockScrollable() =>
+  void lockScrollable() =>
       changePostsScrollable(const NeverScrollableScrollPhysics());
   @action
   openScrollable() =>
@@ -35,13 +36,13 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store {
 
   bool canMorePostsUpload = true;
 
-  lockCanUploadMorePost() => canMorePostsUpload = false;
-  openCanUploadMorePost() => canMorePostsUpload = true;
+  void lockCanUploadMorePost() => canMorePostsUpload = false;
+  void openCanUploadMorePost() => canMorePostsUpload = true;
 
   @observable
   bool showExploreWidget = false;
 
-  changeShowExploreWidgetState(bool state) => showExploreWidget = state;
+  void changeShowExploreWidgetState(bool state) => showExploreWidget = state;
 
   ScrollController get scrollController {
     var controller = ScrollController();
