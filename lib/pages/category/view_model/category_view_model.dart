@@ -1,9 +1,9 @@
-import 'package:Carafe/core/base/view_model/base_view_model.dart';
-import 'package:Carafe/core/firebase/firestore/manager/post_manager/post_manager.dart';
-import 'package:Carafe/pages/main/model/post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import '../../../core/base/view_model/base_view_model.dart';
+import '../../../core/firebase/firestore/manager/post_manager/post_manager.dart';
+import '../../main/model/post_model.dart';
 part 'category_view_model.g.dart';
 
 class CategoryViewModel = _CategoryViewModelBase with _$CategoryViewModel;
