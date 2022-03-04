@@ -54,6 +54,37 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
     });
   }
 
+  final _$currentUserModelAtom =
+      Atom(name: '_MainViewViewModelBase.currentUserModel');
+
+  @override
+  UserModel? get currentUserModel {
+    _$currentUserModelAtom.reportRead();
+    return super.currentUserModel;
+  }
+
+  @override
+  set currentUserModel(UserModel? value) {
+    _$currentUserModelAtom.reportWrite(value, super.currentUserModel, () {
+      super.currentUserModel = value;
+    });
+  }
+
+  final _$startingPageAtom = Atom(name: '_MainViewViewModelBase.startingPage');
+
+  @override
+  Widget get startingPage {
+    _$startingPageAtom.reportRead();
+    return super.startingPage;
+  }
+
+  @override
+  set startingPage(Widget value) {
+    _$startingPageAtom.reportWrite(value, super.startingPage, () {
+      super.startingPage = value;
+    });
+  }
+
   final _$followingUsersIdsAtom =
       Atom(name: '_MainViewViewModelBase.followingUsersIds');
 
@@ -68,6 +99,15 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
     _$followingUsersIdsAtom.reportWrite(value, super.followingUsersIds, () {
       super.followingUsersIds = value;
     });
+  }
+
+  final _$initalizeStartingPageAsyncAction =
+      AsyncAction('_MainViewViewModelBase.initalizeStartingPage');
+
+  @override
+  Future initalizeStartingPage(Widget page) {
+    return _$initalizeStartingPageAsyncAction
+        .run(() => super.initalizeStartingPage(page));
   }
 
   final _$_MainViewViewModelBaseActionController =
@@ -107,6 +147,28 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
   }
 
   @override
+  void addToFollowing(String userId) {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.addToFollowing');
+    try {
+      return super.addToFollowing(userId);
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeFromFollowing(String userId) {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.removeFromFollowing');
+    try {
+      return super.removeFromFollowing(userId);
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic updateFollowingUserIds(List<String> followingUsersIds) {
     final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
         name: '_MainViewViewModelBase.updateFollowingUserIds');
@@ -123,6 +185,8 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
 currentIndex: ${currentIndex},
 isFabVisible: ${isFabVisible},
 postViewType: ${postViewType},
+currentUserModel: ${currentUserModel},
+startingPage: ${startingPage},
 followingUsersIds: ${followingUsersIds}
     ''';
   }
