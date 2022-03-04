@@ -27,10 +27,8 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   bool isFabVisible = true;
   @observable
   PostViewType postViewType = PostViewType.FlatView;
-
   @observable
   UserModel? currentUserModel;
-
   @observable
   Widget startingPage = Container();
   @action
