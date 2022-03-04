@@ -192,6 +192,20 @@ class FirebaseUserManager extends FirebaseBase {
     return true;
   }
 
+  Future<List<String>?> getFollowingUsersIds() async {
+    List<String> followingUsersIds = [];
+    var ref = firebaseConstants.userFollowingCollectionRef(authService.userId!);
+    var rawData = await firebaseService.getCollection(ref);
+    if (rawData.error != null) return null;
+    followingUsersIds.add(authService.userId!);
+    for (var doc in rawData.data!.docs) {
+      var data = FollowUserModel.fromJson(doc.data());
+      followingUsersIds.add(data.followingUserId);
+    }
+    mainVm.updateFollowingUserIds(followingUsersIds);
+    return followingUsersIds;
+  }
+
   Future<bool> updateAField({
     required String fieldName,
     required Object value,
