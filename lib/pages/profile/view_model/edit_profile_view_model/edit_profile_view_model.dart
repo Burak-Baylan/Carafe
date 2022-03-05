@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:Carafe/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -129,6 +130,7 @@ abstract class _EditProfileViewModelBase extends BaseViewModel with Store {
     }
 
     dismissLoadingBar();
+    mainVm.updateCurrentUserModel();
     profileViewModel.refreshPage();
     context!.pop;
   }

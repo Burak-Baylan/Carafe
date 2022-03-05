@@ -42,6 +42,12 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     SearchView(),
   ];
 
+  @action
+  Future<void> updateCurrentUserModel() async {
+    currentUserModel =
+        await firebaseManager.getAUserInformation(authService.userId!);
+  }
+
   Future<void> startApp() async {
     if (auth.currentUser != null) {
       currentUserModel =
