@@ -1,5 +1,7 @@
 // ignore_for_file: must_call_super
 
+import 'package:Carafe/core/extensions/widget_extension.dart';
+import 'package:Carafe/core/widgets/center_dot_text.dart';
 import 'package:Carafe/pages/profile/view/users_profile_other_shares_page/view/users_profile_other_shares_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -116,13 +118,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody>
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Observer(
-              builder: (_) => ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: profileVm.userPostsLength,
-                itemBuilder: (context, index) => postWidgetBuilder(index,
-                    modelList: modelList, docRefs: docRefs),
-              ),
+              builder: (_) => postsListViewBuilder(modelList, docRefs),
             );
           }
           return Column(
@@ -133,6 +129,19 @@ class _ProfileViewBodyState extends State<ProfileViewBody>
           );
         },
       );
+
+  Widget postsListViewBuilder(
+    List<PostModel> modelList,
+    List<DocumentReference<Object?>?>? docRefs,
+  ) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: profileVm.userPostsLength,
+      itemBuilder: (context, index) =>
+          postWidgetBuilder(index, modelList: modelList, docRefs: docRefs),
+    );
+  }
 
   Widget postWidgetBuilder(
     int index, {
@@ -147,9 +156,26 @@ class _ProfileViewBodyState extends State<ProfileViewBody>
     if (profileVm.checkIfSameWithPinnedPost(postModel.postId)) {
       return Container();
     } else {
-      return buildPostWidget(postModel, docRef);
+      if (index == modelList.length) {
+        return buildWidgetWithSpace(postModel, docRef);
+      } else {
+        return buildPostWidget(postModel, docRef);
+      }
     }
   }
+
+  Widget buildWidgetWithSpace(
+    PostModel postModel,
+    DocumentReference<Object?>? docRef,
+  ) =>
+      Column(
+        children: [
+          buildPostWidget(postModel, docRef),
+          50.0.sizedBoxOnlyHeight,
+          CenterDotText().center,
+          50.0.sizedBoxOnlyHeight,
+        ],
+      );
 
   Widget buildPinnedPost() {
     var pinnedPostModel = profileVm.pinnedPost;
