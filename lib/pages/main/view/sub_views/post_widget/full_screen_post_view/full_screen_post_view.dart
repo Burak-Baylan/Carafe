@@ -1,3 +1,5 @@
+import 'package:Carafe/core/extensions/widget_extension.dart';
+import 'package:Carafe/core/widgets/small_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
@@ -59,7 +61,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
         future: commentsFuture,
         builder: (context, snapshot) => snapshot.hasData
             ? _postsListBuilder
-            : const Center(child: CircularProgressIndicator()),
+            : const SmallCircularProgressIndicator().center,
       );
 
   Widget get _postsListBuilder => Observer(

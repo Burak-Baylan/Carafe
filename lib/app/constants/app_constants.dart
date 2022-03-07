@@ -15,6 +15,8 @@ class AppColors {
 class AppConstants {
   static const APP_NAME = "Carafe";
   static const LOCALE = "en";
+  static const APP_LINK =
+      "https://play.google.com/store/apps/details?id=com.bluecannibal.carafe";
 }
 
 class PostContstants {
