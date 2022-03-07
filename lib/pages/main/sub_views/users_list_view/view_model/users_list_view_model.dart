@@ -37,18 +37,19 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
       this.userListType = userListType;
 
   @action
-  changePostsScrollable(ScrollPhysics physics) => usersListScrollabe = physics;
+  void changePostsScrollable(ScrollPhysics physics) =>
+      usersListScrollabe = physics;
   @action
-  lockScrollable() =>
+  void lockScrollable() =>
       changePostsScrollable(const NeverScrollableScrollPhysics());
   @action
-  openScrollable() =>
+  void openScrollable() =>
       changePostsScrollable(const AlwaysScrollableScrollPhysics());
 
   bool canMorePostsUpload = true;
 
-  lockCanUploadMorePost() => canMorePostsUpload = false;
-  openCanUploadMorePost() => canMorePostsUpload = true;
+  void lockCanUploadMorePost() => canMorePostsUpload = false;
+  void openCanUploadMorePost() => canMorePostsUpload = true;
 
   List<UserModel> usersList = [];
   List<PostModel?> postModel = [];
@@ -81,7 +82,7 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
     return usersList;
   }
 
-  Future loadMoreData() async {
+  Future<void> loadMoreData() async {
     var usersModels = await usersListManager.loadMore();
     updateLists(usersModels);
   }

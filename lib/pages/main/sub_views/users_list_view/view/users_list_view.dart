@@ -1,4 +1,3 @@
-import 'package:Carafe/pages/main/model/post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -12,6 +11,7 @@ import '../../../../../core/widgets/something_went_wrong_widget.dart';
 import '../../../../../core/widgets/there_is_nothing_here_widget.dart';
 import '../../../../authenticate/model/user_model.dart';
 import '../../../../search/view/sub_views/searced_users_information_widget.dart';
+import '../../../model/post_model.dart';
 import '../view_model/users_list_view_model.dart';
 
 class UsersListView extends StatefulWidget {
@@ -19,11 +19,11 @@ class UsersListView extends StatefulWidget {
     Key? key,
     required this.appBarText,
     required this.userListType,
-    required this.listingUsersRef,
+    required this.listingRef,
   }) : super(key: key);
 
   String appBarText;
-  Query<Map<String, dynamic>> listingUsersRef;
+  Query<Map<String, dynamic>> listingRef;
   UserListType userListType;
 
   @override
@@ -37,7 +37,7 @@ class _UsersListViewState extends State<UsersListView> {
   @override
   void initState() {
     usersListVm.setUserListType(widget.userListType);
-    future = usersListVm.getData(widget.listingUsersRef);
+    future = usersListVm.getData(widget.listingRef);
     usersListVm.setContext(context);
     super.initState();
   }
@@ -84,21 +84,29 @@ class _UsersListViewState extends State<UsersListView> {
     List<Widget> widgets = [];
     if (widget.userListType == UserListType.comments) {
       var postModel = usersListVm.postModel[index]!;
-      widgets.add(InkWell(
-        onTap: () => usersListVm.navigateToFullScreenView(postModel),
-        child: LitePostWidget(
-          postModel: postModel,
-          userModel: userModel,
-        ),
-      ));
+      widgets.add(getPostItem(postModel, userModel));
     } else {
-      widgets.add(SearchedUsersInformationWidget(
-        viewModel: usersListVm,
-        userModel: userModel,
-      ));
+      widgets.add(getUserItem(userModel));
     }
     widgets.add(bottomExtraWidget(index));
     return Column(children: widgets);
+  }
+
+  Widget getUserItem(UserModel userModel) {
+    return SearchedUsersInformationWidget(
+      viewModel: usersListVm,
+      userModel: userModel,
+    );
+  }
+
+  Widget getPostItem(PostModel postModel, UserModel userModel) {
+    return InkWell(
+      onTap: () => usersListVm.navigateToFullScreenView(postModel),
+      child: LitePostWidget(
+        postModel: postModel,
+        userModel: userModel,
+      ),
+    );
   }
 
   Widget buildCommentTypeWidget(UserModel userModel, PostModel postModel) =>
