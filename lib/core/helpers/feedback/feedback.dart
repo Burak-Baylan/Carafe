@@ -21,6 +21,7 @@ class SendFeedback {
     this.context = context;
     initiailizeValues();
     showRoundedBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (context) {
         return Container(
