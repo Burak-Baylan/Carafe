@@ -113,7 +113,7 @@ class _ProfileFollowingAndFollowersLayoutState
       page: UsersListView(
         appBarText: titleText,
         userListType: userListType,
-        listingUsersRef: _buildRef(collectionName),
+        listingRef: _buildRef(collectionName),
       ),
       animate: true,
     );

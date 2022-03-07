@@ -110,6 +110,15 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
         .run(() => super.initalizeStartingPage(page));
   }
 
+  final _$updateCurrentUserModelAsyncAction =
+      AsyncAction('_MainViewViewModelBase.updateCurrentUserModel');
+
+  @override
+  Future<void> updateCurrentUserModel() {
+    return _$updateCurrentUserModelAsyncAction
+        .run(() => super.updateCurrentUserModel());
+  }
+
   final _$_MainViewViewModelBaseActionController =
       ActionController(name: '_MainViewViewModelBase');
 

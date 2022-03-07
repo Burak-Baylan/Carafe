@@ -118,7 +118,7 @@ class FullScreenPostBottomLayout extends StatelessWidget {
           page: UsersListView(
             appBarText: 'Liked by',
             userListType: UserListType.likes,
-            listingUsersRef: postViewModel.postLikesRef(),
+            listingRef: postViewModel.postLikesRef(),
           ),
           animate: true,
         ),
@@ -135,7 +135,7 @@ class FullScreenPostBottomLayout extends StatelessWidget {
           page: UsersListView(
             appBarText: 'Commented by',
             userListType: UserListType.comments,
-            listingUsersRef: postViewModel.postCommentsRawRef(),
+            listingRef: postViewModel.postCommentsRawRef(),
           ),
           animate: true,
         ),
