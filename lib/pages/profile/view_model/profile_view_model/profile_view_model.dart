@@ -58,8 +58,11 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
   String? website;
   @observable
   Timestamp? birthDate;
-
   ScrollController postListController = ScrollController();
+  bool canMorePostsUpload = true;
+
+  void lockCanUploadMorePost() => canMorePostsUpload = false;
+  void openCanUploadMorePost() => canMorePostsUpload = true;
 
   @action
   Future<bool> initializeInformations() async {
@@ -79,14 +82,14 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
     return true;
   }
 
-  Future refreshPage() async {
+  Future<void> refreshPage() async {
     var response = await initializeInformations();
     if (!response) return;
     await userPostsFuture();
   }
 
   @action
-  Future followButtonClicked(ProfileViewModel profileViewModel) async {
+  Future<void> followButtonClicked(ProfileViewModel profileViewModel) async {
     if (profileOwner) {
       customNavigateToPage(
         page: EditProfileView(profileViewModel: profileViewModel),
@@ -102,14 +105,14 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
   }
 
   @action
-  Future followUser() async {
+  Future<void> followUser() async {
     await userManager.followUser(userId, currentTime);
     isUserFollowing = true;
     followersCount++;
   }
 
   @action
-  Future unfollowUser() async {
+  Future<void> unfollowUser() async {
     await userManager.unfollowUser(userId);
     isUserFollowing = false;
     followersCount--;
@@ -126,13 +129,14 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
   bool checkIfSameWithPinnedPost(String checkingPostId) =>
       pinnedPost != null && checkingPostId == pinnedPost!.postId;
 
-  Future userPostsFuture() async {
+  Future<void> userPostsFuture() async {
     await getUserPinnedPost();
     await getUserPosts();
   }
 
   void prepareScrollListener() {
     postListController.addListener(() async {
+      if (!canMorePostsUpload) return;
       if (postListController.offset >=
           postListController.position.maxScrollExtent) {
         lockScrollable();
@@ -142,10 +146,11 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
     });
   }
 
-  Future getUserPosts() async {
+  Future<void> getUserPosts() async {
     userPosts.clear();
     userPostsLength = 0;
     userPostsRefs.clear();
+    openCanUploadMorePost();
     var rawData = await postManager.getPosts(
         ref: firebaseConstants.getAUsersPostRef(userId));
     if (rawData.error != null) {
@@ -157,7 +162,7 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
     userPostsLength = userPosts.length + 1;
   }
 
-  Future getMorePosts() async {
+  Future<void> getMorePosts() async {
     var rawData = await postManager.loadMorePost(
       ref: firebaseConstants.getAUsersPostRef(userId),
     );
@@ -167,6 +172,8 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
         userPosts.add(doc);
       }
     }
+    var loadedPosts = rawData.data!;
+    loadMoreCommentsLockControl(loadedPosts.length);
     userPostsLength = userPosts.length + 1;
   }
 
@@ -191,7 +198,7 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
         onPressedPositiveButton: () async => await unfollowUser(),
       );
 
-  Future getFollowingAndFollowersCount() async {
+  Future<void> getFollowingAndFollowersCount() async {
     var followersCount = 0;
     var followingCount = 0;
     if (userId == authService.userId) {
@@ -207,5 +214,11 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
     }
     this.followersCount = followersCount;
     this.followingCount = followingCount;
+  }
+
+  void loadMoreCommentsLockControl(int size) {
+    if (size < firebaseConstants.numberOfPostsToBeReceiveAtOnce) {
+      lockCanUploadMorePost();
+    }
   }
 }
