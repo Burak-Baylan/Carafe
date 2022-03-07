@@ -50,6 +50,7 @@ class FirebaseConstants extends FirebaseBase {
   String reportedUsersText = 'ReportedUsers';
   String reportedPostsText = 'ReportedPosts';
   String categoryText = 'category';
+  String feedbacksText = 'Feedback';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
   int numberOfCommentsToBeReceiveAtOnce = 6;
@@ -209,4 +210,7 @@ class FirebaseConstants extends FirebaseBase {
 
   CollectionReference<Map<String, dynamic>> get reportedPostsCollection =>
       firestore.collection(reportedPostsText);
+
+  CollectionReference<Map<String, dynamic>> get feedbackCollectionRef =>
+      firestore.collection(feedbacksText);
 }
