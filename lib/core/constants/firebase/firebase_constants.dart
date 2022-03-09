@@ -51,6 +51,7 @@ class FirebaseConstants extends FirebaseBase {
   String reportedPostsText = 'ReportedPosts';
   String categoryText = 'category';
   String feedbacksText = 'Feedback';
+  String savedAtText = 'saved_at';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
   int numberOfCommentsToBeReceiveAtOnce = 6;

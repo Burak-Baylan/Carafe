@@ -47,7 +47,7 @@ class _ProfileFollowingAndFollowersLayoutState
         Observer(
           builder: (context) => _buildWidget(
             text: 'Followers',
-            userListType: UserListType.followerUsers,
+            userListType: ListingType.followerUsers,
             collectionName:
                 widget.profileViewModel.firebaseConstants.followersText,
             count: widget.profileViewModel.followersCount,
@@ -56,7 +56,7 @@ class _ProfileFollowingAndFollowersLayoutState
         Observer(
           builder: (context) => _buildWidget(
             text: 'Following',
-            userListType: UserListType.followingUsers,
+            userListType: ListingType.followingUsers,
             collectionName:
                 widget.profileViewModel.firebaseConstants.followingText,
             count: widget.profileViewModel.followingCount,
@@ -69,7 +69,7 @@ class _ProfileFollowingAndFollowersLayoutState
   Widget _buildWidget({
     required String text,
     required String collectionName,
-    required UserListType userListType,
+    required ListingType userListType,
     required int count,
   }) =>
       InkWell(
@@ -106,7 +106,7 @@ class _ProfileFollowingAndFollowersLayoutState
 
   void navigatePage({
     required String titleText,
-    required UserListType userListType,
+    required ListingType userListType,
     required String collectionName,
   }) {
     widget.profileViewModel.customNavigateToPage(

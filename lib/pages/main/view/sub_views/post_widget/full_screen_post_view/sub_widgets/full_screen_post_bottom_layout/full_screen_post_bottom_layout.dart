@@ -117,7 +117,7 @@ class FullScreenPostBottomLayout extends StatelessWidget {
         onTap: () => postViewModel.customNavigateToPage(
           page: UsersListView(
             appBarText: 'Liked by',
-            userListType: UserListType.likes,
+            userListType: ListingType.likes,
             listingRef: postViewModel.postLikesRef(),
           ),
           animate: true,
@@ -134,7 +134,7 @@ class FullScreenPostBottomLayout extends StatelessWidget {
         onTap: () => postViewModel.customNavigateToPage(
           page: UsersListView(
             appBarText: 'Commented by',
-            userListType: UserListType.comments,
+            userListType: ListingType.comments,
             listingRef: postViewModel.postCommentsRawRef(),
           ),
           animate: true,

@@ -267,7 +267,7 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
       AsyncAction('_ProfileViewModelBase.followButtonClicked');
 
   @override
-  Future<dynamic> followButtonClicked(ProfileViewModel profileViewModel) {
+  Future<void> followButtonClicked(ProfileViewModel profileViewModel) {
     return _$followButtonClickedAsyncAction
         .run(() => super.followButtonClicked(profileViewModel));
   }
@@ -276,7 +276,7 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
       AsyncAction('_ProfileViewModelBase.followUser');
 
   @override
-  Future<dynamic> followUser() {
+  Future<void> followUser() {
     return _$followUserAsyncAction.run(() => super.followUser());
   }
 
@@ -284,7 +284,7 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
       AsyncAction('_ProfileViewModelBase.unfollowUser');
 
   @override
-  Future<dynamic> unfollowUser() {
+  Future<void> unfollowUser() {
     return _$unfollowUserAsyncAction.run(() => super.unfollowUser());
   }
 
