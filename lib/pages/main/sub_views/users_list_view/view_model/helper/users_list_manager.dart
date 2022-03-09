@@ -1,3 +1,4 @@
+import 'package:Carafe/pages/main/model/post_save_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../../core/constants/firebase/firebase_constants.dart';
 import '../../../../../../core/firebase/firestore/service/firebase_service.dart';
@@ -16,11 +17,11 @@ class UsersListManager {
   List<PostModel> postModel = [];
 
   late QueryDocumentSnapshot<Map<String, dynamic>> _lastVisibleUserDoc;
-  late UserListType _userListType;
+  late ListingType _userListType;
   late Query<Map<String, dynamic>> _reference;
 
   Future<List<UserModel>?> getData({
-    required UserListType userListType,
+    required ListingType userListType,
     required Query<Map<String, dynamic>> reference,
   }) async {
     _userListType = userListType;
@@ -57,17 +58,17 @@ class UsersListManager {
   }
 
   String _getUserId(Map<String, dynamic> documentData) {
-    if (_userListType == UserListType.likes) {
+    if (_userListType == ListingType.likes) {
       var model = LikeModel.fromJson(documentData);
       return model.authorId;
-    } else if (_userListType == UserListType.comments) {
+    } else if (_userListType == ListingType.comments) {
       var model = PostModel.fromJson(documentData);
       postModel.add(model);
       return model.authorId;
-    } else if (_userListType == UserListType.followingUsers) {
+    } else if (_userListType == ListingType.followingUsers) {
       var model = FollowUserModel.fromJson(documentData);
       return model.followingUserId;
-    } else if (_userListType == UserListType.followerUsers) {
+    } else if (_userListType == ListingType.followerUsers) {
       var model = FollowUserModel.fromJson(documentData);
       return model.followerUserId;
     }
@@ -81,18 +82,22 @@ class UsersListManager {
   String get _getReferenceText {
     var createdAtText = _firebaseConstants.createdAtText;
     var followedAtText = _firebaseConstants.followedAtText;
+    var savedAtText = _firebaseConstants.savedAtText;
     switch (_userListType) {
-      case (UserListType.likes):
+      case (ListingType.likes):
         return createdAtText;
-      case UserListType.comments:
+      case ListingType.comments:
         return createdAtText;
-      case UserListType.search:
+      case ListingType.search:
         // TODO: Handle this case.
         break;
-      case UserListType.followingUsers:
+      case ListingType.followingUsers:
         return followedAtText;
-      case UserListType.followerUsers:
+      case ListingType.followerUsers:
         return followedAtText;
+      case ListingType.savedPosts:
+        // TODO: Handle this case.
+        break;
     }
     return createdAtText;
   }

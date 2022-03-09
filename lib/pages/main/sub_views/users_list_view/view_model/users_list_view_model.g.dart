@@ -36,7 +36,7 @@ mixin _$UsersListViewModel on _UsersListViewModelBase, Store {
       ActionController(name: '_UsersListViewModelBase');
 
   @override
-  dynamic changePostsScrollable(ScrollPhysics physics) {
+  void changePostsScrollable(ScrollPhysics physics) {
     final _$actionInfo = _$_UsersListViewModelBaseActionController.startAction(
         name: '_UsersListViewModelBase.changePostsScrollable');
     try {
@@ -47,7 +47,7 @@ mixin _$UsersListViewModel on _UsersListViewModelBase, Store {
   }
 
   @override
-  dynamic lockScrollable() {
+  void lockScrollable() {
     final _$actionInfo = _$_UsersListViewModelBaseActionController.startAction(
         name: '_UsersListViewModelBase.lockScrollable');
     try {
@@ -58,7 +58,7 @@ mixin _$UsersListViewModel on _UsersListViewModelBase, Store {
   }
 
   @override
-  dynamic openScrollable() {
+  void openScrollable() {
     final _$actionInfo = _$_UsersListViewModelBaseActionController.startAction(
         name: '_UsersListViewModelBase.openScrollable');
     try {

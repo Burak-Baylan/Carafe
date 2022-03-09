@@ -33,7 +33,7 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
     return controller;
   }
 
-  void setUserListType(UserListType userListType) =>
+  void setUserListType(ListingType userListType) =>
       this.userListType = userListType;
 
   @action
@@ -53,7 +53,7 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
 
   List<UserModel> usersList = [];
   List<PostModel?> postModel = [];
-  late UserListType userListType;
+  late ListingType userListType;
 
   late Query<Map<String, dynamic>> reference;
 
@@ -92,7 +92,7 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
       for (var user in userList) {
         usersList.add(user);
       }
-      if (userListType == UserListType.comments) {
+      if (userListType == ListingType.comments) {
         postModel = usersListManager.postModel;
       }
     }
@@ -115,4 +115,11 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
   }
 }
 
-enum UserListType { likes, comments, search, followingUsers, followerUsers }
+enum ListingType {
+  likes,
+  comments,
+  search,
+  followingUsers,
+  followerUsers,
+  savedPosts
+}

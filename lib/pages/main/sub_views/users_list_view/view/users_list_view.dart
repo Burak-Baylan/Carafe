@@ -24,7 +24,7 @@ class UsersListView extends StatefulWidget {
 
   String appBarText;
   Query<Map<String, dynamic>> listingRef;
-  UserListType userListType;
+  ListingType userListType;
 
   @override
   State<UsersListView> createState() => _UsersListViewState();
@@ -82,7 +82,7 @@ class _UsersListViewState extends State<UsersListView> {
   Widget buildItem(int index, List<UserModel> users) {
     var userModel = usersListVm.usersList[index];
     List<Widget> widgets = [];
-    if (widget.userListType == UserListType.comments) {
+    if (widget.userListType == ListingType.comments) {
       var postModel = usersListVm.postModel[index]!;
       widgets.add(getPostItem(postModel, userModel));
     } else {
