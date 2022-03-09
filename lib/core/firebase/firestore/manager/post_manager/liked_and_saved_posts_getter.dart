@@ -1,8 +1,9 @@
-import 'package:Carafe/pages/main/model/post_save_model.dart';
-import 'package:Carafe/pages/main/sub_views/users_list_view/view_model/users_list_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../../pages/main/model/like_model.dart';
 import '../../../../../pages/main/model/post_model.dart';
+import '../../../../../pages/main/model/post_save_model.dart';
+import '../../../../../pages/main/sub_views/users_list_view/view_model/users_list_view_model.dart';
 import '../../../base/firebase_base.dart';
 
 class LikedAndSavedPostsGetter extends FirebaseBase {
@@ -31,7 +32,6 @@ class LikedAndSavedPostsGetter extends FirebaseBase {
     return await getPostsList(rawLikedPosts.data!.docs, ListingType.likes);
   }
 
-  //TODO ORGANIZE ET BURAYI
   Future<List<PostModel>?> getSavedPosts(
     Query<Map<String, dynamic>> userSavedPostsRef,
   ) async {

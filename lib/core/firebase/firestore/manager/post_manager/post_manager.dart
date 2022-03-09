@@ -1,4 +1,4 @@
-import 'package:Carafe/core/firebase/firestore/manager/post_manager/liked_posts_getter.dart';
+import 'package:Carafe/core/firebase/firestore/manager/post_manager/liked_and_saved_posts_getter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../main.dart';
 import '../../../../../pages/main/model/pinned_post_model.dart';
@@ -16,7 +16,7 @@ class FirebasePostManager extends FirebaseBase {
   Query<Map<String, dynamic>> get allPostsRef =>
       firebaseConstants.postsCreatedDescending;
 
-  LikedPostsGetter likedPostsGetter = LikedPostsGetter();
+  LikedAndSavedPostsGetter likedPostsGetter = LikedAndSavedPostsGetter();
 
   Future<CustomData<List<PostModel>>> getPosts({
     Query<Map<String, dynamic>>? ref,

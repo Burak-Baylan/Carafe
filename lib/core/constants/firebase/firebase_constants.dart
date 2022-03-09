@@ -214,4 +214,12 @@ class FirebaseConstants extends FirebaseBase {
 
   CollectionReference<Map<String, dynamic>> get feedbackCollectionRef =>
       firestore.collection(feedbacksText);
+
+  Query<Map<String, dynamic>>
+      get getCurrentUserSavedPostWithLimitAndDescending =>
+          firebaseConstants.allUsersCollectionRef
+              .doc(authService.userId)
+              .collection(firebaseConstants.userSavedPostsText)
+              .orderBy(firebaseConstants.savedAtText, descending: true)
+              .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce);
 }
