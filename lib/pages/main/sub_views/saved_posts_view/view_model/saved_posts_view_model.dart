@@ -73,8 +73,8 @@ abstract class _SavedPostsViewModelBase extends BaseViewModel with Store {
     if (savedPosts == null) {
       return;
     }
-    for (var savedPosts in savedPosts) {
-      this.savedPosts.add(savedPosts);
+    for (var savedPost in savedPosts) {
+      this.savedPosts.add(savedPost);
     }
     loadMoreCommentsLockControl(savedPosts.length);
   }
