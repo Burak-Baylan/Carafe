@@ -4,6 +4,7 @@ import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/double_extensions.dart';
 import '../../../../../core/extensions/widget_extension.dart';
 import '../../../../../core/widgets/center_dot_text.dart';
+import '../../../../../core/widgets/deleted_post_widget.dart';
 import '../../../../../core/widgets/small_circular_progress_indicator.dart';
 import '../../../../../core/widgets/something_went_wrong_widget.dart';
 import '../../../../../core/widgets/there_is_nothing_here_widget.dart';
@@ -60,7 +61,13 @@ class _SavedPostsViewState extends State<SavedPostsView> {
           itemCount: savedPostsVm.savedPosts.length,
           controller: savedPostsVm.scrollController,
           physics: savedPostsVm.postsScrollable,
-          itemBuilder: (context, index) => buildPostWidget(index),
+          itemBuilder: (context, index) {
+            var postModel = savedPostsVm.savedPosts[index];
+            if (postModel.isPostDeleted!) {
+              return DeletedPostWidget(postModel: postModel);
+            }
+            return buildPostWidget(index);
+          },
         ),
       );
 
