@@ -30,6 +30,7 @@ class PostWidget extends StatefulWidget {
     this.homeViewModel,
     this.isPostPinned,
     this.onPostPinnedOrUnpinned,
+    this.onClicked,
   }) : super(key: key);
 
   PostModel model;
@@ -45,6 +46,7 @@ class PostWidget extends StatefulWidget {
   int? index;
   HomeViewModel? homeViewModel;
   Function? onPostPinnedOrUnpinned;
+  Function(PostViewModel postViewModel, PostModel postModel)? onClicked;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -78,7 +80,13 @@ class _PostWidgetState extends State<PostWidget> {
   Widget get _postContainer => InkWell(
         splashColor: Colors.grey.shade100.withOpacity(.0),
         borderRadius: widget.closeCardView ? 0.radiusAll : 10.radiusAll,
-        onTap: () => postViewModel.navigateToFullScreenPostView(postViewModel),
+        onTap: () {
+          if (widget.onClicked != null) {
+            widget.onClicked!(postViewModel, model);
+            return;
+          }
+          postViewModel.navigateToFullScreenPostView(postViewModel);
+        },
         child: _postLayout,
       );
 

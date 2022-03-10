@@ -42,7 +42,7 @@ class PostBottomLayout extends StatelessWidget {
 
   Widget get _likeLayout => InkWell(
         borderRadius: 5.radiusAll,
-        onTap: () => postViewModel.like(),
+        onTap: () => postModel.isPostDeleted! ? {} : postViewModel.like(),
         child: Padding(
           padding: 4.0.edgeIntesetsTopBottom,
           child: Row(
@@ -58,10 +58,7 @@ class PostBottomLayout extends StatelessWidget {
 
   Widget get _commentLayout => InkWell(
         borderRadius: 5.radiusAll,
-        onTap: () => postViewModel.navigateToReplyScreen(
-          postModel: postModel,
-          postAddingRef: postViewModel.currentPostRef,
-        ),
+        onTap: () => postModel.isPostDeleted! ? {} : sendToReplyScreen(),
         child: Padding(
           padding: 4.0.edgeIntesetsTopBottom,
           child: Row(
@@ -102,19 +99,21 @@ class PostBottomLayout extends StatelessWidget {
         ),
       );
 
-  Widget get _buildLikeText =>
-      StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: postViewModel.firebaseConstants
-            .likeCountStremRef(postViewModel.currentPostRef),
-        builder: (context, snapshot) => _findLikeText(snapshot),
-      );
+  Widget get _buildLikeText => postModel.isPostDeleted!
+      ? Container()
+      : StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: postViewModel.firebaseConstants
+              .likeCountStremRef(postViewModel.currentPostRef),
+          builder: (context, snapshot) => _findLikeText(snapshot),
+        );
 
-  Widget get _buildCommentText =>
-      StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: postViewModel.firebaseConstants
-            .commentsStremRef(postViewModel.currentPostRef),
-        builder: (context, snapshot) => _findCommentText(snapshot),
-      );
+  Widget get _buildCommentText => postModel.isPostDeleted!
+      ? Container()
+      : StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: postViewModel.firebaseConstants
+              .commentsStremRef(postViewModel.currentPostRef),
+          builder: (context, snapshot) => _findCommentText(snapshot),
+        );
 
   Widget _findLikeText(
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) =>
@@ -164,4 +163,9 @@ class PostBottomLayout extends StatelessWidget {
       );
     }
   }
+
+  void sendToReplyScreen() => postViewModel.navigateToReplyScreen(
+        postModel: postModel,
+        postAddingRef: postViewModel.currentPostRef,
+      );
 }
