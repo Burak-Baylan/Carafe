@@ -12,15 +12,9 @@ import '../../../../category/view/category_view.dart';
 import '../../../../main/model/post_model.dart';
 import '../../../../main/view/sub_views/post_widget/post_widget/post_widget.dart';
 import '../../../view_model/explore_view_model/explore_view_model.dart';
-import '../../../view_model/search_view_model.dart';
 
 class SearchViewExploreBody extends StatefulWidget {
-  SearchViewExploreBody({
-    Key? key,
-    required this.searchViewModel,
-  }) : super(key: key);
-
-  SearchViewModel searchViewModel;
+  SearchViewExploreBody({Key? key}) : super(key: key);
 
   @override
   State<SearchViewExploreBody> createState() => _SearchViewExploreBodyState();

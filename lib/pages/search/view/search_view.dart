@@ -27,7 +27,7 @@ class _SearchViewState extends State<SearchView>
   @override
   void initState() {
     searchViewModel.setContext(context);
-    exploreView = SearchViewExploreBody(searchViewModel: searchViewModel);
+    exploreView = SearchViewExploreBody();
     pages = [
       exploreView,
       SearchViewSearchBody(searchViewModel: searchViewModel)
