@@ -102,6 +102,7 @@ class _UsersProfileOtherSharesPageState
       );
 
   Widget get likedPostListViewBuilder => ListView.builder(
+        key: PageStorageKey(usersOtherSharesVm.likedPosts.first.postId),
         controller: usersOtherSharesVm.likedPostsScrollController,
         physics: usersOtherSharesVm.likedPostsScrollPhysics,
         itemCount: usersOtherSharesVm.likedPosts.length,
@@ -138,6 +139,7 @@ class _UsersProfileOtherSharesPageState
       );
 
   Widget get mediaPostsListViewBuilder => ListView.builder(
+        key: PageStorageKey(usersOtherSharesVm.mediaPosts.first.postId),
         controller: usersOtherSharesVm.mediaPostsScrollController,
         physics: usersOtherSharesVm.mediaPostsScrollPhysics,
         itemCount: usersOtherSharesVm.mediaPosts.length,
