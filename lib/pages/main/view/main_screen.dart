@@ -5,13 +5,10 @@ import '../../../core/base/view/base_view.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/extensions/int_extensions.dart';
 import '../../../core/init/navigation/service/navigation_service.dart';
-import '../view_model/main_view_view_model.dart';
+import '../../../main.dart';
 import 'add_post/view/add_post_page.dart';
-import 'home/view/home_view.dart';
 import 'sub_views/bottom_navigation/bottom_navigation.dart';
 import 'sub_views/drawer/main_screen_drawer.dart';
-
-final MainViewViewModel mainVm = MainViewViewModel();
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -29,12 +26,15 @@ class _MainScreenState extends BaseView<MainScreen> {
     this.context = context;
     _setViewModel(context);
     return Scaffold(
-      appBar: _appBar,
-      backgroundColor: AppColors.backGroundGrey,
-      drawer: MainScreenDrawer(viewModel: mainVm),
+      backgroundColor: AppColors.white,
+      drawer: MainScreenDrawer(),
       floatingActionButton: _fab,
       bottomNavigationBar: MainBottomNavigation(viewModel: mainVm),
-      body: SafeArea(child: HomeView()),
+      body: PageView(
+        controller: mainVm.pageController,
+        children: mainVm.screens,
+        physics: const NeverScrollableScrollPhysics(),
+      ),
     );
   }
 
@@ -58,46 +58,7 @@ class _MainScreenState extends BaseView<MainScreen> {
             NavigationService.instance.customNavigateToPage(AddPostPage()),
       );
 
-  AppBar get _appBar => AppBar(
-        backgroundColor: AppColors.white,
-        leading: _leading,
-        centerTitle: true,
-        title: Text(
-          "Home",
-          style: context.theme.textTheme.headline6?.copyWith(
-            fontSize: context.width / 25,
-            fontWeight: FontWeight.bold,
-            color: context.theme.colorScheme.primary,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.calendar_view_day_sharp,
-              color: context.theme.colorScheme.primary,
-              size: context.width / 17,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      );
-
-  Widget get _leading => Padding(
-        padding: const EdgeInsets.all(10),
-        child: Builder(builder: (context) {
-          return GestureDetector(
-            onTap: () => context.openDrawer,
-            child: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://via.placeholder.com/140x100',
-                scale: 20,
-              ),
-            ),
-          );
-        }),
-      );
-
-  _setViewModel(BuildContext context) {
+  void _setViewModel(BuildContext context) {
     mainVm.setContext(context);
   }
 }
