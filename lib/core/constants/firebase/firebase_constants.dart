@@ -7,51 +7,51 @@ class FirebaseConstants extends FirebaseBase {
       _instance = _instance == null ? FirebaseConstants._init() : _instance!;
   FirebaseConstants._init();
 
-  //* Post paths
-  String postsText = "posts";
-  String commentCountText = "comment_count";
-  String createdAtText = "created_at";
-  String imageLinksText = "image_links";
-  String imageDominantColorsText = "image_dominant_color";
-  String likeCountText = "like_count";
-  String postIdText = "postId";
-  String postNotificationsText = "post_notifications";
-  String textText = "text";
-  String authorIdText = "author_id";
-  String followersCount = "followers_count";
-  //*
-
-  String collectionLikesText = "likers";
-  String deletedPostsText = "deleted_posts";
-  String postLikersText = "likes";
-  String usersText = "Users";
-  String userSavedPostsText = "saved_posts";
-  String userIdText = 'userId';
-  String followingText = 'following';
-  String followersText = 'followers';
-  String followerUserText = 'follower_user';
-  String followingUserText = 'following_user';
-  String pinnedPostText = 'pinned_post';
-  String postCommentsText = 'comments';
-  String usernameText = 'username';
-  String usernameLowerCaseText = 'username_lower_case';
-  String postViewsText = 'post_views';
-  String postClicksText = 'post_clicks';
-  String profileVisitsText = 'profile_visits';
-  String interactionsText = 'interactions';
-  String isPostDeletedText = 'is_post_deleted';
-  String displayNameText = 'display_name';
-  String profileDescriptionText = 'profile_description';
-  String websiteText = 'website';
-  String birthDateText = 'birth_date';
-  String hasImageText = 'has_image';
-  String ppUrlText = 'photo_url';
-  String followedAtText = 'followed_at';
-  String reportedUsersText = 'ReportedUsers';
-  String reportedPostsText = 'ReportedPosts';
-  String categoryText = 'category';
-  String feedbacksText = 'Feedback';
-  String savedAtText = 'saved_at';
+  final String postsText = "posts";
+  final String commentCountText = "comment_count";
+  final String createdAtText = "created_at";
+  final String imageLinksText = "image_links";
+  final String imageDominantColorsText = "image_dominant_color";
+  final String likeCountText = "like_count";
+  final String postIdText = "postId";
+  final String postNotificationsText = "post_notifications";
+  final String textText = "text";
+  final String authorIdText = "author_id";
+  final String followersCount = "followers_count";
+  final String collectionLikesText = "likers";
+  final String deletedPostsText = "deleted_posts";
+  final String postLikersText = "likes";
+  final String usersText = "Users";
+  final String userSavedPostsText = "saved_posts";
+  final String userIdText = 'userId';
+  final String followingText = 'following';
+  final String followersText = 'followers';
+  final String followerUserText = 'follower_user';
+  final String followingUserText = 'following_user';
+  final String pinnedPostText = 'pinned_post';
+  final String postCommentsText = 'comments';
+  final String usernameText = 'username';
+  final String usernameLowerCaseText = 'username_lower_case';
+  final String postViewsText = 'post_views';
+  final String postClicksText = 'post_clicks';
+  final String profileVisitsText = 'profile_visits';
+  final String interactionsText = 'interactions';
+  final String isPostDeletedText = 'is_post_deleted';
+  final String displayNameText = 'display_name';
+  final String profileDescriptionText = 'profile_description';
+  final String websiteText = 'website';
+  final String birthDateText = 'birth_date';
+  final String hasImageText = 'has_image';
+  final String ppUrlText = 'photo_url';
+  final String followedAtText = 'followed_at';
+  final String reportedUsersText = 'ReportedUsers';
+  final String reportedPostsText = 'ReportedPosts';
+  final String categoryText = 'category';
+  final String feedbacksText = 'Feedback';
+  final String savedAtText = 'saved_at';
+  final String tokenText = 'token';
+  final String httpErrorsText = 'HttpErrors';
+  final String notificationsText = 'notifications';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
   int numberOfCommentsToBeReceiveAtOnce = 6;
@@ -222,4 +222,7 @@ class FirebaseConstants extends FirebaseBase {
               .collection(firebaseConstants.userSavedPostsText)
               .orderBy(firebaseConstants.savedAtText, descending: true)
               .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce);
+
+  CollectionReference<Map<String, dynamic>> get httpErrorsCollection =>
+      firestore.collection(httpErrorsText);
 }
