@@ -78,6 +78,7 @@ class RegisterUser extends BaseViewModel {
         usernameLowerCase: vm.username?.toLowerCase(),
         birthDate: null,
         website: null,
+        token: null,
       );
 
   @override

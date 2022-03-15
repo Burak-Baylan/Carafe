@@ -5,7 +5,6 @@ import '../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../authenticate/model/user_model.dart';
 import '../../../model/post_model.dart';
 import '../../../view/sub_views/post_widget/full_screen_post_view/full_screen_post_view.dart';
-import '../../../view/sub_views/post_widget/post_widget/view_model/post_view_model.dart';
 import 'helper/users_list_manager.dart';
 part 'users_list_view_model.g.dart';
 
@@ -99,20 +98,9 @@ abstract class _UsersListViewModelBase extends BaseViewModel with Store {
   }
 
   void navigateToFullScreenView(PostModel postModel) => customNavigateToPage(
-        page: FullScreenPostView(
-          postViewModel: getPostViewModel(postModel),
-          postModel: postModel,
-        ),
+        page: FullScreenPostView(postModel: postModel),
         animate: true,
       );
-
-  PostViewModel getPostViewModel(PostModel postModel) {
-    var postViewModel = PostViewModel();
-    postViewModel.setPostModel(postModel);
-    postViewModel.setContext(context!);
-    postViewModel.initializeValues();
-    return postViewModel;
-  }
 }
 
 enum ListingType {

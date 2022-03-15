@@ -5,6 +5,7 @@ import '../../../app/managers/hive_manager.dart';
 import '../../../core/base/view_model/base_view_model.dart';
 import '../../../core/extensions/int_extensions.dart';
 import '../../../core/hive/hive_constants.dart';
+import '../../../core/init/notification/notification_manager/notification_manager.dart';
 import '../../authenticate/authenticate_view.dart';
 import '../../authenticate/model/user_model.dart';
 import '../../profile/view/profile_view/profile_view.dart';
@@ -36,6 +37,8 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     startingPage = page;
   }
 
+  NotificationManager notificationManager = NotificationManager();
+
   final PageController pageController = PageController();
   List<Widget> screens = [
     const HomeView(),
@@ -53,6 +56,7 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
       currentUserModel =
           await firebaseManager.getAUserInformation(authService.userId!);
       await userManager.getFollowingUsersIds();
+      await userManager.updateUserToken(null);
       initalizeStartingPage(const MainScreen());
       changePostViewType(await HiveManager.getPostWidgetViewType);
     } else {
@@ -117,8 +121,9 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     changePostViewType(data);
   }
 
-  void showPostViewTypeSelector() =>
-      PostViewTypeSelectorBottomSheet.show(context!);
+  void showPostViewTypeSelector() {
+    PostViewTypeSelectorBottomSheet.show(context!);
+  }
 
   late ScrollController homeViewPostsScrollController;
   late ScrollController exploreViewPostsScrollController;

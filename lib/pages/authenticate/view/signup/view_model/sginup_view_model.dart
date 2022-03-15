@@ -7,7 +7,6 @@ import 'package:Carafe/pages/authenticate/view_model/base_authentication_view_mo
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-
 part 'sginup_view_model.g.dart';
 
 class SignupViewModel = _SignupViewModelBase with _$SignupViewModel;
@@ -42,7 +41,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
   bool passwordLock = false;
 
   @override
-  setContext(BuildContext context) => this.context = context;
+  void setContext(BuildContext context) => this.context = context;
 
   @action
   Future<dynamic> signupControl(SignupViewModel viewModel) async {
@@ -57,7 +56,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     removeTextInputFocus();
   }
 
-  Future _signup(SignupViewModel viewModel) async {
+  Future<void> _signup(SignupViewModel viewModel) async {
     CustomData<UserCredential> authenticationResponse =
         await authService.signup(
       LoginModel(
@@ -70,14 +69,14 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
     await registerUser.register(authenticationResponse, viewModel);
   }
 
-  initializeCredenticial() {
+  void initializeCredenticial() {
     displayName = displayNameController.text;
     username = usernameController.text;
     email = emailController.text;
     password = passworController.text;
   }
 
-  clearAllTextInputs() {
+  void clearAllTextInputs() {
     displayNameController.clear();
     usernameController.clear();
     emailController.clear();
@@ -86,10 +85,10 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
 
   @override
   @action
-  changeTabIndex(int index) => authVm.changeTabIndex(index);
+  void changeTabIndex(int index) => authVm.changeTabIndex(index);
 
   @action
-  removeTextInputFocus() {
+  void removeTextInputFocus() {
     displayNameFocusNode.unfocus();
     usernameFocusNode.unfocus();
     emailFocusNode.unfocus();
@@ -97,7 +96,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
   }
 
   @action
-  changeInputState() {
+  void changeInputState() {
     displayNameLock = !displayNameLock;
     usernameLock = !usernameLock;
     emailLock = !emailLock;
@@ -108,7 +107,7 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
 
   String? displayNameValidator(String? text) => text?.displayNameValidator;
 
-  showSignupSuccessAlert() => showAlert(
+  void showSignupSuccessAlert() => showAlert(
         "Success",
         "Signup successful. Please verify your email.",
         context: context!,

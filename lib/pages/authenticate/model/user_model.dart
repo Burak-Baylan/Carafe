@@ -22,11 +22,13 @@ class UserModel {
   bool notifications;
   Timestamp? birthDate;
   String? website;
+  String? token;
 
   UserModel({
     required this.userId,
     required this.email,
     required this.username,
+    this.token,
     this.displayName = "User",
     this.photoUrl,
     this.profileDescription,
@@ -64,6 +66,7 @@ class UserModel {
       usernameLowerCase: json['username_lower_case'],
       birthDate: json['birth_date'],
       website: json['website'],
+      token: json['token'],
     );
   }
 
@@ -84,7 +87,8 @@ class UserModel {
         'display_name_lower_case': displayNameLowerCase,
         'username_lower_case': usernameLowerCase,
         'birth_date': birthDate,
-        'website': website
+        'website': website,
+        'token': token,
       };
 
   @override
@@ -94,6 +98,6 @@ class UserModel {
         ' --||-- profilePrivacy: $profilePrivacy --||-- followersCount: $followersCount --||-- followingCount: $followingCount'
         ' --||-- verified: $verified --||-- profilePhotoBackgroundColor: $profilePhotoBackgroundColor --||--'
         ' --||-- notifications: $notifications --||-- display_name_lower_case: $displayNameLowerCase --||-- '
-        'username_lower_case: $usernameLowerCase --||-- birth_date: $birthDate --||-- website: $website)))]]]}}}';
+        'username_lower_case: $usernameLowerCase --||-- birth_date: $birthDate --||-- website: $website --||-- token: $token)))]]]}}}';
   }
 }
