@@ -92,12 +92,18 @@ abstract class _AddPostViewModelBase extends BaseViewModel with Store {
   }
 
   Future<CustomError> shareComment(AddPostViewModel viewModel) async {
+    var userModel = await firebaseManager
+        .getAUserInformation(replyingPostPostModel!.authorId);
+    if (userModel == null) {
+      return CustomError('UserModel is null');
+    }
     return await postSharer.share(
       viewModel,
       postRef: postAddingReference,
       replyingPostModel: ReplyingPostModel(
         replyingPostId: replyingPostPostModel!.postId,
         replyingUserId: replyingPostPostModel!.authorId,
+        replyingUserToken: userModel.token,
       ),
     );
   }
