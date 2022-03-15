@@ -1,11 +1,11 @@
-import 'package:Carafe/core/extensions/widget_extension.dart';
-import 'package:Carafe/core/widgets/small_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
+import '../../../../../../core/extensions/widget_extension.dart';
 import '../../../../../../core/widgets/center_dot_text.dart';
+import '../../../../../../core/widgets/small_circular_progress_indicator.dart';
 import '../../../../model/post_model.dart';
 import '../post_widget/post_widget.dart';
 import '../post_widget/sub_widgets/name_and_menu/name_and_menu.dart';
@@ -17,10 +17,9 @@ import 'sub_widgets/full_screen_post_bottom_layout/full_screen_post_bottom_layou
 
 class FullScreenPostView extends StatefulWidget {
   FullScreenPostView(
-      {Key? key, required this.postViewModel, required this.postModel})
+      {Key? key, required this.postModel})
       : super(key: key);
 
-  PostViewModel postViewModel;
   PostModel postModel;
 
   @override
@@ -47,8 +46,11 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
   @override
   void initState() {
     super.initState();
-    postViewModel = widget.postViewModel;
+    postViewModel = PostViewModel();
+    postViewModel.setContext(context);
+    postViewModel.setPostModel(widget.postModel);
     postViewModel.findCommentsPath(widget.postModel.postPath);
+    postViewModel.findPostOwnerUser();
     commentsFuture = postViewModel.getComments();
     _initValues();
   }
@@ -171,7 +173,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
             halfSizeHeight: context.height / 2.8,
             onPressedImage:
                 (imageProviders, imageUrls, imageIndex, tagForImage) =>
-                    widget.postViewModel.onPressedImage(
+                    postViewModel.onPressedImage(
                         imageProviders, imageUrls, imageIndex, tagForImage),
           ),
         ],
@@ -196,7 +198,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
 
   Widget get _buildPostBottomLayout => FullScreenPostBottomLayout(
         postModel: widget.postModel,
-        postViewModel: widget.postViewModel,
+        postViewModel: postViewModel,
       );
 
   AppBar get _appBar => AppBar(
