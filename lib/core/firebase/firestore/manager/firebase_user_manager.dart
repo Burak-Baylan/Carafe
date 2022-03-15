@@ -1,9 +1,11 @@
 import 'dart:io';
-import 'package:Carafe/pages/main/model/pinned_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import '../../../../app/notification/notification_sender_by_type.dart';
 import '../../../../main.dart';
 import '../../../../pages/authenticate/model/follow_user_model.dart';
 import '../../../../pages/authenticate/model/user_model.dart';
+import '../../../../pages/main/model/pinned_post_model.dart';
 import '../../../../pages/main/model/post_model.dart';
 import '../../../data/custom_data.dart';
 import '../../../error/custom_error.dart';
@@ -16,6 +18,7 @@ class FirebaseUserManager extends FirebaseBase {
   FirebaseUserManager._init();
 
   String get currentUserId => authService.userId!;
+  NotificationSenderByType notificatSender = NotificationSenderByType();
 
   Future<CustomError> createUser(UserModel userModel) async {
     var userExistingControlResponse = await checkUsernameExisting(userModel);
@@ -89,27 +92,27 @@ class FirebaseUserManager extends FirebaseBase {
     }
   }
 
-  Future<bool> followUser(String followingUserId, Timestamp currentTime) async {
-    var followersUserFollowingRef = firebaseConstants
-        .userFollowingCollectionRef(currentUserId)
-        .doc(followingUserId);
-    var followingUserFollowersRef = firebaseConstants
-        .userFollowersCollectionRef(followingUserId)
-        .doc(currentUserId);
+  Future<bool> followUser(UserModel userModel, Timestamp currentTime) async {
+    var userId = userModel.userId;
+    var followersUserFollowingRef =
+        firebaseConstants.userFollowingCollectionRef(currentUserId).doc(userId);
+    var followingUserFollowersRef =
+        firebaseConstants.userFollowersCollectionRef(userId).doc(currentUserId);
     var data = FollowUserModel(
-            followerUserId: currentUserId,
-            followingUserId: followingUserId,
-            followedAt: currentTime)
-        .toJson();
-    mainVm.addToFollowing(followingUserId);
+      followerUserId: currentUserId,
+      followingUserId: userId,
+      followedAt: currentTime,
+    ).toJson();
+    mainVm.addToFollowing(userId);
     var response =
         await firebaseService.addDocument(followersUserFollowingRef, data);
     var response2 =
         await firebaseService.addDocument(followingUserFollowersRef, data);
     if (response.errorMessage != null || response2.errorMessage != null) {
-      await unfollowUser(followingUserId);
+      await unfollowUser(userId);
       return false;
     }
+    await notificatSender.sendFollowNotification(userModel: userModel);
     return true;
   }
 
@@ -208,7 +211,7 @@ class FirebaseUserManager extends FirebaseBase {
 
   Future<bool> updateAField({
     required String fieldName,
-    required Object value,
+    required Object? value,
   }) async {
     var ref = firebaseConstants.allUsersCollectionRef.doc(currentUserId);
     var response =
@@ -217,5 +220,32 @@ class FirebaseUserManager extends FirebaseBase {
       return false;
     }
     return true;
+  }
+
+  Future<String?> getUserCurrentToken() async {
+    var userModel = await firebaseManager.getAUserInformation(currentUserId);
+    return userModel?.token;
+  }
+
+  Future<String?> getUserToken() async {
+    return await FirebaseMessaging.instance.getToken();
+  }
+
+  Future<bool> updateUserToken(String? token) async {
+    String? newToken;
+    if (token != null) {
+      newToken = token;
+    }
+    newToken = await getUserToken();
+    if (newToken == null) return false;
+    String tokenText = firebaseConstants.tokenText;
+    bool response = await updateAField(fieldName: tokenText, value: newToken);
+    return response;
+  }
+
+  Future<bool> removeUserToken() async {
+    String tokenText = firebaseConstants.tokenText;
+    bool response = await updateAField(fieldName: tokenText, value: null);
+    return response;
   }
 }

@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../../main.dart';
-import '../../../../pages/authenticate/model/follow_user_model.dart';
 import '../../../../pages/authenticate/model/user_model.dart';
 import '../../../../pages/main/model/post_model.dart';
 import '../../../error/custom_error.dart';
@@ -34,10 +32,10 @@ class FirebaseManager extends FirebaseBase {
 
   Future<PostModel?> getPostInformations(
     String? postId, {
-    DocumentReference? documentSnapshot,
+    DocumentReference? reference,
   }) async {
     var rawData = await firebaseService
-        .getDocument(documentSnapshot ?? postDocRef(postId!));
+        .getDocument(reference ?? postDocRef(postId!));
     if (rawData.error != null) return null;
     var data = rawData.data!.data() as Map<String, dynamic>;
     return PostModel.fromJson(data);
