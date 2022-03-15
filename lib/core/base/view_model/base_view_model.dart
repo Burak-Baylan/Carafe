@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../../app/notification/notification_sender_by_type.dart';
 import '../../alerts/alert_dialog/custom_alert_dialog.dart';
 import '../../extensions/double_extensions.dart';
 import '../../firebase/base/firebase_base.dart';
@@ -19,6 +20,7 @@ abstract class BaseViewModel with FirebaseBase {
 
   ImageColorsGetter imageColorsGetter = ImageColorsGetter();
   HiveHelper hiveHelper = HiveHelper.instance;
+  NotificationSenderByType notificationSender = NotificationSenderByType();
 
   void navigateToPage({required String path, required Object? data}) =>
       NavigationService.instance.navigateToPage(path: path, data: data);
