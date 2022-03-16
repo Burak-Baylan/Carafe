@@ -101,26 +101,30 @@ class _ProfileViewState extends State<ProfileView>
       ProfileViewProfilePhotoWidget(profileViewModel: profileViewModel);
 
   Widget get buildDescription => Observer(
-        builder: (_) => (profileViewModel.description != null &&
-                profileViewModel.description != '')
-            ? Column(
-                children: [
-                  ProfileTextWidget(
-                    text: profileViewModel.description!,
-                    color: Colors.grey.shade900,
-                    fontSize: context.width / 24.5,
-                    maxLines: null,
-                    overflow: TextOverflow.visible,
-                  ),
-                  8.0.sizedBoxOnlyHeight,
-                ],
-              )
-            : Container(),
+        builder: (_) {
+          String? description = profileViewModel.description;
+          return (description != null && description != '')
+              ? Column(
+                  children: [
+                    ProfileTextWidget(
+                      text: profileViewModel.description!,
+                      color: Colors.grey.shade900,
+                      fontSize: context.width / 24.5,
+                      maxLines: null,
+                      overflow: TextOverflow.visible,
+                    ),
+                    8.0.sizedBoxOnlyHeight,
+                  ],
+                )
+              : Container();
+        },
       );
 
-  Widget get buildCreatedAt => Observer(
-        builder: (context) => (profileViewModel.birthDate?.longDate != null &&
-                profileViewModel.birthDate?.longDate != '')
+  Widget get buildCreatedAt {
+    var createdAt = profileViewModel.userModel?.createdAt?.longDate;
+    return Observer(
+      builder: (context) {
+        return (createdAt != null && createdAt != '')
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -132,7 +136,7 @@ class _ProfileViewState extends State<ProfileView>
                   3.0.sizedBoxOnlyWidth,
                   Flexible(
                     child: ProfileTextWidget(
-                      text: 'Joined ' + profileViewModel.birthDate!.longDate,
+                      text: 'Joined ' + createdAt,
                       color: Colors.grey.shade700,
                       fontSize: context.width / 23,
                       maxLines: 1,
@@ -141,8 +145,10 @@ class _ProfileViewState extends State<ProfileView>
                   ),
                 ],
               )
-            : Container(),
-      );
+            : Container();
+      },
+    );
+  }
 
   Widget get buildLink => Observer(builder: (context) {
         return (profileViewModel.userModel!.website != null &&
