@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../../../../app/notification/notification_sender_by_type.dart';
 import '../../../../../../core/error/custom_error.dart';
 import '../../../../../../core/extensions/color_extensions.dart';
 import '../../../../../../core/firebase/base/firebase_base.dart';
@@ -13,6 +14,8 @@ class SharePost with FirebaseBase {
   static SharePost get instance =>
       _instance = _instance == null ? SharePost._init() : _instance!;
   SharePost._init();
+
+  NotificationSenderByType notificationSender = NotificationSenderByType();
 
   late AddPostViewModel addPostViewModel;
   String postId = "";
@@ -37,7 +40,18 @@ class SharePost with FirebaseBase {
     await _getImagesDominantColors();
     PostModel model = _prepareModel();
     var response = await _uploadPost(model);
+    if (response.errorMessage == null) {
+      await sendNotification(model);
+    }
     return response;
+  }
+
+  Future<void> sendNotification(PostModel postModel) async {
+    await notificationSender.sendCommentNotification(
+      receiverUserToken: replyingPostModel!.replyingUserToken!,
+      postModel: postModel,
+      toUserId: replyingPostModel!.replyingUserId,
+    );
   }
 
   Future<CustomError> _uploadPost(PostModel model) async =>
