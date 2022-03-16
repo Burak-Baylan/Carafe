@@ -43,12 +43,11 @@ class PostViewModelNavigators {
           true);
 
   void navigateToFullScreenPostView(
-    PostViewModel viewModel,
     PostModel postModel,
     DocumentReference ref,
   ) =>
       customNavigateToPage(
-        FullScreenPostView(postViewModel: viewModel, postModel: postModel),
+        FullScreenPostView(postModel: postModel),
         true,
       );
 

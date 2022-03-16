@@ -29,7 +29,7 @@ abstract class _PostStatusViewModelBase extends BaseViewModel with Store {
     userModel = (await firebaseManager.getAUserInformation(authorId))!;
     postModel = (await firebaseManager.getPostInformations(
       null,
-      documentSnapshot: postViewModel.currentPostRef,
+      reference: postViewModel.currentPostRef,
     ))!;
     var likeCount = await postViewModel.postManager
         .getPostLikeCount(postViewModel.currentPostRef);
