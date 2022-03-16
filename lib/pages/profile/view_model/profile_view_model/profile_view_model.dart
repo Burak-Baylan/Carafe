@@ -106,7 +106,7 @@ abstract class _ProfileViewModelBase extends BaseViewModel with Store {
 
   @action
   Future<void> followUser() async {
-    await userManager.followUser(userId, currentTime);
+    await userManager.followUser(userModel!, currentTime);
     isUserFollowing = true;
     followersCount++;
   }

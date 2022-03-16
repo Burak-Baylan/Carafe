@@ -1,12 +1,11 @@
-import 'package:Carafe/pages/authenticate/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import '../../../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../../../../core/firebase/firestore/manager/post_manager/post_manager.dart';
+import '../../../../../../authenticate/model/user_model.dart';
 import '../../../../../model/post_model.dart';
 import '../../../../../model/post_save_model.dart';
-import '../../../../home/view_model/home_view_model.dart';
 import 'helpers/post_status_informations_manager.dart';
 import 'helpers/post_view_model_navigators.dart';
 part 'post_view_model.g.dart';
@@ -115,6 +114,7 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
       likeIcon = likedIcon;
       bool isPostLiked = await postManager.likePost(
           currentPostRef, currentTime, postModel.postId);
+      await sendLikeNotification();
       if (!isPostLiked) likeIcon = unlikedIcon;
     } else {
       likeIcon = unlikedIcon;
@@ -243,9 +243,8 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
   void navigateToPostStatus(PostViewModel postViewModel) =>
       postViewModelNavigators.navigateToPostStatus(postViewModel, postModel);
 
-  void navigateToFullScreenPostView(PostViewModel viewModel) =>
-      postViewModelNavigators.navigateToFullScreenPostView(
-          viewModel, postModel, currentPostRef);
+  void navigateToFullScreenPostView() => postViewModelNavigators
+      .navigateToFullScreenPostView(postModel, currentPostRef);
 
   void navigateToReplyScreen({
     PostModel? postModel,
@@ -255,4 +254,11 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
         postModel ?? this.postModel,
         postAddingRef ?? currentPostRef,
       );
+
+  Future<void> sendLikeNotification() async {
+    await notificationSender.sendLikeNotification(
+      userModel: userModel!,
+      postModel: postModel,
+    );
+  }
 }

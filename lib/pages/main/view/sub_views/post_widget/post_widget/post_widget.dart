@@ -85,7 +85,7 @@ class _PostWidgetState extends State<PostWidget> {
             widget.onClicked!(postViewModel, model);
             return;
           }
-          postViewModel.navigateToFullScreenPostView(postViewModel);
+          postViewModel.navigateToFullScreenPostView();
         },
         child: _postLayout,
       );
