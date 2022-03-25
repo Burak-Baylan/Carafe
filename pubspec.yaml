@@ -32,7 +32,6 @@ dependencies:
   photo_view: ^0.13.0
   uuid: ^3.0.5
   cached_network_image: ^3.2.0
-  bottom_navy_bar: ^6.0.0
   carousel_slider: ^4.0.0
   image: ^3.1.0
   get_time_ago: ^1.0.9
@@ -51,6 +50,13 @@ dependencies:
   flutter_native_splash: ^2.0.1+1
   page_transition: ^2.0.5
   auto_size_text: ^3.0.0
+  share: ^2.0.4
+  firebase_messaging: ^11.2.7
+  overlay_support: ^1.2.1
+  firebase_analytics: ^9.1.2
+  http: ^0.13.4
+  badges: ^2.0.2
+  salomon_bottom_bar: ^3.3.0
 
 flutter_native_splash:
   color: "#FFFFFF"

@@ -1,7 +1,10 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../../../../../core/extensions/context_extensions.dart';
+import '../../../../../core/widgets/border_container.dart';
+import '../../../../../main.dart';
 import '../../../view_model/main_view_view_model.dart';
 
 class MainBottomNavigation extends StatelessWidget {
@@ -20,53 +23,54 @@ class MainBottomNavigation extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Divider(height: 0, thickness: 1),
-        Observer(builder: (_) {
-          return BottomNavyBar(
-            showElevation: false,
-            selectedIndex: viewModel.currentIndex,
-            items: <BottomNavyBarItem>[
-              _homeIcon,
-              _searchIcon,
-              _notificationsIcon,
-              _messagesIcon,
-            ],
-            onItemSelected: (index) => viewModel.changeIndex(index),
-          );
-        }),
+        Observer(
+          builder: (_) {
+            return SalomonBottomBar(
+              currentIndex: viewModel.currentIndex,
+              onTap: (i) => viewModel.changeIndex(i),
+              items: [homeIcon, searchIcon, notificationIcon],
+            );
+          },
+        ),
       ],
     );
   }
 
-  BottomNavyBarItem get _homeIcon => BottomNavyBarItem(
+  SalomonBottomBarItem get homeIcon => SalomonBottomBarItem(
         icon: const Icon(Icons.home_outlined),
-        activeColor: context.theme.colorScheme.primary,
-        title: _buildText('Home'),
-        inactiveColor: context.theme.colorScheme.secondary,
+        title: _buildText("Home"),
+        unselectedColor: context.colorScheme.secondary,
+        selectedColor: context.colorScheme.primary,
       );
 
-  BottomNavyBarItem get _searchIcon => BottomNavyBarItem(
+  SalomonBottomBarItem get searchIcon => SalomonBottomBarItem(
         icon: const Icon(Icons.search_outlined),
-        activeColor: context.theme.colorScheme.primary,
-        title: _buildText('Search'),
-        inactiveColor: context.theme.colorScheme.secondary,
+        title: _buildText("Search"),
+        unselectedColor: context.colorScheme.secondary,
+        selectedColor: context.colorScheme.primary,
       );
 
-  BottomNavyBarItem get _notificationsIcon => BottomNavyBarItem(
-        icon: const Icon(Icons.notifications_outlined),
-        activeColor: context.theme.colorScheme.primary,
-        title: _buildText('Notification'),
-        inactiveColor: context.theme.colorScheme.secondary,
+  SalomonBottomBarItem get notificationIcon => SalomonBottomBarItem(
+        icon: getNotificationIcon,
+        unselectedColor: context.colorScheme.secondary,
+        title: _buildText("Notification"),
+        selectedColor: context.colorScheme.primary,
       );
 
-  BottomNavyBarItem get _messagesIcon => BottomNavyBarItem(
-        icon: const Icon(Icons.mail_outline_outlined),
-        activeColor: context.theme.colorScheme.primary,
-        title: _buildText('Messages'),
-        inactiveColor: context.theme.colorScheme.secondary,
+  Widget get getNotificationIcon =>
+      Observer(builder: (context) => buildNotificationIcon);
+
+  Widget get buildNotificationIcon => Badge(
+        child: const Icon(Icons.notifications_outlined),
+        badgeContent: BorderContainer.all(radius: 50),
+        elevation: mainVm.notificationIndicator ? 2 : 0,
+        badgeColor: mainVm.notificationIndicator
+            ? context.colorScheme.primary
+            : Colors.transparent,
       );
 
-  _buildText(String text) => Text(
+  Text _buildText(String text) => Text(
         text,
-        style: TextStyle(fontSize: context.width / 24),
+        style: TextStyle(fontSize: context.width / 25),
       );
 }
