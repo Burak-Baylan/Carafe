@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../core/base/view_model/base_view_model.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/double_extensions.dart';
 import '../../../../core/widgets/user_name_username_text.dart';
+import '../../../../main.dart';
 import '../../../authenticate/model/user_model.dart';
 import '../../../main/view/sub_views/post_widget/post_widget/sub_widgets/profile_photo.dart';
 import '../../../profile/view/profile_view/profile_view.dart';
@@ -10,12 +10,10 @@ import '../../../profile/view/profile_view/profile_view.dart';
 class SearchedUsersInformationWidget extends StatefulWidget {
   SearchedUsersInformationWidget({
     Key? key,
-    required this.viewModel,
     required this.userModel,
     this.extraWidget,
   }) : super(key: key);
 
-  BaseViewModel viewModel;
   UserModel userModel;
   Widget? extraWidget;
 
@@ -111,7 +109,7 @@ class _SearchedUsersInformationWidgetState
         ),
       );
 
-  void navigateToProfile() => widget.viewModel.customNavigateToPage(
+  void navigateToProfile() => mainVm.customNavigateToPage(
       page: ProfileView(userId: widget.userModel.userId), animate: true);
 
   @override

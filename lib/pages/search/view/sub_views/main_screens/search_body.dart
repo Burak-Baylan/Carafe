@@ -52,7 +52,6 @@ class _SearchViewSearchBodyState extends State<SearchViewSearchBody>
     }
     if (index <= widget.searchViewModel.searcedPople.length - 1) {
       return SearchedUsersInformationWidget(
-        viewModel: widget.searchViewModel,
         userModel: widget.searchViewModel.searcedPople[index],
       );
     }

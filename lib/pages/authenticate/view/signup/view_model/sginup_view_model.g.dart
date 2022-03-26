@@ -108,7 +108,7 @@ mixin _$SignupViewModel on _SignupViewModelBase, Store {
   }
 
   @override
-  dynamic removeTextInputFocus() {
+  void removeTextInputFocus() {
     final _$actionInfo = _$_SignupViewModelBaseActionController.startAction(
         name: '_SignupViewModelBase.removeTextInputFocus');
     try {
@@ -119,7 +119,7 @@ mixin _$SignupViewModel on _SignupViewModelBase, Store {
   }
 
   @override
-  dynamic changeInputState() {
+  void changeInputState() {
     final _$actionInfo = _$_SignupViewModelBaseActionController.startAction(
         name: '_SignupViewModelBase.changeInputState');
     try {

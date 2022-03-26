@@ -93,10 +93,7 @@ class _UsersListViewState extends State<UsersListView> {
   }
 
   Widget getUserItem(UserModel userModel) {
-    return SearchedUsersInformationWidget(
-      viewModel: usersListVm,
-      userModel: userModel,
-    );
+    return SearchedUsersInformationWidget(userModel: userModel);
   }
 
   Widget getPostItem(PostModel postModel, UserModel userModel) {

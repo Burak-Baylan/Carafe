@@ -27,7 +27,6 @@ class PostMenuItems {
     return [
       Observer(
         builder: (_) => _listItem(
-          3,
           postMenuVm.pinButtonText,
           () async => itemClicked(() async {
             await postMenuVm.pinProfileClicked();
@@ -39,7 +38,6 @@ class PostMenuItems {
         ),
       ),
       _listItem(
-        3,
         "Delete",
         () => itemClicked(() async => await postMenuVm.deletePost()),
         Icons.delete_forever_outlined,
@@ -51,20 +49,12 @@ class PostMenuItems {
     var username = userModel.username;
     return [
       _listItem(
-        2,
         '${postMenuVm.followButtonText} @$username',
         () async =>
             itemClicked(() async => await postMenuVm.followUserClicked()),
         Icons.person_add_alt_outlined,
       ),
       _listItem(
-        2,
-        'Block @$username',
-        () => context.pop,
-        Icons.block_outlined,
-      ),
-      _listItem(
-        2,
         'Report @$username',
         () =>
             itemClicked(() => postMenuVm.reportClicked(ReportType.userReport)),
@@ -72,7 +62,6 @@ class PostMenuItems {
       ),
       const Divider(height: 0),
       _listItem(
-        2,
         'Report post',
         () =>
             itemClicked(() => postMenuVm.reportClicked(ReportType.postReport)),
@@ -86,7 +75,7 @@ class PostMenuItems {
     await function();
   }
 
-  Widget _listItem(int index, String text, Function() onTap, IconData icon) {
+  Widget _listItem(String text, Function() onTap, IconData icon) {
     return ListTile(
       leading: Icon(icon, color: AppColors.secondary, size: context.width / 15),
       title: Text(

@@ -16,9 +16,7 @@ import '../post_widget/view_model/post_view_model.dart';
 import 'sub_widgets/full_screen_post_bottom_layout/full_screen_post_bottom_layout.dart';
 
 class FullScreenPostView extends StatefulWidget {
-  FullScreenPostView(
-      {Key? key, required this.postModel})
-      : super(key: key);
+  FullScreenPostView({Key? key, required this.postModel}) : super(key: key);
 
   PostModel postModel;
 
@@ -189,7 +187,7 @@ class _FullScreenPostViewState extends State<FullScreenPostView> {
   dynamic get _buildPp => PostProfilePhoto(
         height: context.width / 7.5,
         width: context.width / 7.5,
-        postModel: widget.postModel,
+        userId: widget.postModel.authorId,
         postViewModel: postViewModel,
         imageUrl: postViewModel.userModel!.photoUrl,
       );

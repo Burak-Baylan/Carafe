@@ -5,7 +5,7 @@ import '../../../../../pages/main/model/post_save_model.dart';
 import '../../../../../pages/main/sub_views/users_list_view/view_model/users_list_view_model.dart';
 import '../../../base/firebase_base.dart';
 
-class LikedAndSavedPostsGetter extends FirebaseBase {
+class LikedAndSavedPostsGetter with FirebaseBase {
   late QueryDocumentSnapshot<Map<String, dynamic>> lastVisibleLikedPost;
   late QueryDocumentSnapshot<Map<String, dynamic>> lastVisibleSavedPost;
   late Query<Map<String, dynamic>> userLikedPostsRef;
@@ -83,7 +83,7 @@ class LikedAndSavedPostsGetter extends FirebaseBase {
     int i = 0;
     for (var postsData in docs) {
       i++;
-      String referencePath = getReferncePath(listingType, postsData.data());
+      String referencePath = getReferencePath(listingType, postsData.data());
       var rawData =
           await firestoreService.getDocument(firestore.doc(referencePath));
       if (rawData.error != null || rawData.data?.data() == null) {
@@ -103,7 +103,7 @@ class LikedAndSavedPostsGetter extends FirebaseBase {
     return posts;
   }
 
-  String getReferncePath(
+  String getReferencePath(
     ListingType listingType,
     Map<String, dynamic> rawData,
   ) {

@@ -7,13 +7,12 @@ import '../../../../../../../core/extensions/int_extensions.dart';
 import '../../../../../../../core/widgets/border_container.dart';
 import '../../../../../../../main.dart';
 import '../../../../../../profile/view/profile_view/profile_view.dart';
-import '../../../../../model/post_model.dart';
 import '../view_model/post_view_model.dart';
 
 class PostProfilePhoto extends StatelessWidget {
   PostProfilePhoto({
     Key? key,
-    this.postModel,
+    this.userId,
     this.imageUrl,
     this.width,
     this.height,
@@ -23,7 +22,7 @@ class PostProfilePhoto extends StatelessWidget {
     this.placeHolderImageUrl,
   }) : super(key: key);
 
-  PostModel? postModel;
+  String? userId;
   String? imageUrl;
   double? width;
   double? height;
@@ -75,7 +74,7 @@ class PostProfilePhoto extends StatelessWidget {
 
   void _sendToProfile() {
     mainVm.customNavigateToPage(
-        page: ProfileView(userId: postModel!.authorId), animate: true);
+        page: ProfileView(userId: userId!), animate: true);
     postViewModel != null ? postViewModel!.addToProfileVisits() : null;
   }
 }

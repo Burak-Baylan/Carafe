@@ -156,7 +156,7 @@ class _PostWidgetState extends State<PostWidget> {
         builder: (_) => PostProfilePhoto(
           height: context.width / 7.5,
           width: context.width / 7.5,
-          postModel: model,
+          userId: model.authorId,
           postViewModel: postViewModel,
           imageUrl: postViewModel.userModel != null
               ? postViewModel.userModel!.photoUrl

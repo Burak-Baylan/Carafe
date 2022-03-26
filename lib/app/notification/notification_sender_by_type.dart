@@ -32,7 +32,7 @@ class NotificationSenderByType {
       toToken: receiverUserToken,
       toUserId: toUserId,
       title: '@$currentUserUsername commented on your post.',
-      message: postModel.text.toString(),
+      message: '@$currentUserUsername: ' + postModel.text.toString(),
       notificationType: NotificationType.commentNotifcation,
       postId: postModel.postId,
       postPath: postModel.postPath,
