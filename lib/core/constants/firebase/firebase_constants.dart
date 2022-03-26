@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../firebase/base/firebase_base.dart';
 
@@ -52,8 +53,10 @@ class FirebaseConstants extends FirebaseBase {
   final String tokenText = 'token';
   final String httpErrorsText = 'HttpErrors';
   final String notificationsText = 'notifications';
+  final String hasReadText = 'has_read';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
+  int numberOfNotificationsToBeReceiveAtOnce = 17;
   int numberOfCommentsToBeReceiveAtOnce = 6;
   int numberOfUsersSearchAtOnce = 10;
 
@@ -91,8 +94,8 @@ class FirebaseConstants extends FirebaseBase {
   Query<Map<String, dynamic>> userLikedPostsCollectionRefWithLimitAndDescending(
           String userId) =>
       userLikedPostsCollectionRef(userId)
-          .orderBy(firebaseConstants.createdAtText, descending: true)
-          .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce);
+          .orderBy(createdAtText, descending: true)
+          .limit(numberOfPostsToBeReceiveAtOnce);
 
   CollectionReference<Map<String, dynamic>> userPostSaveCollectionRef(
           String userId) =>
@@ -178,11 +181,10 @@ class FirebaseConstants extends FirebaseBase {
   Query<Map<String, dynamic>> getCommentsWithLimitStartAfterDocumentsRef(
           QueryDocumentSnapshot<Map<String, dynamic>> lastVisibleComment,
           DocumentReference<Object?> postCommentsRef) =>
-      commentsCreatedDescending(
-              postCommentsRef.collection(firebaseConstants.postCommentsText))
+      commentsCreatedDescending(postCommentsRef.collection(postCommentsText))
           .startAfterDocument(lastVisibleComment)
           .where(isPostDeletedText, isEqualTo: false)
-          .limit(firebaseConstants.numberOfCommentsToBeReceiveAtOnce);
+          .limit(numberOfCommentsToBeReceiveAtOnce);
 
   Query<Map<String, dynamic>> getAUsersPostRef(String userId) =>
       allPostsCollectionRef
@@ -201,10 +203,8 @@ class FirebaseConstants extends FirebaseBase {
       getAUsersPostRef(userId).where(hasImageText, isEqualTo: true);
 
   Query<Map<String, dynamic>> getUserSearchQueryWithLimit(String text) =>
-      allUsersCollectionRef
-          .orderBy(firebaseConstants.usernameLowerCaseText)
-          .startAt([text]).endAt([text + '\uf8ff']).limit(
-              numberOfUsersSearchAtOnce);
+      allUsersCollectionRef.orderBy(usernameLowerCaseText).startAt(
+          [text]).endAt([text + '\uf8ff']).limit(numberOfUsersSearchAtOnce);
 
   CollectionReference<Map<String, dynamic>> get reportedUsersCollection =>
       firestore.collection(reportedUsersText);
@@ -216,13 +216,23 @@ class FirebaseConstants extends FirebaseBase {
       firestore.collection(feedbacksText);
 
   Query<Map<String, dynamic>>
-      get getCurrentUserSavedPostWithLimitAndDescending =>
-          firebaseConstants.allUsersCollectionRef
-              .doc(authService.userId)
-              .collection(firebaseConstants.userSavedPostsText)
-              .orderBy(firebaseConstants.savedAtText, descending: true)
-              .limit(firebaseConstants.numberOfPostsToBeReceiveAtOnce);
+      get getCurrentUserSavedPostWithLimitAndDescending => allUsersCollectionRef
+          .doc(authService.userId)
+          .collection(userSavedPostsText)
+          .orderBy(savedAtText, descending: true)
+          .limit(numberOfPostsToBeReceiveAtOnce);
 
   CollectionReference<Map<String, dynamic>> get httpErrorsCollection =>
       firestore.collection(httpErrorsText);
+
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listenNotifications({
+    required String userId,
+    required Function(QuerySnapshot<Map<String, dynamic>>) onData,
+  }) =>
+      allUsersCollectionRef
+          .doc(userId)
+          .collection(notificationsText)
+          .where(hasReadText, isEqualTo: false)
+          .snapshots()
+          .listen((snapshot) => onData(snapshot));
 }
