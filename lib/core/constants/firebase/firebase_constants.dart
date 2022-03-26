@@ -235,4 +235,12 @@ class FirebaseConstants extends FirebaseBase {
           .where(hasReadText, isEqualTo: false)
           .snapshots()
           .listen((snapshot) => onData(snapshot));
+
+  DocumentReference<Map<String, dynamic>> spesificNotificationRef(
+    String notificationId,
+  ) =>
+      allUsersCollectionRef
+          .doc(authService.userId)
+          .collection(notificationsText)
+          .doc(notificationId);
 }
