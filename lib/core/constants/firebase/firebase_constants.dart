@@ -225,7 +225,7 @@ class FirebaseConstants extends FirebaseBase {
   CollectionReference<Map<String, dynamic>> get httpErrorsCollection =>
       firestore.collection(httpErrorsText);
 
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listenNotifications({
+  void listenNotifications({
     required String userId,
     required Function(QuerySnapshot<Map<String, dynamic>>) onData,
   }) =>
