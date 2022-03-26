@@ -85,6 +85,23 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
     });
   }
 
+  final _$notificationIndicatorAtom =
+      Atom(name: '_MainViewViewModelBase.notificationIndicator');
+
+  @override
+  bool get notificationIndicator {
+    _$notificationIndicatorAtom.reportRead();
+    return super.notificationIndicator;
+  }
+
+  @override
+  set notificationIndicator(bool value) {
+    _$notificationIndicatorAtom.reportWrite(value, super.notificationIndicator,
+        () {
+      super.notificationIndicator = value;
+    });
+  }
+
   final _$followingUsersIdsAtom =
       Atom(name: '_MainViewViewModelBase.followingUsersIds');
 
@@ -119,8 +136,39 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
         .run(() => super.updateCurrentUserModel());
   }
 
+  final _$listenNotificationAsyncAction =
+      AsyncAction('_MainViewViewModelBase.listenNotification');
+
+  @override
+  Future<void> listenNotification() {
+    return _$listenNotificationAsyncAction
+        .run(() => super.listenNotification());
+  }
+
   final _$_MainViewViewModelBaseActionController =
       ActionController(name: '_MainViewViewModelBase');
+
+  @override
+  void openNotificationIndicator() {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.openNotificationIndicator');
+    try {
+      return super.openNotificationIndicator();
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void closeNotificationIndicator() {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.closeNotificationIndicator');
+    try {
+      return super.closeNotificationIndicator();
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changePostViewType(bool type) {
@@ -196,6 +244,7 @@ isFabVisible: ${isFabVisible},
 postViewType: ${postViewType},
 currentUserModel: ${currentUserModel},
 startingPage: ${startingPage},
+notificationIndicator: ${notificationIndicator},
 followingUsersIds: ${followingUsersIds}
     ''';
   }

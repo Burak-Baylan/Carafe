@@ -8,6 +8,7 @@ import '../../../core/hive/hive_constants.dart';
 import '../../../core/init/notification/notification_manager/notification_manager.dart';
 import '../../authenticate/authenticate_view.dart';
 import '../../authenticate/model/user_model.dart';
+import '../../notification/view/notification_view.dart';
 import '../../profile/view/profile_view/profile_view.dart';
 import '../../search/view/search_view.dart';
 import '../view/helper/post_view_type_selector_bottom_sheet.dart';
@@ -32,6 +33,8 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   UserModel? currentUserModel;
   @observable
   Widget startingPage = Container();
+  @observable
+  bool notificationIndicator = false;
   @action
   Future<void> initalizeStartingPage(Widget page) async {
     startingPage = page;
@@ -43,7 +46,13 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   List<Widget> screens = [
     const HomeView(),
     SearchView(),
+    const NotificationView(),
   ];
+
+  @action
+  void openNotificationIndicator() => notificationIndicator = true;
+  @action
+  void closeNotificationIndicator() => notificationIndicator = false;
 
   @action
   Future<void> updateCurrentUserModel() async {
@@ -57,8 +66,10 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
           await firebaseManager.getAUserInformation(authService.userId!);
       await userManager.getFollowingUsersIds();
       await userManager.updateUserToken(null);
+      await notificationManager.initNotifications(context!);
       initalizeStartingPage(const MainScreen());
       changePostViewType(await HiveManager.getPostWidgetViewType);
+      listenNotification();
     } else {
       initalizeStartingPage(AuthenticateView());
     }
@@ -90,9 +101,7 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
         currentIndex = index;
         break;
       case 2:
-        currentIndex = index;
-        break;
-      case 3:
+        _notificationTabClicked(index);
         currentIndex = index;
         break;
     }
@@ -127,6 +136,7 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
 
   late ScrollController homeViewPostsScrollController;
   late ScrollController exploreViewPostsScrollController;
+  late ScrollController notificationsViewPostsScrollController;
 
   void _homeTabClicked(int index) {
     if (currentIndex == 0) {
@@ -142,11 +152,35 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     currentIndex = index;
   }
 
-  void sendToFirstIndex(ScrollController controller) {
-    controller.animateTo(
-      controller.position.minScrollExtent,
-      duration: 300.durationMilliseconds,
-      curve: Curves.fastOutSlowIn,
+  void _notificationTabClicked(int index) {
+    if (currentIndex == 2) {
+      sendToFirstIndex(notificationsViewPostsScrollController);
+    }
+    currentIndex = index;
+  }
+
+  @action
+  Future<void> listenNotification() async {
+    String userId = currentUserModel!.userId;
+    firebaseConstants.listenNotifications(
+      userId: userId,
+      onData: (snapshot) =>
+          snapshot.size > 0 ? openNotificationIndicator() : null,
     );
+  }
+
+  Future<void> markNotificationAsRead(String notificationId) async {
+    var ref = firebaseConstants.spesificNotificationRef(notificationId);
+    await firebaseManager.update(ref, {firebaseConstants.hasReadText: true});
+  }
+
+  void sendToFirstIndex(ScrollController controller) {
+    try {
+      controller.animateTo(
+        controller.position.minScrollExtent,
+        duration: 300.durationMilliseconds,
+        curve: Curves.fastOutSlowIn,
+      );
+    } catch (e) {}
   }
 }
