@@ -5,24 +5,23 @@ import '../../../../pages/main/model/notification_model.dart';
 import '../../../../pages/main/model/post_model.dart';
 import '../../../../pages/main/view/sub_views/post_widget/full_screen_post_view/full_screen_post_view.dart';
 import '../../../../pages/profile/view/profile_view/profile_view.dart';
+import '../../../firebase/base/firebase_base.dart';
 import '../../../firebase/firestore/manager/notifciation_firestore_manager/notification_firestore_manager.dart';
 import '../notification_sender.dart';
 import '../show_notification.dart';
 import 'helpers/click_handler.dart';
 
-class NotificationManager {
+class NotificationManager with FirebaseBase {
   late FirebaseMessaging _messaging;
   NotificationSender notificationSender = NotificationSender();
   NotificationFirestoreManager notificationFirestoreManager =
       NotificationFirestoreManager();
   NotificationClickHandler clickHandler = NotificationClickHandler();
 
-  Future<void> messaging(BuildContext context) async {
+  Future<void> initNotifications(BuildContext context) async {
     _messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await requestPermission();
-
     var status = settings.authorizationStatus;
-
     if (status == AuthorizationStatus.authorized) {
       listenTokenRefresh();
       listenInitialNotification();
@@ -45,6 +44,7 @@ class NotificationManager {
     var initMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initMessage != null) {
       var notificationModel = NotificationModel.fromJson(initMessage.data);
+      await mainVm.markNotificationAsRead(notificationModel.notificationId);
       await notificationFirestoreManager.markAsRead(
         notificationModel.receiverUserId!,
         notificationModel.notificationId,
@@ -57,6 +57,7 @@ class NotificationManager {
   void listenWhenNotKilled() {
     FirebaseMessaging.onMessageOpenedApp.listen((event) async {
       var notificationModel = NotificationModel.fromJson(event.data);
+      await mainVm.markNotificationAsRead(notificationModel.notificationId);
       await notificationFirestoreManager.markAsRead(
         notificationModel.receiverUserId!,
         notificationModel.notificationId,
@@ -122,6 +123,7 @@ class NotificationManager {
 
   Future<void> notificationAlertClicked(RemoteMessage event) async {
     var notificationModel = NotificationModel.fromJson(event.data);
+    await mainVm.markNotificationAsRead(notificationModel.notificationId);
     String? postPath = notificationModel.postPath;
     if (postPath != null) {
       await notificationFirestoreManager.markAsRead(
@@ -154,6 +156,11 @@ class NotificationManager {
       page: ProfileView(userId: userId),
       animate: true,
     );
+  }
+
+  Future<void> markAsRead(String notificationId) async {
+    var ref = firebaseConstants.spesificNotificationRef(notificationId);
+    await firebaseManager.update(ref, {firebaseConstants.hasReadText: true});
   }
 }
 

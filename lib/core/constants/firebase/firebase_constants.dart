@@ -243,4 +243,11 @@ class FirebaseConstants extends FirebaseBase {
           .doc(authService.userId)
           .collection(notificationsText)
           .doc(notificationId);
+
+  Query<Map<String, dynamic>> get userNotificationsWithLimitAndOrderBy =>
+      firebaseConstants.allUsersCollectionRef
+          .doc(authService.userId)
+          .collection(notificationsText)
+          .orderBy(firebaseConstants.createdAtText, descending: true)
+          .limit(numberOfNotificationsToBeReceiveAtOnce);
 }

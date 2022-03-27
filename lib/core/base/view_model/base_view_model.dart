@@ -11,12 +11,15 @@ import '../../helpers/no_internet_alert_dialog.dart';
 import '../../helpers/random_id.dart';
 import '../../hive/hive_helper.dart';
 import '../../init/navigation/service/navigation_service.dart';
+import '../../init/notification/notification_manager/notification_manager.dart';
 
 abstract class BaseViewModel with FirebaseBase {
   BuildContext? context;
   void setContext(BuildContext context);
 
   Timestamp get currentTime => Timestamp.now();
+
+  NotificationManager notificationManager = NotificationManager();
 
   ImageColorsGetter imageColorsGetter = ImageColorsGetter();
   HiveHelper hiveHelper = HiveHelper.instance;

@@ -5,7 +5,6 @@ import '../../../app/managers/hive_manager.dart';
 import '../../../core/base/view_model/base_view_model.dart';
 import '../../../core/extensions/int_extensions.dart';
 import '../../../core/hive/hive_constants.dart';
-import '../../../core/init/notification/notification_manager/notification_manager.dart';
 import '../../authenticate/authenticate_view.dart';
 import '../../authenticate/model/user_model.dart';
 import '../../notification/view/notification_view.dart';
@@ -40,7 +39,6 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     startingPage = page;
   }
 
-  NotificationManager notificationManager = NotificationManager();
 
   final PageController pageController = PageController();
   List<Widget> screens = [
@@ -170,8 +168,7 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   }
 
   Future<void> markNotificationAsRead(String notificationId) async {
-    var ref = firebaseConstants.spesificNotificationRef(notificationId);
-    await firebaseManager.update(ref, {firebaseConstants.hasReadText: true});
+    await notificationManager.markAsRead(notificationId);
   }
 
   void sendToFirstIndex(ScrollController controller) {
