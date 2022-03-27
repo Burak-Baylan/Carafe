@@ -31,21 +31,29 @@ class NotificationModel {
   String? createdAt;
   bool hasRead;
 
-  factory NotificationModel.fromJson(Map<String, dynamic> json) =>
-      NotificationModel(
-        senderToken: json['sender_token'],
-        senderUserId: json['sender_user_id'],
-        postId: json['post_id'],
-        type: json['type'],
-        receiverToken: json['receiver_token'],
-        receiverUserId: json['receiver_user_id'],
-        postPath: json['post_path'],
-        title: json['title'],
-        message: json['message'],
-        hasRead: (json['has_read'] == 'true' ? true : false),
-        notificationId: json['notification_id'],
-        createdAt: json['created_at'],
-      );
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    bool getHasReadValue(Object data) {
+      if (data == 'true' || data == true) {
+        return true;
+      }
+      return false;
+    }
+
+    return NotificationModel(
+      senderToken: json['sender_token'],
+      senderUserId: json['sender_user_id'],
+      postId: json['post_id'],
+      type: json['type'],
+      receiverToken: json['receiver_token'],
+      receiverUserId: json['receiver_user_id'],
+      postPath: json['post_path'],
+      title: json['title'],
+      message: json['message'],
+      hasRead: getHasReadValue(json['has_read']),
+      notificationId: json['notification_id'],
+      createdAt: json['created_at'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'priority': 'high',
