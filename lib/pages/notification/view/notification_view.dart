@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../app/constants/app_constants.dart';
 import '../../../core/extensions/context_extensions.dart';
+import '../../../core/extensions/double_extensions.dart';
 import '../../../core/extensions/widget_extension.dart';
 import '../../../core/widgets/small_circular_progress_indicator.dart';
 import '../../../core/widgets/something_went_wrong_widget.dart';
 import '../../../core/widgets/there_is_nothing_here_widget.dart';
 import '../../../main.dart';
+import '../../main/view/sub_views/post_widget/post_widget/sub_widgets/profile_photo.dart';
 import '../view_model/notification_view_model.dart';
 import 'sub_views/notififcation_widget.dart';
 
@@ -17,7 +19,8 @@ class NotificationView extends StatefulWidget {
   State<NotificationView> createState() => _NotificationViewState();
 }
 
-class _NotificationViewState extends State<NotificationView> {
+class _NotificationViewState extends State<NotificationView>
+    with AutomaticKeepAliveClientMixin {
   NotificationViewModel notificationVm = NotificationViewModel();
 
   late Future<void> notificationFuture;
@@ -88,6 +91,7 @@ class _NotificationViewState extends State<NotificationView> {
     return AppBar(
       elevation: 0,
       backgroundColor: AppColors.white,
+      leading: appBarLeading,
       centerTitle: true,
       title: Text(
         "Notifications",
@@ -115,4 +119,17 @@ class _NotificationViewState extends State<NotificationView> {
       ),
     );
   }
+
+  Widget get appBarLeading => Container(
+        margin: 7.0.edgeIntesetsAll,
+        child: Observer(
+          builder: (_) => PostProfilePhoto(
+            imageUrl: (mainVm.currentUserModel)?.photoUrl,
+            onClicked: (_) => context.openDrawer,
+          ),
+        ),
+      );
+
+  @override
+  bool get wantKeepAlive => true;
 }
