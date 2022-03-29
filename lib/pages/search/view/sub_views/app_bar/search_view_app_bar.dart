@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../app/constants/app_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/double_extensions.dart';
 import '../../../../../core/extensions/int_extensions.dart';
+import '../../../../../main.dart';
 import '../../../../main/view/sub_views/post_widget/post_widget/sub_widgets/profile_photo.dart';
 import '../../../view_model/search_view_model.dart';
 
@@ -76,9 +78,11 @@ class _SearchViewAppBarState extends State<SearchViewAppBar> {
         )
       : Container(
           margin: 7.0.edgeIntesetsAll,
-          child: PostProfilePhoto(
-            imageUrl: 'https://via.placeholder.com/140x100',
-            onClicked: (_) => widget.context.openDrawer,
+          child: Observer(
+            builder: (_) => PostProfilePhoto(
+              imageUrl: (mainVm.currentUserModel)?.photoUrl,
+              onClicked: (_) => widget.context.openDrawer,
+            ),
           ),
         );
 }

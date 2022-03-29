@@ -90,11 +90,11 @@ class NotificationSender {
     var currentUserModel = mainVm.currentUserModel!;
     var notificationModel = NotificationModel(
       notificationId: mainVm.randomId,
-      senderToken: currentUserModel.token!,
+      senderToken: currentUserModel.token,
       senderUserId: currentUserId,
       postId: postId!,
       type: type,
-      receiverToken: toToken!,
+      receiverToken: toToken,
       receiverUserId: toUserId,
       postPath: postPath,
       message: message,

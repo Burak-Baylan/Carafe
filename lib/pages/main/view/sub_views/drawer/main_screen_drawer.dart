@@ -95,6 +95,8 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
         _navigate(ProfileView(userId: mainVm.authService.userId!));
         break;
       case 1:
+        context.pop;
+        mainVm.changeIndex(2);
         break;
       case 2:
         context.pop;

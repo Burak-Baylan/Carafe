@@ -118,15 +118,6 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
     });
   }
 
-  final _$initalizeStartingPageAsyncAction =
-      AsyncAction('_MainViewViewModelBase.initalizeStartingPage');
-
-  @override
-  Future<void> initalizeStartingPage(Widget page) {
-    return _$initalizeStartingPageAsyncAction
-        .run(() => super.initalizeStartingPage(page));
-  }
-
   final _$updateCurrentUserModelAsyncAction =
       AsyncAction('_MainViewViewModelBase.updateCurrentUserModel');
 
@@ -147,6 +138,17 @@ mixin _$MainViewViewModel on _MainViewViewModelBase, Store {
 
   final _$_MainViewViewModelBaseActionController =
       ActionController(name: '_MainViewViewModelBase');
+
+  @override
+  void initalizeStartingPage(Widget page) {
+    final _$actionInfo = _$_MainViewViewModelBaseActionController.startAction(
+        name: '_MainViewViewModelBase.initalizeStartingPage');
+    try {
+      return super.initalizeStartingPage(page);
+    } finally {
+      _$_MainViewViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void openNotificationIndicator() {

@@ -35,10 +35,9 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   @observable
   bool notificationIndicator = false;
   @action
-  Future<void> initalizeStartingPage(Widget page) async {
+  void initalizeStartingPage(Widget page) {
     startingPage = page;
   }
-
 
   final PageController pageController = PageController();
   List<Widget> screens = [

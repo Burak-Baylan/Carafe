@@ -33,6 +33,15 @@ mixin _$NotificationViewModel on _NotificationViewModelBase, Store {
     return _$getNotificationsAsyncAction.run(() => super.getNotifications());
   }
 
+  final _$loadMoreNotificationsAsyncAction =
+      AsyncAction('_NotificationViewModelBase.loadMoreNotifications');
+
+  @override
+  Future<void> loadMoreNotifications() {
+    return _$loadMoreNotificationsAsyncAction
+        .run(() => super.loadMoreNotifications());
+  }
+
   final _$_NotificationViewModelBaseActionController =
       ActionController(name: '_NotificationViewModelBase');
 

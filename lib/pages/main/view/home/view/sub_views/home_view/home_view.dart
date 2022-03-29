@@ -171,10 +171,11 @@ class _HomeViewState extends State<HomeView>
   Widget get _leading => Container(
         margin: 7.0.edgeIntesetsAll,
         child: Observer(
-            builder: (_) => PostProfilePhoto(
-                  imageUrl: (mainVm.currentUserModel)?.photoUrl,
-                  onClicked: (_) => context.openDrawer,
-                )),
+          builder: (_) => PostProfilePhoto(
+            imageUrl: (mainVm.currentUserModel)?.photoUrl,
+            onClicked: (_) => context.openDrawer,
+          ),
+        ),
       );
 
   @override

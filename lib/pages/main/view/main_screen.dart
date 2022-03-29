@@ -24,7 +24,7 @@ class _MainScreenState extends BaseView<MainScreen> {
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    _setViewModel(context);
+    initValues(context);
     return Scaffold(
       backgroundColor: AppColors.white,
       drawer: MainScreenDrawer(),
@@ -48,7 +48,7 @@ class _MainScreenState extends BaseView<MainScreen> {
       );
 
   Widget get _fabWidget => FloatingActionButton(
-        backgroundColor: context.colorScheme.secondaryVariant,
+        backgroundColor: context.colorScheme.secondary,
         child: Icon(
           Icons.add_outlined,
           color: Colors.white,
@@ -58,7 +58,7 @@ class _MainScreenState extends BaseView<MainScreen> {
             NavigationService.instance.customNavigateToPage(AddPostPage()),
       );
 
-  void _setViewModel(BuildContext context) {
+  void initValues(BuildContext context) {
     mainVm.setContext(context);
   }
 }
