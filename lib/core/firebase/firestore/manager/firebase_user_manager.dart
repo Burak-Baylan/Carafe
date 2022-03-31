@@ -248,4 +248,29 @@ class FirebaseUserManager extends FirebaseBase {
     bool response = await updateAField(fieldName: tokenText, value: null);
     return response;
   }
+
+  Future<bool> getUserNotificationStatus(String userId) async {
+    UserModel? userModel = await firebaseManager.getAUserInformation(userId);
+    if (userModel == null) return true;
+    return userModel.notifications;
+  }
+
+  Future<bool> updateUserNotificationStatus(bool value) async {
+    var response = await updateAField(
+      fieldName: firebaseConstants.notificationsText,
+      value: value,
+    );
+    return response;
+  }
+
+  Future<bool> openUserNotificaitons() async {
+    var response = await updateUserNotificationStatus(true);
+    return response;
+  }
+
+  Future<bool> closeUserNotifications() async {
+    var response = await updateUserNotificationStatus(false);
+    return response;
+  }
+  
 }
