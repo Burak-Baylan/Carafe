@@ -26,7 +26,7 @@ class _SearchedUsersInformationWidgetState
     extends State<SearchedUsersInformationWidget>
     with AutomaticKeepAliveClientMixin {
   Icon get verifiedIcon => Icon(
-        Icons.check_circle,
+        Icons.verified,
         color: context.colorScheme.secondary,
         size: context.width / 27,
       );

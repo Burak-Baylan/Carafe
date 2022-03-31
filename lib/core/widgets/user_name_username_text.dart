@@ -23,7 +23,7 @@ class UserNameUsernameText extends StatefulWidget {
 
 class _UserNameUsernameTextState extends State<UserNameUsernameText> {
   Icon get verifiedIcon => Icon(
-        Icons.check_circle,
+        Icons.verified,
         color: context.colorScheme.secondary,
         size: context.width / 27,
       );

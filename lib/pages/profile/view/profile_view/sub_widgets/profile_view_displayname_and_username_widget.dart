@@ -20,7 +20,7 @@ class ProfileViewDisplaynameAndUsernameWidget extends StatefulWidget {
 class _ProfileViewDisplaynameAndUsernameWidgetState
     extends State<ProfileViewDisplaynameAndUsernameWidget> {
   Icon get verifiedIcon => Icon(
-        Icons.check_circle,
+        Icons.verified,
         color: context.colorScheme.secondary,
         size: context.width / 21,
       );
