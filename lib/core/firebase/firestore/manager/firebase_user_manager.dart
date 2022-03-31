@@ -7,6 +7,7 @@ import '../../../../pages/authenticate/model/follow_user_model.dart';
 import '../../../../pages/authenticate/model/user_model.dart';
 import '../../../../pages/main/model/pinned_post_model.dart';
 import '../../../../pages/main/model/post_model.dart';
+import '../../../../pages/main/model/verification_request_model.dart';
 import '../../../data/custom_data.dart';
 import '../../../error/custom_error.dart';
 import '../../base/firebase_base.dart';
@@ -272,5 +273,15 @@ class FirebaseUserManager extends FirebaseBase {
     var response = await updateUserNotificationStatus(false);
     return response;
   }
-  
+
+  Future<CustomError> sendVerificationRequest() async {
+    var ref = firebaseConstants.verificationRequestsRef.doc(currentUserId);
+    var model = VerificationRequestModel(
+      authorId: currentUserId,
+      createdAt: mainVm.currentTime,
+    );
+    var jsonData = model.toJson();
+    var response = await firebaseService.addDocument(ref, jsonData);
+    return response;
+  }
 }

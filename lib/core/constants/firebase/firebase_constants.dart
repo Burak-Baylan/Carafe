@@ -54,6 +54,7 @@ class FirebaseConstants extends FirebaseBase {
   final String httpErrorsText = 'HttpErrors';
   final String notificationsText = 'notifications';
   final String hasReadText = 'has_read';
+  final String verificationsRequestsText = 'VerificationsRequests';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
   int numberOfNotificationsToBeReceiveAtOnce = 17;
@@ -250,4 +251,7 @@ class FirebaseConstants extends FirebaseBase {
           .collection(notificationsText)
           .orderBy(firebaseConstants.createdAtText, descending: true)
           .limit(numberOfNotificationsToBeReceiveAtOnce);
+
+  CollectionReference<Map<String, dynamic>> get verificationRequestsRef =>
+      firestore.collection(verificationsRequestsText);
 }
