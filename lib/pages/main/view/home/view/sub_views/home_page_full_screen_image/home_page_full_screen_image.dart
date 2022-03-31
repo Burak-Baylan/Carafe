@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../../core/extensions/context_extensions.dart';
@@ -38,11 +37,11 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
   Widget build(BuildContext context) {
     _firstInit();
     return SafeArea(
-        maintainBottomViewPadding: true,
-        top: false,
-        bottom: false,
-        child: _buildImageWidget,
-      );
+      maintainBottomViewPadding: true,
+      top: false,
+      bottom: false,
+      child: _buildImageWidget,
+    );
   }
 
   CarouselController controller = CarouselController();
@@ -79,23 +78,25 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
         ),
       );
 
-  Widget _fullScreenImage(int index) => Observer(
-        builder: (_) => DismissiblePage(
+  Widget _fullScreenImage(int index) => FullScreenImage(
+        onImageTap: () => changeVisibility,
+        scaleStateChangedCallback: (state) =>
+            fullScreenImageVm.photoScaleStateChanged(state),
+        disableBackButton: true,
+        tag: widget.tag,
+        image: widget.imageProviders[index],
+      );
+
+  /*
+        DismissiblePage(
           onDismiss: () => context.pop,
           disabled: fullScreenImageVm.dismissCloseState,
           direction: DismissDirection.vertical,
           backgroundColor: Colors.transparent,
           startingOpacity: 0,
-          child: FullScreenImage(
-            onImageTap: () => changeVisibility,
-            scaleStateChangedCallback: (state) =>
-                fullScreenImageVm.photoScaleStateChanged(state),
-            disableBackButton: true,
-            tag: widget.tag,
-            image: widget.imageProviders[index],
-          ),
+          child: Container(),
         ),
-      );
+      */
 
   CarouselOptions get _carouselOptions => CarouselOptions(
         scrollPhysics: fullScreenImageVm.sliderScrollPhysics,
@@ -133,12 +134,12 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
 
   void get changeVisibility => fullScreenImageVm.changeVisiblity();
 
-  changeIndex(int index) {
+  void changeIndex(int index) {
     fullScreenImageVm.changeIndex(index);
     fullScreenImageVm.setColor(imageDominantColor);
   }
 
-  _firstInit() {
+  void _firstInit() {
     if (fullScreenImageVm.firstInit) {
       //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       changeIndex(widget.imageIndex);

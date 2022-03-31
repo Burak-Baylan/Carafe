@@ -146,8 +146,9 @@ class _PostWidgetState extends State<PostWidget> {
           5.sizedBoxOnlyHeight,
           ImageWidgets(
             images: model.imageLinks,
-            onPressedImage: (iProvider, iUrl, iIndex, tag) =>
-                postViewModel.onPressedImage(iProvider, iUrl, iIndex, tag),
+            onPressedImage: (iProvider, iUrl, iIndex, tag) {
+              postViewModel.onPressedImage(iProvider, iUrl, iIndex, tag);
+            },
           ),
         ],
       );

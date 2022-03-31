@@ -28,26 +28,25 @@ class PostImageWidget extends StatelessWidget {
 
   String tagForImage = getRandomId();
 
-  Widget _image() => Hero(
-        tag: tagForImage,
-        child: CachedNetworkImage(
-          fadeInDuration: 0.durationMilliseconds,
-          filterQuality: FilterQuality.medium,
-          placeholder: (context, url) => BorderContainer.all(
-            radius: 10,
-            color: AppColors.placeHolderGray,
-          ),
-          placeholderFadeInDuration: 100.durationMilliseconds,
-          imageBuilder: (context, provider) {
-            getProvider(provider);
-            return _buildImageContainer(provider);
-          },
-          imageUrl: imageLink,
-          fit: BoxFit.cover,
-        ),
-      );
+  Widget _image() {
+    return CachedNetworkImage(
+      fadeInDuration: 0.durationMilliseconds,
+      filterQuality: FilterQuality.medium,
+      placeholder: (context, url) => BorderContainer.all(
+        radius: 10,
+        color: AppColors.placeHolderGray,
+      ),
+      placeholderFadeInDuration: 100.durationMilliseconds,
+      imageBuilder: (context, provider) {
+        getProvider(provider);
+        return _buildImageContainer(provider);
+      },
+      imageUrl: imageLink,
+      fit: BoxFit.cover,
+    );
+  }
 
-  _buildImageContainer(ImageProvider<Object> provider) => Material(
+  Widget _buildImageContainer(ImageProvider<Object> provider) => Material(
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius,
           side: BorderSide(color: Colors.grey.shade500, width: 0.3),

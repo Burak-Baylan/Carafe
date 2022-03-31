@@ -4,7 +4,6 @@ import '../extensions/color_extensions.dart';
 import '../extensions/context_extensions.dart';
 import '../extensions/int_extensions.dart';
 import '../helpers/status_bar_helper.dart';
-import '../helpers/system_navigation_bar_helper.dart';
 import 'photo_view_widget.dart';
 import 'small_button_for_full_size_images.dart';
 
@@ -43,23 +42,19 @@ class _FullScreenImageState extends State<FullScreenImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: widget.tag!,
-      child: Stack(
-        children: [
-          Align(alignment: Alignment.center, child: _buildImage),
-          _getWidgets,
-        ],
-      ),
-    );
+    return Stack(
+      children: [
+        Align(alignment: Alignment.center, child: _buildImage),
+        _getWidgets,
+      ],
+  );
   }
 
   Widget get _getWidgets {
     List<Widget> widgets = [];
     if (!widget.disableBackButton) {
-      widgets += <Widget>[
-        Align(alignment: Alignment.topLeft, child: _buildBackButton),
-      ];
+      var item = Align(alignment: Alignment.topLeft, child: _buildBackButton);
+      widgets += <Widget>[item];
     }
     if (widget.children != null) {
       widgets += widget.children!;
@@ -115,11 +110,4 @@ class _FullScreenImageState extends State<FullScreenImage> {
         icon: Icons.chevron_left_sharp,
         onTap: () => _closePage(),
       );
-
-  @override
-  void dispose() {
-    StatusBarHelper.open();
-    SystemBottomNavigationBarHelper.lightBottomNavBar;
-    super.dispose();
-  }
 }

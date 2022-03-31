@@ -45,26 +45,25 @@ class PostViewModelNavigators {
   void navigateToFullScreenPostView(
     PostModel postModel,
     DocumentReference ref,
-  ) =>
-      customNavigateToPage(
-        FullScreenPostView(postModel: postModel),
-        true,
-      );
+  ) {
+    customNavigateToPage(FullScreenPostView(postModel: postModel), true);
+  }
 
   void navigateToReplyScreen(
     PostModel postModel,
     DocumentReference<Object?> postAddingRef,
-  ) =>
-      customNavigateToPage(
-        AddPostPage(
-          isAComment: true,
-          postAddingReference: postAddingRef
-              .collection(FirebaseConstants.instance.postCommentsText),
-          replyingPostPostModel: postModel,
-        ),
-        true,
-      );
+  ) {
+    customNavigateToPage(
+      AddPostPage(
+        isAComment: true,
+        postAddingReference: postAddingRef
+            .collection(FirebaseConstants.instance.postCommentsText),
+        replyingPostPostModel: postModel,
+      ),
+      true,
+    );
+  }
 
-  customNavigateToPage(Widget page, bool animate) =>
+  void customNavigateToPage(Widget page, bool animate) =>
       NavigationService.instance.customNavigateToPage(page, animate: animate);
 }
