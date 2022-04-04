@@ -26,7 +26,7 @@ abstract class _ForgotPasswordViewModelBase extends BaseViewModel with Store {
     }
   }
 
-  _responseControl(CustomError response) {
+  void _responseControl(CustomError response) {
     if (response.errorMessage == null) {
       _successResponse();
     } else {
@@ -34,15 +34,15 @@ abstract class _ForgotPasswordViewModelBase extends BaseViewModel with Store {
     }
   }
 
-  _successResponse() {
+  void _successResponse() {
     emailController.clear();
     emailFocusNode.unfocus();
     _showAlert("Sent", "Email sent, please check your mailbox.");
   }
 
-  _unseccessfulResponse(String message) => _showAlert("Error", message);
+  void _unseccessfulResponse(String message) => _showAlert("Error", message);
 
-  _showAlert(String title, String message) => CustomAlertDialog(
+  void _showAlert(String title, String message) => CustomAlertDialog(
         context: context!,
         title: title,
         message: message,

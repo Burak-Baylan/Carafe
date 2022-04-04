@@ -75,6 +75,9 @@ class NotificationManager with FirebaseBase {
     required NotificationType notificationType,
     String? postId,
   }) async {
+    var userNotificationsStatus =
+        await userManager.getUserNotificationStatus(toUserId);
+    if (!userNotificationsStatus) return;
     await notificationSender.send(
       toToken: toToken,
       title: title,

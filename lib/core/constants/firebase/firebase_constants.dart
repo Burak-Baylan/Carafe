@@ -55,6 +55,7 @@ class FirebaseConstants extends FirebaseBase {
   final String notificationsText = 'notifications';
   final String hasReadText = 'has_read';
   final String verificationsRequestsText = 'VerificationsRequests';
+  final String emailText = 'email';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
   int numberOfNotificationsToBeReceiveAtOnce = 17;

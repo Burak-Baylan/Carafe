@@ -1,3 +1,4 @@
+import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import '../../../app/enums/post_view_type.dart';
@@ -136,6 +137,8 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   late ScrollController notificationsViewPostsScrollController;
 
   void _homeTabClicked(int index) {
+    context!.closeKeyboard;
+    changeFabVisibility(true);
     if (currentIndex == 0) {
       sendToFirstIndex(homeViewPostsScrollController);
     }
@@ -150,6 +153,8 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   }
 
   void _notificationTabClicked(int index) {
+    context!.closeKeyboard;
+    changeFabVisibility(true);
     if (currentIndex == 2) {
       sendToFirstIndex(notificationsViewPostsScrollController);
     }

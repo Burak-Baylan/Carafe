@@ -19,7 +19,7 @@ class ForgotPasswordView extends StatelessWidget {
     this.context = context;
     forgotPassworVm.setContext(context);
     return Scaffold(
-      backgroundColor: context.colorScheme.background,
+      backgroundColor: Colors.white,
       appBar: _appBar,
       body: _body,
     );
@@ -89,20 +89,22 @@ class ForgotPasswordView extends StatelessWidget {
 
   AppBar get _appBar => AppBar(
         backgroundColor: Colors.white,
-        centerTitle: true,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            color: context.colorScheme.primary,
-          ),
+          icon: const Icon(Icons.arrow_back_ios_rounded),
           onPressed: () => context.pop,
         ),
         title: Text(
-          "Forgot Password",
-          style: context.theme.textTheme.headline6?.copyWith(
-            fontSize: context.width / 25,
-            color: context.colorScheme.primary,
+          'Forgot Password',
+          style: TextStyle(
+            fontSize: context.width / 20,
+            color: context.theme.colorScheme.primary,
           ),
         ),
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: Size(context.width, 1),
+          child: const Divider(height: 0),
+        ),
+        iconTheme: IconThemeData(color: context.theme.colorScheme.primary),
       );
 }

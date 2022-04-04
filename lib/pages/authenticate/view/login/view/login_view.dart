@@ -24,45 +24,42 @@ class _LoginScreenState extends State<LoginScreen> {
     _loginVm.setContext(context);
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      body: Observer(
-        builder: (_) => Padding(
-          padding: context.paddingNormalHorizontal,
-          child: Form(
-            key: _loginVm.formKey,
-            child: Column(
-              children: [
-                const Spacer(flex: 2),
-                _emailFormField,
-                _passwordFormField,
-                const Spacer(),
-                _buildForgotPasswordText,
-                const Spacer(flex: 6),
-                _buildLoginButton,
-                const Spacer(),
-                _buildDontAccountText,
-                const Spacer(),
-              ],
-            ),
+      body: Padding(
+        padding: context.paddingNormalHorizontal,
+        child: Form(
+          key: _loginVm.formKey,
+          child: Column(
+            children: [
+              const Spacer(flex: 2),
+              _emailFormField,
+              _passwordFormField,
+              const Spacer(),
+              _buildForgotPasswordText,
+              const Spacer(flex: 6),
+              _buildLoginButton,
+              const Spacer(),
+              _buildDontAccountText,
+              const Spacer(),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget get _buildDontAccountText => Observer(
-        builder: (_) => GestureDetector(
-          onTap: () => _loginVm.changeTabIndex(_loginVm.authVm.signupPageIndex),
-          child: RichText(
-            text: TextSpan(
-              style: context.theme.textTheme.headline6,
-              children: [
-                const TextSpan(text: "Don't have an account? "),
-                TextSpan(
-                  text: "Signup",
-                  style: context.underlinedText,
-                ),
-              ],
-            ),
+  Widget get _buildDontAccountText => GestureDetector(
+        onTap: () => _loginVm.changeTabIndex(_loginVm.authVm.signupPageIndex),
+        child: RichText(
+          text: TextSpan(
+            style: context.theme.textTheme.headline6
+                  ?.copyWith(color: context.colorScheme.secondary),
+            children: [
+              const TextSpan(text: "Don't have an account? "),
+              TextSpan(
+                text: "Signup",
+                style: context.underlinedText,
+              ),
+            ],
           ),
         ),
       );
@@ -91,15 +88,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  Widget get _buildLoginButton => Observer(
-        builder: (_) => AnimatedButton(
-          onPressed: () => _loginVm.loginControl(),
-          text: "Login to app",
-        ),
+  Widget get _buildLoginButton => AnimatedButton(
+        onPressed: () => _loginVm.loginControl(),
+        text: "Login to app",
       );
 
   GestureDetector get _buildForgotPasswordText => GestureDetector(
-        onTap: () => PushToPage.instance.forgotPasswordPage(),
+        onTap: () => _loginVm.navigateToForgorPasswordPage(),
         child: Padding(
           padding:
               EdgeInsets.only(right: context.lowValue, top: context.lowValue),

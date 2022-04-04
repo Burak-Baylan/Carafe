@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../app/constants/app_constants.dart';
 import '../../extensions/context_extensions.dart';
 

@@ -128,6 +128,7 @@ class _AddPostPageState extends State<AddPostPage> with WidgetsBindingObserver {
   }
 
   Widget get _textField => CustomTextFormField(
+        keyboardType: TextInputType.multiline,
         hideCounterText: true,
         maxLength: PostContstants.MAX_POST_TEXT_LENGTH,
         fontSize: 15,
@@ -136,7 +137,9 @@ class _AddPostPageState extends State<AddPostPage> with WidgetsBindingObserver {
         backgroundColor: AppColors.white,
         inputBorder: InputBorder.none,
         controller: controller,
-        hintText: addPostViewModel.isAComment ? 'Write your reply!' : "Write what you want!",
+        hintText: addPostViewModel.isAComment
+            ? 'Write your reply!'
+            : "Write what you want!",
         disableLeading: true,
       );
 

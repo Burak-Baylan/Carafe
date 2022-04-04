@@ -159,7 +159,11 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
     _replacePage(AuthenticateView());
   }
 
-  void _replacePage(Widget page) => mainVm.customReplacePage(page: page);
+  void _replacePage(Widget page) => mainVm.customReplacePage(
+        page: page,
+        animate: true,
+      );
+      
   void _navigate(Widget page) =>
       mainVm.customNavigateToPage(page: page, animate: true);
 
