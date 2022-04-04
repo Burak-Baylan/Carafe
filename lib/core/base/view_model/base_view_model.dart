@@ -33,6 +33,10 @@ abstract class BaseViewModel with FirebaseBase {
   void customNavigateToPage({required Widget page, bool animate = false}) =>
       NavigationService.instance.customNavigateToPage(page, animate: animate);
 
+  void pushAndRemoveAll({required Widget page, bool animate = true}) {
+    NavigationService.instance.pushAndRemoveAll(page, animate: animate);
+  }
+
   void customReplacePage({
     required Widget page,
     bool animate = false,
