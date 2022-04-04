@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import '../../../../../core/constants/navigation/navigation_constants.dart';
 import '../../../../../core/data/custom_data.dart';
+import '../../../../../core/helpers/email_verification_sender_dialog.dart';
 import '../../../../../main.dart';
+import '../../../../main/view/home/view/sub_views/home_view/home_view.dart';
 import '../../../view_model/base_authentication_view_model.dart';
+import '../../forgot_password/view/forgot_password_view.dart';
 import '../model/login_model.dart';
 part 'login_view_model.g.dart';
 
@@ -70,21 +72,12 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
   }
 
   Future<void> _emailValidateControl() async {
-    await mainVm.startApp();
-    //replacePage(path: NavigationConstans.MAIN_VIEW, data: null);
-    //return;
-
     if (authService.isEmailValid!) {
-      //await FirebaseManager.instance.getFollowingUsersIds();
       await mainVm.startApp();
-      replacePage(path: NavigationConstans.MAIN_VIEW, data: null);
+      customReplacePage(page: const HomeView(), animate: true);
     } else {
-      showAlert(
-        "Error",
-        "Email not verified. Please verified your email.",
-        context: context!,
-        positiveButtonText: "Send mail",
-        negativeButtonText: "Cancel",
+      showEmailVerificationSenderDialog(
+        context!,
         onPressedPositiveButton: () async {
           await authService.sendVerificationEmail();
           await auth.signOut();
@@ -92,6 +85,13 @@ abstract class _LoginViewModelBase extends IAuthenticationViewModel with Store {
         onPressedNegativeButton: () => auth.signOut(),
       ).then((value) => auth.signOut());
     }
+  }
+
+  void navigateToForgorPasswordPage() {
+    customNavigateToPage(
+      page: ForgotPasswordView(),
+      animate: true,
+    );
   }
 
   @override
