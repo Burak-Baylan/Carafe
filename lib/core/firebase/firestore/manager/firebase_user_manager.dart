@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../../../app/notification/notification_sender_by_type.dart';
 import '../../../../main.dart';
@@ -22,7 +23,8 @@ class FirebaseUserManager extends FirebaseBase {
   NotificationSenderByType notificatSender = NotificationSenderByType();
 
   Future<CustomError> createUser(UserModel userModel) async {
-    var userExistingControlResponse = await checkUsernameExisting(userModel);
+    var userExistingControlResponse =
+        await checkUsernameExisting(userModel.username);
     if (userExistingControlResponse.errorMessage != null) {
       return userExistingControlResponse;
     }
@@ -33,9 +35,9 @@ class FirebaseUserManager extends FirebaseBase {
     return customError;
   }
 
-  Future<CustomError> checkUsernameExisting(UserModel userModel) async {
+  Future<CustomError> checkUsernameExisting(String username) async {
     var query = firebaseConstants.allUsersCollectionRef
-        .where(firebaseConstants.usernameText, isEqualTo: userModel.username);
+        .where(firebaseConstants.usernameText, isEqualTo: username);
     var data = await firebaseService.getQuery(query);
     if (data.error != null) {
       return CustomError("An error occured. Please try again.");
@@ -283,5 +285,34 @@ class FirebaseUserManager extends FirebaseBase {
     var jsonData = model.toJson();
     var response = await firebaseService.addDocument(ref, jsonData);
     return response;
+  }
+
+  Future<CustomError> updateUserEmailAuth(String email) async {
+    try {
+      await auth.currentUser!.updateEmail(email);
+      return CustomError(null);
+    } on FirebaseAuthException catch (e) {
+      return CustomError(e.message);
+    }
+  }
+
+  Future<CustomError> updateUserEmailFirestore(String email) async {
+    var response = await userManager.updateAField(
+      fieldName: firebaseConstants.emailText,
+      value: email,
+    );
+    if (!response) {
+      return CustomError('Something went wrong.');
+    }
+    return CustomError(null);
+  }
+
+  Future<CustomError> updateUserPassword(String password) async {
+    try {
+      await auth.currentUser!.updatePassword(password);
+      return CustomError(null);
+    } on FirebaseException catch (e) {
+      return CustomError(e.message);
+    }
   }
 }
