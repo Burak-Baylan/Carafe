@@ -47,6 +47,15 @@ class NavigationService extends INavigationService {
     );
   }
 
+  void pushAndRemoveAll(Widget page, {bool animate = true}) {
+    navigatorKey.currentState!.pushAndRemoveUntil(
+      animate
+          ? CustomPageRoute(child: page)
+          : MaterialPageRoute(builder: (context) => page),
+      (route) => false,
+    );
+  }
+
   @override
   Future<void> navigateToPageClear({
     required String path,

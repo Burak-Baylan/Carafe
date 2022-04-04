@@ -1,3 +1,4 @@
+import 'package:Carafe/pages/settings/view/sub_views/delete_account_sheet/view/delete_account_sheet_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import '../../../core/base/view_model/base_view_model.dart';
@@ -19,5 +20,9 @@ abstract class _SettingsViewModelBase extends BaseViewModel with Store {
 
   void showVerificationRequestDialog() {
     VerificationRequestBottomSheet.show(context!);
+  }
+
+  void showDeleteAccountDialog() {
+    DeleteAccountSheet.show(context!);
   }
 }

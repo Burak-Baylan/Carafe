@@ -100,6 +100,21 @@ mixin _$PostViewModel on _PostViewModelBase, Store {
     });
   }
 
+  final _$isUserDeletedAtom = Atom(name: '_PostViewModelBase.isUserDeleted');
+
+  @override
+  bool get isUserDeleted {
+    _$isUserDeletedAtom.reportRead();
+    return super.isUserDeleted;
+  }
+
+  @override
+  set isUserDeleted(bool value) {
+    _$isUserDeletedAtom.reportWrite(value, super.isUserDeleted, () {
+      super.isUserDeleted = value;
+    });
+  }
+
   final _$findPostOwnerUserAsyncAction =
       AsyncAction('_PostViewModelBase.findPostOwnerUser');
 
@@ -205,7 +220,8 @@ likeIcon: ${likeIcon},
 postSaveIcon: ${postSaveIcon},
 comments: ${comments},
 isPostDeleted: ${isPostDeleted},
-commentsScrollable: ${commentsScrollable}
+commentsScrollable: ${commentsScrollable},
+isUserDeleted: ${isUserDeleted}
     ''';
   }
 }

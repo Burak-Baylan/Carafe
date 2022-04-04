@@ -34,8 +34,8 @@ class FirebaseManager extends FirebaseBase {
     String? postId, {
     DocumentReference? reference,
   }) async {
-    var rawData = await firebaseService
-        .getDocument(reference ?? postDocRef(postId!));
+    var rawData =
+        await firebaseService.getDocument(reference ?? postDocRef(postId!));
     if (rawData.error != null) return null;
     var data = rawData.data!.data() as Map<String, dynamic>;
     return PostModel.fromJson(data);
@@ -53,7 +53,7 @@ class FirebaseManager extends FirebaseBase {
     DocumentReference<Object?> reference,
   ) async {
     var rawData = await firebaseService.getDocument(reference);
-    if (rawData.error != null) return null;
+    if (rawData.error != null || rawData.data?.data() == null) return null;
     var data = rawData.data!.data() as Map<String, dynamic>;
     return data;
   }

@@ -43,7 +43,7 @@ class UsersListManager {
       String? userId = _getUserId(documentData);
       var userRef = _firebaseConstants.allUsersCollectionRef.doc(userId);
       var userRawData = await _firebaseService.getDocument(userRef);
-      if (userRawData.error != null || userRawData.data == null) {
+      if (userRawData.error != null || userRawData.data?.data() == null) {
         continue;
       }
       if (doc == docs.last) {
@@ -81,7 +81,6 @@ class UsersListManager {
   String get _getReferenceText {
     var createdAtText = _firebaseConstants.createdAtText;
     var followedAtText = _firebaseConstants.followedAtText;
-    var savedAtText = _firebaseConstants.savedAtText;
     switch (_userListType) {
       case (ListingType.likes):
         return createdAtText;

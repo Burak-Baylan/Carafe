@@ -96,7 +96,7 @@ class _SettingsViewState extends State<SettingsView> {
       );
 
   SettingsTile get buildDeleteAccountTile => SettingsTile(
-        onPressed: (context) {},
+        onPressed: (context) => settingsVm.showDeleteAccountDialog(),
         leading: const Icon(Icons.delete_forever_outlined),
         title: SettingsSectionText(text: deleteAccountText),
         description: SettingsDescriptionText(

@@ -58,16 +58,16 @@ abstract class _SignupViewModelBase extends IAuthenticationViewModel
 
   Future<void> _signup(SignupViewModel viewModel) async {
     CustomData<UserCredential> authenticationResponse =
-        await authService.signup(
-      LoginModel(
+        await authService.signup(loginModel);
+    await registerUser.register(authenticationResponse, viewModel);
+  }
+
+  LoginModel get loginModel => LoginModel(
         email: email,
         password: password,
         username: username,
         displayName: displayName,
-      ),
-    );
-    await registerUser.register(authenticationResponse, viewModel);
-  }
+      );
 
   void initializeCredenticial() {
     displayName = displayNameController.text;

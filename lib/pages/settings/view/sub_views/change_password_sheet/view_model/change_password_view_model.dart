@@ -4,7 +4,6 @@ import 'package:mobx/mobx.dart';
 import '../../../../../../core/alerts/loading_alert_dialog.dart';
 import '../../../../../../core/base/view_model/base_view_model.dart';
 import '../../../../../../core/error/custom_error.dart';
-import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../authenticate/authenticate_view.dart';
 part 'change_password_view_model.g.dart';
 
@@ -60,9 +59,7 @@ abstract class _ChangePasswordViewModelBase extends BaseViewModel with Store {
   Future<void> signOut() async {
     await userManager.removeUserToken();
     await auth.signOut();
-    context!.pop;
-    context!.pop;
-    customReplacePage(page: AuthenticateView());
+    pushAndRemoveAll(page: AuthenticateView());
   }
 
   Future<void> showAreYouSureAlert() async {

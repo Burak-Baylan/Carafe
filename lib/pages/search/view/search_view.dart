@@ -27,15 +27,13 @@ class _SearchViewState extends State<SearchView>
   @override
   void initState() {
     searchViewModel.setContext(context);
-    exploreView = SearchViewExploreBody();
     pages = [
-      exploreView,
+      SearchViewExploreBody(),
       SearchViewSearchBody(searchViewModel: searchViewModel)
     ];
     super.initState();
   }
 
-  late Widget exploreView;
   late List<Widget> pages;
 
   Future<bool> _onWillPop() async {

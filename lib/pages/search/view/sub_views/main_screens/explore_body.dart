@@ -88,24 +88,24 @@ class _SearchViewExploreBodyState extends State<SearchViewExploreBody>
       );
 
   Widget categoryWidget(List<PostModel>? postList, String categoryName) {
-    if (postList == null || postList.isEmpty) {
-      return Container();
-    }
     return Column(
       children: [
         buildTile(categoryName),
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: postList.length,
+          itemCount: postList == null ? 0 : postList.length,
           shrinkWrap: true,
-          itemBuilder: (context, index) => buildPostWidget(postList[index]),
+          itemBuilder: (context, index) => buildPostWidget(postList![index]),
         ),
       ],
     );
   }
 
-  Widget buildPostWidget(PostModel postModel) =>
-      PostWidget(model: postModel, closeCardView: true);
+  Widget buildPostWidget(PostModel postModel) => PostWidget(
+        model: postModel,
+        closeCardView: true,
+        showDeletedPost: false,
+      );
 
   Widget buildTile(String categoryName) => _createTile(
         categoryName,

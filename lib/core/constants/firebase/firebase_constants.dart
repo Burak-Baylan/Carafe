@@ -56,6 +56,7 @@ class FirebaseConstants extends FirebaseBase {
   final String hasReadText = 'has_read';
   final String verificationsRequestsText = 'VerificationsRequests';
   final String emailText = 'email';
+  final String deletedUsersText = 'DeletedUsers';
 
   int numberOfPostsToBeReceiveAtOnce = 15;
   int numberOfNotificationsToBeReceiveAtOnce = 17;
@@ -75,6 +76,9 @@ class FirebaseConstants extends FirebaseBase {
   @override
   DocumentReference<Map<String, dynamic>> postDocRef(String postId) =>
       allPostsCollectionRef.doc(postId);
+
+  CollectionReference<Map<String, dynamic>> get allDeletedUsersCollectionRef =>
+      firestore.collection(deletedUsersText);
 
   CollectionReference<Map<String, dynamic>> allCommentsCollectionRef(
           String postId) =>

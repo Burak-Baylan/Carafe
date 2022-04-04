@@ -4,6 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/extensions/double_extensions.dart';
 import '../../../../../../core/extensions/int_extensions.dart';
+import '../../../../../../core/widgets/deleted_post_widget.dart';
+import '../../../../../../core/widgets/deleted_users_post.dart';
 import '../../../../model/post_model.dart';
 import '../../../home/view_model/home_view_model.dart';
 import 'sub_widgets/name_and_menu/name_and_menu.dart';
@@ -31,6 +33,7 @@ class PostWidget extends StatefulWidget {
     this.isPostPinned,
     this.onPostPinnedOrUnpinned,
     this.onClicked,
+    this.showDeletedPost = true,
   }) : super(key: key);
 
   PostModel model;
@@ -47,6 +50,7 @@ class PostWidget extends StatefulWidget {
   HomeViewModel? homeViewModel;
   Function? onPostPinnedOrUnpinned;
   Function(PostViewModel postViewModel, PostModel postModel)? onClicked;
+  bool showDeletedPost;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -60,21 +64,26 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     _initializeValues();
     return Observer(
-      builder: (_) => (!postViewModel.isPostDeleted ||
-              (model.isPostDeleted != null && !(model.isPostDeleted!)))
-          ? Column(
-              children: [
-                widget.closeCardView
-                    ? 0.sizedBoxOnlyHeight
-                    : 15.sizedBoxOnlyHeight,
-                PostSkeleton(
-                  closeCardView: widget.closeCardView,
-                  child: _postContainer,
-                )
-              ],
-            )
-          : postIsDeletedWidget,
+      builder: (_) => isDeleted ? postIsDeletedWidget : buildColumn,
     );
+  }
+
+  Widget get buildColumn {
+    return Column(
+      children: [
+        widget.closeCardView ? 0.sizedBoxOnlyHeight : 15.sizedBoxOnlyHeight,
+        PostSkeleton(
+          closeCardView: widget.closeCardView,
+          child: _postContainer,
+        ),
+      ],
+    );
+  }
+
+  bool get isDeleted {
+    return (postViewModel.isPostDeleted ||
+            (model.isPostDeleted != null && (model.isPostDeleted!))) ||
+        postViewModel.isUserDeleted;
   }
 
   Widget get _postContainer => InkWell(
@@ -191,9 +200,20 @@ class _PostWidgetState extends State<PostWidget> {
         )
       : Container();
 
-  Widget get postIsDeletedWidget => Builder(builder: (context) => Container());
+  Widget get postIsDeletedWidget => Builder(
+        builder: (context) {
+          if (!widget.showDeletedPost) {
+            return Container();
+          }
+          if (postViewModel.isUserDeleted) {
+            return DeletedUsersPost();
+          } else {
+            return DeletedPostWidget(postModel: widget.model);
+          }
+        },
+      );
 
-  void _initializeValues() async {
+  Future<void> _initializeValues() async {
     postViewModel.setPostModel(widget.model);
     postViewModel.setContext(context);
     postViewModel.initializeValues();

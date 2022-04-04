@@ -46,6 +46,8 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
   late PostModel postModel;
   bool likeLock = false;
   bool saveLock = false;
+  @observable
+  bool isUserDeleted = false;
   IconData unlikedIcon = Icons.favorite_border_rounded;
   IconData likedIcon = Icons.favorite_outlined;
   IconData unsavedIcon = Icons.bookmark_outline;
@@ -79,8 +81,15 @@ abstract class _PostViewModelBase extends BaseViewModel with Store {
   }
 
   @action
-  Future<void> findPostOwnerUser() async =>
-      userModel = await firebaseManager.getAUserInformation(postModel.authorId);
+  Future<void> findPostOwnerUser() async {
+    var model = await firebaseManager.getAUserInformation(postModel.authorId);
+    if (model == null) {
+      isUserDeleted = true;
+      await userManager.unfollowUser(postModel.authorId);
+      return;
+    }
+    userModel = model;
+  }
 
   @action
   Future<void> findLikeIcon() async {
