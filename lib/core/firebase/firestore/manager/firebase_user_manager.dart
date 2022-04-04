@@ -315,4 +315,32 @@ class FirebaseUserManager extends FirebaseBase {
       return CustomError(e.message);
     }
   }
+
+  Future<CustomError> deleteUserFirestore() async {
+    var ref = allUsersCollectionRef.doc(currentUserId);
+    await addUserToDeletedUsers();
+    var response = await firebaseService.deleteDocument(ref);
+    if (response.errorMessage != null) {
+      var deleteUsersRef =
+          firebaseConstants.allDeletedUsersCollectionRef.doc(currentUserId);
+      await firebaseService.deleteDocument(deleteUsersRef);
+    }
+    return response;
+  }
+
+  Future<CustomError> deleteUserAuth() async {
+    try {
+      await auth.currentUser!.delete();
+      return CustomError(null);
+    } on FirebaseException catch (e) {
+      return CustomError(e.message);
+    }
+  }
+
+  Future<CustomError> addUserToDeletedUsers() async {
+    var userModel = mainVm.currentUserModel!;
+    var ref = firebaseConstants.allDeletedUsersCollectionRef.doc(currentUserId);
+    var response = await firebaseService.addDocument(ref, userModel.toJson());
+    return response;
+  }
 }
