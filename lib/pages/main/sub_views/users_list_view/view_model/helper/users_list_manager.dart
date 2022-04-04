@@ -1,4 +1,3 @@
-import 'package:Carafe/pages/main/model/post_save_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../../core/constants/firebase/firebase_constants.dart';
 import '../../../../../../core/firebase/firestore/service/firebase_service.dart';

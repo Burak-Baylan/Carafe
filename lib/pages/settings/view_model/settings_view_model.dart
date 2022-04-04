@@ -13,9 +13,11 @@ abstract class _SettingsViewModelBase extends BaseViewModel with Store {
   @override
   void setContext(BuildContext context) => this.context = context;
 
-  Future<void> showNotificationsDialog() async =>
-      NotificationBottomSheet.show(context!);
+  void showNotificationsDialog() {
+    NotificationBottomSheet.show(context!);
+  }
 
-  void showVerificationRequestDialog() =>
-      VerificationRequestBottomSheet.show(context!);
+  void showVerificationRequestDialog() {
+    VerificationRequestBottomSheet.show(context!);
+  }
 }
