@@ -9,10 +9,13 @@ Carafe is a social media app. You can communicate with other people with Carafe.
 
 <img src="https://user-images.githubusercontent.com/67222076/161743247-42de86f8-3ad2-40aa-998d-00803765ba10.png" width="200" height="400" />
 
+<img src="https://user-images.githubusercontent.com/67222076/161745140-1774a5da-f038-4e83-989a-d1a2034595f2.png" width="200" height="400" />
+
 <img src="https://user-images.githubusercontent.com/67222076/161743253-bc6a0b12-5191-4dd6-8b87-fafc63a3a8ca.png" width="200" height="400" />
 
 <img src="https://user-images.githubusercontent.com/67222076/161743263-d79e48ac-bc6d-4618-b6f0-c9c2990f4381.png" width="200" height="400" />
 
+<img src="https://user-images.githubusercontent.com/67222076/161743263-d79e48ac-bc6d-4618-b6f0-c9c2990f4381.png" width="200" height="400" />
 
 # Privacy Policy
 
