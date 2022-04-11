@@ -35,8 +35,6 @@ Carafe is a social media app. You can communicate with other people with Carafe.
 
 <img src="https://user-images.githubusercontent.com/67222076/161743263-d79e48ac-bc6d-4618-b6f0-c9c2990f4381.png" width="200" height="400" />
 
-<img src="https://user-images.githubusercontent.com/67222076/161743263-d79e48ac-bc6d-4618-b6f0-c9c2990f4381.png" width="200" height="400" />
-
 # Privacy Policy
 
 Blue Cannibal built the Carafe app as a Free app. This SERVICE is provided by Blue Cannibal at no cost and is intended for use as is.
