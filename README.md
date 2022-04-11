@@ -2,7 +2,7 @@
 
 Carafe is a social media app. You can communicate with other people with Carafe.
 
-App features:
+# App features
 
 · You can enter the app by creating an account with a verified email via firebase  
 · You can share post with/without photo and you can delete the posts  
