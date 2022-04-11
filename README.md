@@ -4,23 +4,23 @@ Carafe is a social media app. You can communicate with other people with Carafe.
 
 App features:
 
-· You can enter the app by creating an account with a verified email via firebase
-· You can share post with/without photo and you can delete the posts
-· You can share post by categories
-· You can see how long ago the posts were shared
-· You can view photos
-· You can change your account password and delete your account
-· You can like, comment and save posts
-· You can have a verified account
-· You can see how many people have seen your posts, visits to the profile via the post, how many times the post has been clicked, and how many interactions the post has received
-· You can change the profile photo, username, profile description and add a website link to your profile
-· You can pin post to your profile
-· You'll get notifications when your post is liked, commented, and when you are followed. (can be turned off in settings)
-· You can send feedback
-· You can report the posts or users
-· You can see who likes and comments on posts
-· You can see the posts that other users liked
-· You can see your followers and people you follow
+· You can enter the app by creating an account with a verified email via firebase  
+· You can share post with/without photo and you can delete the posts  
+· You can share post by categories  
+· You can see how long ago the posts were shared  
+· You can view photos  
+· You can change your account password and delete your account  
+· You can like, comment and save posts  
+· You can have a verified account  
+· You can see how many people have seen your posts, visits to the profile via the post, how many times the post has been clicked, and how many interactions the post has received  
+· You can change the profile photo, username, profile description and add a website link to your profile  
+· You can pin posts to your profile  
+· You'll get notifications when your post is liked, commented, and when you are followed. (can be turned off in settings)  
+· You can send feedback  
+· You can report the posts or users  
+· You can see who likes and comments on posts  
+· You can see the posts that other users liked  
+· You can see your followers and people you follow  
 
 # Screenshots
 <img src="https://user-images.githubusercontent.com/67222076/161742671-f6158d94-6ed9-40ab-859d-53daa10146d1.png" width="200" height="400" />
