@@ -47,6 +47,7 @@ class SharePost with FirebaseBase {
   }
 
   Future<void> sendNotification(PostModel postModel) async {
+    if (replyingPostModel == null) return;
     await notificationSender.sendCommentNotification(
       receiverUserToken: replyingPostModel!.replyingUserToken!,
       postModel: postModel,
