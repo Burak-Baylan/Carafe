@@ -11,8 +11,8 @@ class NotificationSender {
   final String postUrl = 'https://fcm.googleapis.com/fcm/send';
 
   late String? toToken;
-  late String title;
-  late String message;
+  late String? title;
+  late String? message;
   late NotificationType notificationType;
   late String? postId;
   late String toUserId;
@@ -23,8 +23,8 @@ class NotificationSender {
 
   Future<void> send({
     required String? toToken,
-    required String title,
-    required String message,
+    required String? title,
+    required String? message,
     required NotificationType notificationType,
     required String toUserId,
     required String postPath,

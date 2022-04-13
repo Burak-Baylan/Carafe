@@ -68,9 +68,9 @@ class NotificationManager with FirebaseBase {
 
   Future<void> send({
     required String? toToken,
-    required String title,
+    required String? title,
     required String toUserId,
-    required String message,
+    required String? message,
     required String postPath,
     required NotificationType notificationType,
     String? postId,
