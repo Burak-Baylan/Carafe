@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import '../extensions/color_extensions.dart';
 import '../extensions/context_extensions.dart';
 import '../extensions/int_extensions.dart';
@@ -19,7 +18,7 @@ class FullScreenImage extends StatefulWidget {
     this.height,
     this.width,
     this.disableBackButton = false,
-    this.scaleStateChangedCallback,
+    this.onDispose,
   }) : super(key: key);
 
   String? tag = "";
@@ -27,11 +26,11 @@ class FullScreenImage extends StatefulWidget {
   Widget? imageWidget;
   List<Widget>? children;
   Function()? onImageTap;
+  Function()? onDispose;
   Color? backgroundColor;
   double? width;
   double? height;
   bool disableBackButton;
-  void Function(PhotoViewScaleState)? scaleStateChangedCallback;
 
   @override
   State<FullScreenImage> createState() => _FullScreenImageState();
@@ -47,7 +46,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
         Align(alignment: Alignment.center, child: _buildImage),
         _getWidgets,
       ],
-  );
+    );
   }
 
   Widget get _getWidgets {
@@ -78,10 +77,6 @@ class _FullScreenImageState extends State<FullScreenImage> {
   Widget get photoView => PhotoViewWidget(
         width: widget.width,
         height: widget.height,
-        scaleStateChangedCallback: (state) =>
-            widget.scaleStateChangedCallback != null
-                ? widget.scaleStateChangedCallback!(state)
-                : null,
         image: widget.image!,
         backgroundColor: widget.backgroundColor,
       );
@@ -94,6 +89,8 @@ class _FullScreenImageState extends State<FullScreenImage> {
       Colors.transparent.changeBottomNavBarColor;
     } else {
       StatusBarHelper.close();
+      StatusBarHelper.defaultScreen();
+      Colors.white.changeBottomNavBarColor;
     }
   }
 
@@ -110,4 +107,12 @@ class _FullScreenImageState extends State<FullScreenImage> {
         icon: Icons.chevron_left_sharp,
         onTap: () => _closePage(),
       );
+
+  @override
+  void dispose() {
+    if (widget.onDispose != null){
+      widget.onDispose!();
+    }
+    super.dispose();
+  }
 }
