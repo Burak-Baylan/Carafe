@@ -33,7 +33,7 @@ class PostWidget extends StatefulWidget {
     this.isPostPinned,
     this.onPostPinnedOrUnpinned,
     this.onClicked,
-    this.showDeletedPost = true,
+    this.showDeletedPost = false,
   }) : super(key: key);
 
   PostModel model;
