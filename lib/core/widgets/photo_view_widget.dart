@@ -10,7 +10,6 @@ class PhotoViewWidget extends StatefulWidget {
     this.height,
     this.minScale,
     this.maxScale,
-    this.scaleStateChangedCallback,
   });
 
   ImageProvider<Object> image;
@@ -20,27 +19,20 @@ class PhotoViewWidget extends StatefulWidget {
   double? minScale;
   double? maxScale;
   Color? backgroundColor;
-  void Function(PhotoViewScaleState)? scaleStateChangedCallback;
 
   @override
-  State<PhotoViewWidget> createState() => _PhotoViewWidgetState();
+  State<PhotoViewWidget> createState() => _PhotoViewWidgetState ();
 }
 
 class _PhotoViewWidgetState extends State<PhotoViewWidget> {
-  Color? myColor;
-  bool lockState = false;
-
   @override
-  Widget build(BuildContext context) => SizedBox(
+  Widget build(BuildContext context) {
+    return SizedBox(
         width: widget.width ?? context.width,
         height: widget.height ?? context.height,
         child: PhotoView(
-          scaleStateChangedCallback: (state) =>
-              widget.scaleStateChangedCallback != null
-                  ? widget.scaleStateChangedCallback!(state)
-                  : null,
-          backgroundDecoration:
-              BoxDecoration(color: widget.backgroundColor ?? Colors.transparent),
+          backgroundDecoration: BoxDecoration(
+              color: widget.backgroundColor ?? Colors.transparent),
           maxScale: PhotoViewComputedScale.contained * (widget.minScale ?? 5),
           minScale: PhotoViewComputedScale.contained * (widget.maxScale ?? 1),
           initialScale:
@@ -48,4 +40,5 @@ class _PhotoViewWidgetState extends State<PhotoViewWidget> {
           imageProvider: widget.image,
         ),
       );
+  }
 }
