@@ -1,14 +1,14 @@
-import 'package:Carafe/core/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import '../../../app/enums/post_view_type.dart';
 import '../../../app/managers/hive_manager.dart';
 import '../../../core/base/view_model/base_view_model.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../core/extensions/int_extensions.dart';
-import '../../../core/hive/hive_constants.dart';
 import '../../authenticate/authenticate_view.dart';
 import '../../authenticate/model/user_model.dart';
 import '../../notification/view/notification_view.dart';
+import '../../onboarding.dart';
 import '../../profile/view/profile_view/profile_view.dart';
 import '../../search/view/search_view.dart';
 import '../view/helper/post_view_type_selector_bottom_sheet.dart';
@@ -59,6 +59,10 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
   }
 
   Future<void> startApp() async {
+    if (await checkFirstInit) {
+      initalizeStartingPage(Onboarding());
+      return;
+    }
     if (auth.currentUser != null) {
       currentUserModel =
           await firebaseManager.getAUserInformation(authService.userId!);
@@ -71,6 +75,11 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
     } else {
       initalizeStartingPage(AuthenticateView());
     }
+  }
+
+  Future<bool> get checkFirstInit async {
+    var response = await HiveManager.getFirstInit;
+    return response;
   }
 
   @action
@@ -123,13 +132,12 @@ abstract class _MainViewViewModelBase extends BaseViewModel with Store {
       this.followingUsersIds = followingUsersIds;
 
   Future<void> updatePostViewType(bool data) async {
-    await hiveHelper.putData<bool>(HiveConstants.BOX_APP_PREFERENCES,
-        HiveConstants.KEY_POST_VIEW_TYPE_PREFERENCE, data);
+    await HiveManager.setPostWidgetViewType(data);
     changePostViewType(data);
   }
 
-  void showPostViewTypeSelector() {
-    PostViewTypeSelectorBottomSheet.show(context!);
+  void showPostViewTypeSelector({BuildContext? context}) {
+    PostViewTypeSelectorBottomSheet.show(context ?? this.context!);
   }
 
   late ScrollController homeViewPostsScrollController;
