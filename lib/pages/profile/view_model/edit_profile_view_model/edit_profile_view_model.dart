@@ -79,10 +79,7 @@ abstract class _EditProfileViewModelBase extends BaseViewModel with Store {
     Timestamp? newBirthDate = birthDate;
 
     if (isProfilePhotoChanged()) {
-      var response = await userManager.updateUserProfilePhoto(ppImageFile!);
-      if (response) {
-        printGreen('pp changed');
-      }
+      await userManager.updateUserProfilePhoto(ppImageFile!);
     }
 
     if (isDisplayNameChanged()) {
@@ -108,7 +105,7 @@ abstract class _EditProfileViewModelBase extends BaseViewModel with Store {
     }
 
     if (isWebsiteChanged()) {
-      if (!(newWebsite.urlControl) && newWebsite != '') {
+      if (newWebsite != '') {
         dismissLoadingBar();
         showToast("Url type is not correct");
         return;

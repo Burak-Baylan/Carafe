@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Carafe/app/constants/constants_colors.dart';
+import 'package:Carafe/app/constants/app_constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppThemes {
   static AppThemes? _instance;
@@ -8,24 +9,37 @@ class AppThemes {
   AppThemes._init();
 
   ThemeData get lightTheme => ThemeData(
-      primaryColor: AppColors.primary,
-      colorScheme: ColorScheme(
-        primary: AppColors.primary,
-        primaryVariant: Colors.white,
-        secondary: Colors.white,
-        secondaryVariant: Colors.white,
-        surface: Colors.black,
-        background: Colors.white,
-        error: Colors.redAccent,
-        onPrimary: Colors.white,
-        onSecondary: Colors.white,
-        onSurface: AppColors.primary, // TextInput altındaki çizgi rengi
-        onBackground: Colors.white,
-        onError: Colors.white,
-        brightness: Brightness.light,
-      ),
-      inputDecorationTheme: const InputDecorationTheme(
-          labelStyle: TextStyle(color: Colors.black)));
+        primaryColor: AppColors.primary,
+        colorScheme: ColorScheme(
+          primary: AppColors.primary,
+          primaryVariant: AppColors.correctGreen,
+          secondary: AppColors.secondary,
+          secondaryVariant: AppColors.secondary,
+          surface: Colors.black,
+          background: AppColors.backGroundGrey,
+          error: Colors.redAccent,
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onSurface: AppColors.primary, //TextInput altındaki çizgi rengi
+          onBackground: Colors.white,
+          onError: Colors.white,
+          brightness: Brightness.light,
+        ),
+        textTheme: TextTheme(
+          headline6: TextStyle(
+            fontFamily: GoogleFonts.sourceSansPro().fontFamily,
+            fontSize: 15,
+          ),
+          subtitle2: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              fontFamily: GoogleFonts.sourceSansPro().fontFamily,
+              color: AppColors.secondary),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.black),
+        ),
+      );
 
   ThemeData get darkTheme => ThemeData(
         primaryColor: Colors.greenAccent,
