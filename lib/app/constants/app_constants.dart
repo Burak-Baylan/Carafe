@@ -16,7 +16,8 @@ class AppConstants {
   static const APP_NAME = "Carafe";
   static const LOCALE = "en";
   static const APP_LINK =
-      "https://play.google.com/store/apps/details?id=com.bluecannibal.carafe";
+      "https://play.google.com/store/apps/details?id=$APP_PACKAGE_NAME";
+  static const APP_PACKAGE_NAME = "com.bluecannibal.carafe";
 }
 
 class PostContstants {
