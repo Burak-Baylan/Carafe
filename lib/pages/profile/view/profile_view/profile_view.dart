@@ -122,32 +122,28 @@ class _ProfileViewState extends State<ProfileView>
 
   Widget get buildCreatedAt {
     var createdAt = profileViewModel.userModel?.createdAt?.longDate;
-    return Observer(
-      builder: (context) {
-        return (createdAt != null && createdAt != '')
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.date_range_outlined,
-                    color: Colors.grey.shade700,
-                    size: context.width / 19,
-                  ),
-                  3.0.sizedBoxOnlyWidth,
-                  Flexible(
-                    child: ProfileTextWidget(
-                      text: 'Joined ' + createdAt,
-                      color: Colors.grey.shade700,
-                      fontSize: context.width / 23,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              )
-            : Container();
-      },
-    );
+    return (createdAt != null && createdAt != '')
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.date_range_outlined,
+                color: Colors.grey.shade700,
+                size: context.width / 19,
+              ),
+              3.0.sizedBoxOnlyWidth,
+              Flexible(
+                child: ProfileTextWidget(
+                  text: 'Joined ' + createdAt,
+                  color: Colors.grey.shade700,
+                  fontSize: context.width / 23,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          )
+        : Container();
   }
 
   Widget get buildLink => Observer(builder: (context) {

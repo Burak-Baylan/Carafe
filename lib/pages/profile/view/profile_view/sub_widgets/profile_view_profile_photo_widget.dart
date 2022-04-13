@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../../../../core/extensions/color_extensions.dart';
 import '../../../../../core/extensions/context_extensions.dart';
-import '../../../../main/view/sub_views/post_widget/post_widget/sub_widgets/post_full_screen_image.dart';
+import '../../../../../core/helpers/status_bar_helper.dart';
+import '../../../../../core/widgets/full_screen_image.dart';
 import '../../../../main/view/sub_views/post_widget/post_widget/sub_widgets/profile_photo.dart';
 import '../../../view_model/profile_view_model/profile_view_model.dart';
 
@@ -27,11 +29,16 @@ class _ProfileViewProfilePhotoWidgetState
           height: context.width / 4,
           width: context.width / 4,
           onClicked: (provider) => widget.profileViewModel.customNavigateToPage(
-            page: PostFullScreenImage(
-              imageUrl: widget.profileViewModel.ppUrl ?? '',
-              imageProvider: provider,
+            page: FullScreenImage(
+              image: provider,
+              onDispose: () => onDispose(),
             ),
           ),
         ),
       );
+
+  void onDispose() {
+    StatusBarHelper.open();
+    Colors.white.changeBottomNavBarColor;
+  }
 }

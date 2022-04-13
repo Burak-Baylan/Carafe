@@ -68,7 +68,7 @@ class _SettingsViewState extends State<SettingsView> {
       );
 
   SettingsTile get buildViewTypeTile => SettingsTile(
-        onPressed: (context) => mainVm.showPostViewTypeSelector(),
+        onPressed: (context) => mainVm.showPostViewTypeSelector(context: context),
         leading: const Icon(Icons.widgets_outlined),
         description: SettingsDescriptionText(text: postViewTypeDescription),
         title: SettingsSectionText(text: postViewTypeText),
