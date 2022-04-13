@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:photo_view/photo_view.dart';
 import '../../../../../../../../core/base/view_model/base_view_model.dart';
 part 'home_page_full_screen_image_view_model.g.dart';
 
@@ -40,15 +39,4 @@ abstract class _HomePageFullScreenImageViewModelBase extends BaseViewModel with 
   openPhotoDismissible() => dismissCloseState = false;
 
   bool firstInit = true;
-
-  @action
-  photoScaleStateChanged(PhotoViewScaleState state) {
-    if (state == PhotoViewScaleState.initial) {
-      sliderPageScrollPhysics();
-      openPhotoDismissible();
-    } else {
-      sliderNoneScrollPhysics();
-      closePhotoDismissible();
-    }
-  }
 }

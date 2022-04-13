@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../../../../../../core/extensions/color_extensions.dart';
 import '../../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../../core/extensions/int_extensions.dart';
 import '../../../../../../../core/extensions/string_extensions.dart';
+import '../../../../../../../core/helpers/status_bar_helper.dart';
 import '../../../../../../../core/widgets/full_screen_image.dart';
 import '../../../../../../../core/widgets/small_button_for_full_size_images.dart';
 import 'home_page_full_screen_image_menu_button.dart';
@@ -58,16 +60,20 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
           duration: 300.durationMilliseconds,
           child: Container(
             color: Colors.black.withOpacity(.3),
-            child: Stack(
-              children: [
-                Align(alignment: Alignment.center, child: _carouselBuilder),
-                Align(alignment: Alignment.topLeft, child: _buildBackButton),
-                SafeArea(child: _buildMoreButton)
-              ],
-            ),
+            child: buildStack,
           ),
         ),
       );
+
+  Widget get buildStack {
+    return Stack(
+      children: [
+        Align(alignment: Alignment.center, child: _carouselBuilder),
+        Align(alignment: Alignment.topLeft, child: _buildBackButton),
+        SafeArea(child: _buildMoreButton)
+      ],
+    );
+  }
 
   Widget get _carouselBuilder => Observer(
         builder: (context) => CarouselSlider.builder(
@@ -80,23 +86,10 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
 
   Widget _fullScreenImage(int index) => FullScreenImage(
         onImageTap: () => changeVisibility,
-        scaleStateChangedCallback: (state) =>
-            fullScreenImageVm.photoScaleStateChanged(state),
         disableBackButton: true,
         tag: widget.tag,
         image: widget.imageProviders[index],
       );
-
-  /*
-        DismissiblePage(
-          onDismiss: () => context.pop,
-          disabled: fullScreenImageVm.dismissCloseState,
-          direction: DismissDirection.vertical,
-          backgroundColor: Colors.transparent,
-          startingOpacity: 0,
-          child: Container(),
-        ),
-      */
 
   CarouselOptions get _carouselOptions => CarouselOptions(
         scrollPhysics: fullScreenImageVm.sliderScrollPhysics,
@@ -132,6 +125,12 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
         ),
       );
 
+  Widget get buildHomePageFullScreenImageMenuButton {
+    return HomePageFullScreenImageMenuButton(
+      imageUrl: widget.imageUrls[fullScreenImageVm.index],
+    );
+  }
+
   void get changeVisibility => fullScreenImageVm.changeVisiblity();
 
   void changeIndex(int index) {
@@ -141,9 +140,15 @@ class _HomePageFullScreenImageState extends State<HomePageFullScreenImage> {
 
   void _firstInit() {
     if (fullScreenImageVm.firstInit) {
-      //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       changeIndex(widget.imageIndex);
       fullScreenImageVm.firstInit = false;
     }
+  }
+
+  @override
+  void dispose() {
+    StatusBarHelper.open();
+    Colors.white.changeBottomNavBarColor;
+    super.dispose();
   }
 }

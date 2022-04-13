@@ -184,20 +184,6 @@ mixin _$HomePageFullScreenImageViewModel
   }
 
   @override
-  dynamic photoScaleStateChanged(PhotoViewScaleState state) {
-    final _$actionInfo =
-        _$_HomePageFullScreenImageViewModelBaseActionController.startAction(
-            name:
-                '_HomePageFullScreenImageViewModelBase.photoScaleStateChanged');
-    try {
-      return super.photoScaleStateChanged(state);
-    } finally {
-      _$_HomePageFullScreenImageViewModelBaseActionController
-          .endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 index: ${index},
