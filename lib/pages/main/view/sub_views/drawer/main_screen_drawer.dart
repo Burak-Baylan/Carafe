@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
+import 'package:store_redirect/store_redirect.dart';
 import '../../../../../app/constants/app_constants.dart';
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/double_extensions.dart';
@@ -79,11 +80,16 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
             icon: Icons.share_outlined,
             onClick: () => _selectedItem(6),
           ),
+          _buildMenuItem(
+            text: "Rate Us",
+            icon: Icons.star_rate_outlined,
+            onClick: () => _selectedItem(7),
+          ),
           getDividerWithHeight,
           _buildMenuItem(
             text: "Logout",
             icon: Icons.logout_outlined,
-            onClick: () => _selectedItem(7),
+            onClick: () => _selectedItem(8),
           ),
         ],
       );
@@ -118,6 +124,10 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
         Share.share(AppConstants.APP_LINK);
         break;
       case 7:
+        context.pop;
+        StoreRedirect.redirect(androidAppId: AppConstants.APP_PACKAGE_NAME);
+        break;
+      case 8:
         _signOutAlert();
         break;
       default:
