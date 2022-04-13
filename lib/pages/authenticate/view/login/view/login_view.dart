@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../../../core/extensions/context_extensions.dart';
 import '../../../../../core/extensions/string_extensions.dart';
-import '../../../../../core/init/navigation/navigator/navigator.dart';
 import '../../../../../core/widgets/animated_button.dart';
-import '../../../components/authentication_button.dart';
 import '../../../../../core/widgets/custom_text_form.dart';
 import '../view_model/login_view_model.dart';
 
