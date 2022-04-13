@@ -14,6 +14,32 @@ class HiveManager {
       ) ??
       true;
 
+  static Future<void> setPostWidgetViewType(bool data) async {
+    await hiveHelper.putData<bool>(
+      HiveConstants.BOX_APP_PREFERENCES,
+      HiveConstants.KEY_POST_VIEW_TYPE_PREFERENCE,
+      data,
+    );
+  }
+
+  static Future<void> closeFirstInit() async {
+    await hiveHelper.putData<bool>(
+      HiveConstants.BOX_APP_PREFERENCES,
+      HiveConstants.KEY_FIRST_INIT_PREFERENCE,
+      false,
+    );
+  }
+
+  static Future<bool> get getFirstInit async {
+    var response = await hiveHelper.getData<bool>(
+          HiveConstants.BOX_APP_PREFERENCES,
+          HiveConstants.KEY_FIRST_INIT_PREFERENCE,
+          defaultValue: true,
+        ) ??
+        false;
+    return response;
+  }
+
   static Future<List<String>> get getUserFollowingUsersIds async =>
       await hiveHelper.getData<List<String>>(
         HiveConstants.BOX_USER_INFORMATIONS,
