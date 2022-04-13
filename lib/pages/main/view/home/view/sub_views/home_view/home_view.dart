@@ -46,10 +46,11 @@ class _HomeViewState extends State<HomeView>
               future: postsFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data!.isEmpty) {
+                  if (snapshot.data!.isNotEmpty || viewModel.posts.isNotEmpty) {
+                    return _buildPostsList;
+                  } else {
                     return postsNotFoundWidget;
                   }
-                  return _buildPostsList;
                 }
                 if (snapshot.hasError) {
                   return _errorLayout;
@@ -163,7 +164,7 @@ class _HomeViewState extends State<HomeView>
               color: context.theme.colorScheme.primary,
               size: context.width / 17,
             ),
-            onPressed: () => mainVm.showPostViewTypeSelector(),
+            onPressed: () => mainVm.showPostViewTypeSelector(context: context),
           ),
         ],
       );
