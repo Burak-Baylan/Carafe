@@ -2,6 +2,8 @@
 
 Carafe is a social media app. You can communicate with other people with Carafe.
 
+Play Store Link: https://play.google.com/store/apps/details?id=com.bluecannibal.carafe
+
 # App features
 
 · You can enter the app by creating an account with a verified email via firebase  
